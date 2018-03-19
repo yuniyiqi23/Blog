@@ -9,6 +9,10 @@ var CONFIG = {
     'port': 8023,
 };
 
+app.post('/signup', function(req,res){
+    console.log(req.body);
+})
+
 // 创建服务器
 Http.createServer(function (request, response) {
 

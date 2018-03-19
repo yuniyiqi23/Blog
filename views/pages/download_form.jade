@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+    form.form-signin(action='download',
+    method='post',ENCTYPE='multipart/form-data')
+        h2.form-signin-heading DOWNLOAD FILES
+        input.input-block-level(type="text", placeholder="file path",
+        name="filepath")
+        button.btn.btn-large.btn-primary(type="submit")
+            | DOWNLOAD

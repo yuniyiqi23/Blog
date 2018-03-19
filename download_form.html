@@ -5,6 +5,11 @@
     <title>DownloadForm</title>
 </head>
 <body>
-
+<form action="/download" method="post" enctype='multipart/form-data'  onsubmit="return checkTask(this)">
+    <label for="resource">上传文档</label>
+    <input type="file" id="resource" name="resource">
+    <a href="download/kkk">下载文件</a>
+    <button type="submit">新建任务</button>
+</form>
 </body>
 </html>
