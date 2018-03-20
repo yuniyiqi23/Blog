@@ -1,21 +1,8 @@
-"use strict";
 
-var Http = require('http');
+var express = require('express');
 var FS = require('fs');
-var URL = require('url');
 
-var CONFIG = {
-    'host': '127.0.0.1',
-    'port': 8023,
-};
-
-// 创建服务器
-Http.createServer(function (request, response) {
-
-    // 解析 url 参数
-    // http://127.0.0.1:8023/download?filepath=word1.odt
-    var params = URL.parse(request.url, true).query;
-    var filePath = params.filepath;
+function downloading(filepath, response) {
 
     if (filePath != null) {
         //判断文件和目录是否存在
@@ -46,18 +33,6 @@ Http.createServer(function (request, response) {
                             'Content-Type': 'application/force-download',
                             'Content-Disposition': 'attachment; filename=' + filePath,
                         });
-                        /*//  发送响应数据
-                        var index = '<!DOCTYPE html>' +
-                            '<html>' +
-                            '<head>' +
-                            '<meta charset="utf-8">' +
-                            '<title>Download</title>' +
-                            '</head>' +
-                            '<body>' +
-                            '下载文件 ： ' + filePath + '成功！'
-                        '</body>' +
-                        '</html>';
-                        response.write(index);*/
                         response.end(data);
                     }
                 });
@@ -84,8 +59,12 @@ Http.createServer(function (request, response) {
             }
         })
     }
+}
 
+function test(callback) {
+    callback('ok');
+}
 
-}).listen(CONFIG.port, CONFIG.host);
+module.exports = downloading;
+module.exports = test;
 
-console.log('Server running at : http://' + CONFIG.host + ':' + CONFIG.port.toString() + '/');
