@@ -2,7 +2,7 @@
 var express = require('express');
 //用于处理目录的对象，提高开发效率
 var path = require('path');
-//用户加载图标
+//加载图标
 var favicon = require('serve-favicon');
 //在控制台中，显示req请求的信息
 var logger = require('morgan');
@@ -38,7 +38,7 @@ app.use(cookieParser());
 //静态文件目录设置,设置public文件夹为存放静态文件的目录
 app.use(express.static(path.join(__dirname, 'public')));
 
-//路由控制器
+//设置路由控制器
 app.use('/', index);
 app.use('/users', users);
 app.use('/download_form', download);
@@ -58,7 +58,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('/pages/error');
+  res.render('pages/error');
 });
 
 module.exports = app;
