@@ -11,19 +11,22 @@ var cookieParser = require('cookie-parser');
 //解析客户端请求的body中的内容,内部使用JSON编码处理,url编码处理以及对于文件的上传处理
 var bodyParser = require('body-parser');
 
-var index = require('./app_server/routes/index');
-var users = require('./app_server/routes/users');
-//To do download
-var download = require('./app_server/routes/download');
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+const flash = require('connect-flash')
+const config = require('config-lite')(__dirname)
+const routes = require('./routes')
+const pkg = require('./package')
+
 
 var app = express();
 
 // view engine setup
 //定义视图搜索路径
 //设置VIEWS文件夹，__dirname是node.js里面的全局变量。取得执行js所在的路径
-app.set('views', path.join(__dirname, 'app_server', 'views'));
+app.set('views', path.join(__dirname, 'views'));
 //设置模板引擎
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -37,11 +40,55 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 //静态文件目录设置,设置public文件夹为存放静态文件的目录
 app.use(express.static(path.join(__dirname, 'public')));
+// session 中间件
+app.use(session({
+    name: config.session.key, // 设置 cookie 中保存 session id 的字段名称
+    secret: config.session.secret, // 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
+    resave: true, // 强制更新 session
+    saveUninitialized: false, // 设置为 false，强制创建一个 session，即使用户未登录
+    cookie: {
+        maxAge: config.session.maxAge// 过期时间，过期后 cookie 中的 session id 自动删除
+    },
+    // store: new MongoStore({// 将 session 存储到 mongodb
+    //     url: config.mongodb// mongodb 地址
+    // })
+}))
+// flash 中间件，用来显示通知
+app.use(flash());
+
+// 处理表单及文件上传的中间件
+app.use(require('express-formidable')({
+    uploadDir: path.join(__dirname, 'public/images'), // 上传文件目录
+    keepExtensions: true// 保留后缀
+}));
+
+// 设置模板全局常量
+app.locals.blog = {
+    title: pkg.name,
+    description: pkg.description
+};
+
+// 添加模板必需的三个变量
+app.use(function (req, res, next) {
+    res.locals.user = req.session.user
+    res.locals.success = req.flash('success').toString()
+    res.locals.error = req.flash('error').toString()
+    next()
+});
 
 //设置路由控制器
-app.use('/', index);
-app.use('/users', users);
-app.use('/download_form', download);
+// app.use('/', require('./routes/index'));
+// app.use('/users', require('./routes/users'));
+// app.use('/download_form', require('./routes/download'));
+//Blog路由控制器
+app.use('/signup', require('./routes/signup'));
+app.use('/signin', require('./routes/signin'));
+app.use('/signout', require('./routes/signout'));
+app.use('/posts', require('./routes/posts'));
+app.use('/comments', require('./routes/comments'));
+// Blog路由
+// routes(app);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
