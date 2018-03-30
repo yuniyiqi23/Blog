@@ -1,7 +1,7 @@
 {
   "name": "Blog",
   "version": "0.0.0",
-  "description": "Adam's Blog",
+  "description": "Adam Blog",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"

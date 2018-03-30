@@ -3,7 +3,7 @@ var express = require('express');
 //用于处理目录的对象，提高开发效率
 var path = require('path');
 //加载图标
-var favicon = require('serve-favicon');
+// var favicon = require('serve-favicon');
 //在控制台中，显示req请求的信息
 var logger = require('morgan');
 //加载cookie模块，用于获取web浏览器发送的cookie中的内容
@@ -105,7 +105,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('pages/error');
+  res.render('error');
 });
 
 module.exports = app;

@@ -7,6 +7,7 @@ body {
   padding-top: 40px;
 }
 
+
 a:hover {
   border-bottom: 3px solid #4fc08d;
 }
@@ -16,12 +17,14 @@ a:hover {
   color: #fff !important;
 }
 
+
 .avatar {
   border-radius: 3px;
   width: 48px;
   height: 48px;
   float: right;
 }
+
 
 /* ---------- nav ---------- */
 
@@ -30,6 +33,7 @@ a:hover {
   color: #999;
   text-align: center;
 }
+
 
 .nav h1 {
   color: #4fc08d;
