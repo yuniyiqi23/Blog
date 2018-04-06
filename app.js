@@ -76,19 +76,13 @@ app.use(function (req, res, next) {
     next()
 });
 
-//设置路由控制器
-// app.use('/', require('./routes/index'));
-// app.use('/users', require('./routes/users'));
-// app.use('/download_form', require('./routes/download'));
-//Blog路由控制器
-app.use('/signup', require('./routes/signup'));
-app.use('/signin', require('./routes/signin'));
-app.use('/signout', require('./routes/signout'));
-app.use('/posts', require('./routes/posts'));
-app.use('/comments', require('./routes/comments'));
-// Blog路由
-// routes(app);
 
+// Blog路由
+routes(app);
+
+app.get('/favicon.ico', function(req, res) {
+    res.status(204);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,13 +1,12 @@
-var express = require('express');
-var router = express.Router();
 
-/* GET home page. */
-router.get('/:name', function(req, res, next) {
-  // res.render('pages/index', { title: 'Express' });
-    res.render('users', {
-        name: req.params.name
-    });
-});
-
-module.exports = router;
+module.exports = function (app) {
+    app.get('/', function (req, res) {
+        res.redirect('/posts')
+    })
+    app.use('/signup', require('./signup'))
+    app.use('/signin', require('./signin'))
+    app.use('/signout', require('./signout'))
+    app.use('/posts', require('./posts'))
+    app.use('/comments', require('./comments'))
+}
 

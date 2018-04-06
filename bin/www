@@ -7,7 +7,7 @@
 //引入我们上面导出的app实例
 var app = require('../app');
 //引入debug模块，打印调试日志
-var debug = require('debug')('node1:server');
+var debug = require('debug')('nodeapp:server');
 var http = require('http');
 
 /**
