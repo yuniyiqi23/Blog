@@ -5,15 +5,13 @@ const router = express.Router();
 const UserModel = require('../models/users')
 const checkNotLogin = require('../middlewares/check').checkNotLogin;
 
-router.get('/', checkNotLogin, function (req, res, next) {
-    // res.writeHead(200);
-    res.render('signin.ejs');
-    // next();
+router.get('/', function (req, res, next) {
+    res.render('signin');
 })
 
 router.post('/', function (req, res, next) {
-    const name = req.fields.name;
-    const password = req.fields.password;
+    const name = req.body.name;
+    const password = req.body.password;
 
     //校验参数
     try{

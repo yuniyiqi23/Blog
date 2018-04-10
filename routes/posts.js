@@ -21,8 +21,8 @@ router.get('/', function (req, res, next) {
 // POST /posts/create 发表一篇文章
 router.post('/create', checkLogin, function (req, res, next) {
     const author = req.session.user._id;
-    const title = req.fields.title;
-    const content = req.fields.content;
+    const title = req.body.title;
+    const content = req.body.content;
 
     // 校验参数
     try {
@@ -47,11 +47,12 @@ router.post('/create', checkLogin, function (req, res, next) {
         .then(function (result) {
             // 此 post 是插入 mongodb 后的值，包含 _id
             post = result.ops[0];
+            console.log('post._id = ' + post._id);
             req.flash('success', '发表成功')
             // 发表成功后跳转到该文章页
             res.redirect('/posts/${post._id}');
         })
-        .catch(next)
+        .catch(next)    
 
 })
 

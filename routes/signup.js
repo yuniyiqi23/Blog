@@ -18,7 +18,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
     const gender = req.fields.gender;
     const bio = req.fields.bio;
     const avatar = req.files.avatar.path.split(path.sep).pop();
-    var password = req.fields.password;
+    let password = req.fields.password;
     const repassword = req.fields.repassword;
 
     // 校验参数
@@ -51,7 +51,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
     // 明文密码加密
     password = sha1(password);
     // 待写入数据库的用户信息
-    var user = {
+    let user = {
         name: name,
         password: password,
         gender: gender,
