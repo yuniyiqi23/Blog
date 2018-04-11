@@ -10,7 +10,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 //解析客户端请求的body中的内容,内部使用JSON编码处理,url编码处理以及对于文件的上传处理
 const bodyParser = require('body-parser');
-//
+
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
@@ -60,6 +60,7 @@ app.use(flash());
 //     keepExtensions: true// 保留后缀
 // }));
 
+
 // 设置模板全局常量
 app.locals.blog = {
     title: pkg.name,
@@ -79,7 +80,10 @@ routes(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    next(createError(404));
+//     next(createError(404));
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handler

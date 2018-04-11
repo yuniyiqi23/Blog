@@ -50,7 +50,7 @@ router.post('/create', checkLogin, function (req, res, next) {
             console.log('post._id = ' + post._id);
             req.flash('success', '发表成功')
             // 发表成功后跳转到该文章页
-            res.redirect('/posts/${post._id}');
+            res.redirect('/posts/' + post._id);
         })
         .catch(next)    
 
