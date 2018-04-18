@@ -4,7 +4,7 @@ module.exports = {
             req.flash('error', '未登录！');
             return res.redirect('/sigin');
         }
-        next()
+        next();
     },
 
     checkNotLogin : function checkNotLogin(req, res, next) {
@@ -12,6 +12,6 @@ module.exports = {
             req.flush('error', '已登录！');
             return res.redirect('/sigin.ejs');
         }
-        next()
+        next();
     }
 }

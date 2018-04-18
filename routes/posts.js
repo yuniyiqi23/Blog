@@ -3,6 +3,7 @@ const router = express.Router();
 
 const checkLogin = require('../middlewares/check').checkLogin;
 const PostModel = require('../models/posts');
+const CommentModel = require('../models/comments');
 
 // GET /posts 所有用户或者特定用户的文章页
 // eg: GET /posts?author=xxx
@@ -68,17 +69,21 @@ router.get('/:postId', function (req, res, next) {
     Promise.all([
         // 获取文章信息
         PostModel.getPostById(postId),
+        // 获取该文章所有留言
+        CommentModel.getComments(postId),
         // pv 加 1
-        PostModel.incPv(postId)
+        PostModel.incPv(postId),
     ])
         .then(function (result) {
-            const post = result[0]
+            const post = result[0];
+            const comments = result[1];
             if (!post) {
                 throw new Error('该文章不存在')
             }
 
             res.render('post', {
-                post: post
+                post: post,
+                comments :comments,
             })
         })
         .catch(next)
@@ -109,8 +114,8 @@ router.get('/:postId/edit', checkLogin, function (req, res, next) {
 router.post('/:postId/edit', checkLogin, function (req, res, next) {
     const postId = req.params.postId;
     const author = req.session.user._id;
-    const title = req.fields.title;
-    const content = req.fields.content;
+    const title = req.body.title;
+    const content = req.body.content;
 
     //校验参数
     try{
@@ -125,13 +130,23 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
         return res.redirect('back')
     }
 
-    PostModel.getRawPostById(postId, {title : title, content : content})
+    PostModel.getRawPostById(postId)
         .then(function (post) {
-            req.flash('success', '编辑文章成功');
-            // 编辑成功后跳转到上一页
-            res.redirect('/posts/${postId}');
-        })
-        .catch(next);
+            if (!post) {
+                throw new Error('文章不存在')
+            }
+            if (post.author._id.toString() !== author.toString()) {
+                throw new Error('没有权限')
+            }
+
+            PostModel.updatePostById(postId, { title: title, content: content })
+                .then(function () {
+                    req.flash('success', '编辑文章成功')
+                    // 编辑成功后跳转到上一页
+                    res.redirect('/posts/' + postId)
+                })
+                .catch(next)
+        });
 })
 
 // GET /posts/:postId/remove 删除一篇文章
