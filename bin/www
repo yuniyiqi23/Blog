@@ -4,24 +4,37 @@
  * Module dependencies.
  */
 //依赖加载
+var fs = require('fs');
 //引入我们上面导出的app实例
 const app = require('../app');
 //引入debug模块，打印调试日志
 const debug = require('debug')('nodeapp:server');
 const http = require('http');
 
+const https = require('https');
+console.log('__dirname = ' + __dirname);
+var privateKey  = fs.readFileSync('ssl/key.pem', 'utf8');
+var certificate = fs.readFileSync('ssl/cert.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
+//引入配置文件
+var config = require('../config/config');
+console.log('当前运行环境为：'+ config.env);
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '80');
+const port = normalizePort(config.port || '3000');
+// 打印输出端口号
+console.log('当前监听端口号为： ' + port);
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
+const server = https.createServer(credentials, app);
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -1,10 +1,7 @@
 
 module.exports = function (app) {
 
-    // app.get('/', function (req, res, next) {
-    //     res.render('./test_post.ejs');
-    //     // res.redirect('/posts')
-    // });
+    app.get('/', require('./posts'));
     app.use('/signup', require('./signup'));
     app.use('/signin', require('./signin'));
     app.use('/signout', require('./signout'));
@@ -16,7 +13,7 @@ module.exports = function (app) {
         if (!res.headersSent) {
         res.status(404).render('404')
         }
-    })
+    });
     
 }
 

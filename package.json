@@ -1,9 +1,11 @@
 {
-  "name": "Blog",
+  "name": "Adam",
   "version": "0.0.0",
-  "description": "Adam Blog",
+  "description": "Welcome to Blog World",
   "private": true,
   "scripts": {
+    "test": "mocha test",
+    "run": "export NODE_ENV=production&&node ./bin/www",
     "start": "node ./bin/www"
   },
   "dependencies": {
@@ -31,5 +33,9 @@
     "serve-favicon": "~2.4.5",
     "sha1": "^1.1.1",
     "winston": "^2.4.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.1.1",
+    "supertest": "^3.0.0"
   }
 }

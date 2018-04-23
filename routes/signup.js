@@ -43,9 +43,9 @@ router.post('/', checkNotLogin, function (req, res, next) {
             if (!(bio.length >= 1 && bio.length <= 30)) {
                 throw new Error('个人简介请限制在 1-30 个字符')
             }
-            if (!files.avatar.name) {
-                throw new Error('缺少头像')
-            }
+            // if (!files.avatar.name) {
+            //     throw new Error('缺少头像')
+            // }
             if (password.length < 6) {
                 throw new Error('密码至少 6 个字符')
             }
