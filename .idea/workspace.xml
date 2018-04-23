@@ -2,22 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4b0987bb-78ff-430b-91f3-bfb549906648" name="Default" comment="1.测试部署ECS">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/logs/.gitignore" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/logs/error.log" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/public/images/.gitignore" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ssl/cert.pem" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ssl/csr.pem" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ssl/key.pem" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/add.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/add.test.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/avatar.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/signup.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.vscode/launch.json" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/Node学习记录.docx" afterPath="$PROJECT_DIR$/Node学习记录.docx" />
-      <change beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change beforePath="$PROJECT_DIR$/bin/www" afterPath="$PROJECT_DIR$/bin/www" />
-      <change beforePath="$PROJECT_DIR$/config/default.js" afterPath="$PROJECT_DIR$/config/default.js" />
       <change beforePath="$PROJECT_DIR$/node_modules/color-name/.npmignore" afterPath="$PROJECT_DIR$/node_modules/color-name/.npmignore" />
       <change beforePath="$PROJECT_DIR$/node_modules/color-name/LICENSE" afterPath="$PROJECT_DIR$/node_modules/color-name/LICENSE" />
       <change beforePath="$PROJECT_DIR$/node_modules/color-name/README.md" afterPath="$PROJECT_DIR$/node_modules/color-name/README.md" />
@@ -28,10 +15,6 @@
       <change beforePath="$PROJECT_DIR$/node_modules/marked/www/demo.html" afterPath="$PROJECT_DIR$/node_modules/marked/www/demo.html" />
       <change beforePath="$PROJECT_DIR$/node_modules/marked/www/demo.js" afterPath="$PROJECT_DIR$/node_modules/marked/www/demo.js" />
       <change beforePath="$PROJECT_DIR$/node_modules/resolve/test/resolver/symlinked/.npmignore" afterPath="$PROJECT_DIR$/node_modules/resolve/test/resolver/symlinked/.npmignore" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" afterPath="$PROJECT_DIR$/package-lock.json" />
-      <change beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
-      <change beforePath="$PROJECT_DIR$/routes/signup.js" afterPath="$PROJECT_DIR$/routes/signup.js" />
       <change beforePath="$PROJECT_DIR$/word.odt" afterPath="" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -413,7 +396,7 @@
       <workItem from="1524204369524" duration="2719000" />
       <workItem from="1524297212565" duration="3189000" />
       <workItem from="1524397627586" duration="1871000" />
-      <workItem from="1524446906828" duration="13482000" />
+      <workItem from="1524446906828" duration="13612000" />
     </task>
     <task id="LOCAL-00001" summary="1.Node学习记录">
       <created>1522765898760</created>
@@ -464,7 +447,14 @@
       <option name="project" value="LOCAL" />
       <updated>1524400305329</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="1.HTTPS&#10;2.添加development和production配置文件">
+      <created>1524477867074</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1524477867074</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -500,7 +490,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="132391000" />
+    <option name="totallyTimeSpent" value="132521000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -577,7 +567,8 @@
     <MESSAGE value="1.加强用户密码安全，使用bcryptjs算法" />
     <MESSAGE value="1.更新APP图标" />
     <MESSAGE value="1.测试部署ECS" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.测试部署ECS" />
+    <MESSAGE value="1.HTTPS&#10;2.添加development和production配置文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.HTTPS&#10;2.添加development和production配置文件" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
