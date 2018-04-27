@@ -6,15 +6,15 @@ const CommentModel = require('./comments');
 Post.plugin('contentToHtml', {
     afterFind: function (posts) {
         return posts.map(function (post) {
-            post.content = marked(post.content)
-            return post
+            post.content = marked(post.content);
+            return post;
         })
     },
     afterFindOne: function (post) {
         if (post) {
-            post.content = marked(post.content)
+            post.content = marked(post.content);
         }
-        return post
+        return post;
     }
 });
 

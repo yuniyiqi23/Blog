@@ -8,6 +8,10 @@ const CommentModel = require('../models/comments');
 // GET /posts 所有用户或者特定用户的文章页
 // eg: GET /posts?author=xxx
 router.get('/', function (req, res, next) {
+    if (req.session.user) {//检查用户是否已经登录
+        console.log(req.session);//打印session的值
+    }
+
     const author = req.query.author;
 
     PostModel.getPosts(author)

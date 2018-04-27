@@ -20,7 +20,7 @@ router.get('/', checkNotLogin, function (req, res, next) {
 router.post('/', checkNotLogin, function (req, res, next) {
 
     const form = new formidable.IncomingForm();
-    form.uploadDir = '../public/images';   //文件保存在系统临时目录
+    form.uploadDir = path.join(__dirname, '../public/images');  //文件保存在系统临时目录
     form.maxFieldsSize = 1 * 1024 * 1024;  //上传文件大小限制为最大1M
     form.keepExtensions = true;        //使用文件的原扩展名
 
@@ -43,9 +43,9 @@ router.post('/', checkNotLogin, function (req, res, next) {
             if (!(bio.length >= 1 && bio.length <= 30)) {
                 throw new Error('个人简介请限制在 1-30 个字符')
             }
-            // if (!files.avatar.name) {
-            //     throw new Error('缺少头像')
-            // }
+            if (!files.avatar.name) {
+                throw new Error('缺少头像')
+            }
             if (password.length < 6) {
                 throw new Error('密码至少 6 个字符')
             }
@@ -66,7 +66,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
                 return next(err);
             }
             bcrypt.hash(password, salt, function(err, hash){
-                console.log('salt = ' + salt);
+                // console.log('salt = ' + salt);
                 if(err){
                     return next(err);
                 }
@@ -81,7 +81,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
                     bio: bio,
                     avatar: avatar,
                 };
-                console.log('user.password = ' + user.password)
+                // console.log('user.password = ' + user.password)
 
                 // 用户信息写入数据库
                 UserModel.create(user)
@@ -106,10 +106,10 @@ router.post('/', checkNotLogin, function (req, res, next) {
                         }
                         next(e);
                     });
-
             });
         });
     });
 });
+
 
 module.exports = router;

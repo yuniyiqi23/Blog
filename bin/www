@@ -12,9 +12,9 @@ const debug = require('debug')('nodeapp:server');
 const http = require('http');
 
 const https = require('https');
-console.log('__dirname = ' + __dirname);
-var privateKey  = fs.readFileSync('ssl/key.pem', 'utf8');
-var certificate = fs.readFileSync('ssl/cert.pem', 'utf8');
+// console.log('__dirname = ' + __dirname);
+var privateKey  = fs.readFileSync('../ssl/key.pem', 'utf8');
+var certificate = fs.readFileSync('../ssl/cert.pem', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
 //引入配置文件

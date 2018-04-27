@@ -91,7 +91,7 @@ describe('signup', function () {
       agent
         .post('/signup')
         .type('form')
-        // .attach('avatar', path.join(__dirname, 'avatar.png'))
+        .attach('avatar', path.join(__dirname, 'avatar.png'))
         .field({ name: testName2, gender: 'm', bio: 'noder', password: '123456', repassword: '123456' })
         .redirects()
         .end(function (err, res) {
@@ -100,7 +100,7 @@ describe('signup', function () {
               return done(err);
           }
           assert(res.text.match(/注册成功/))
-          // done()
+          done()
         })
     })
   })
