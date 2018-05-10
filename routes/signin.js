@@ -49,11 +49,6 @@ router.post('/', function (req, res, next) {
                 // 跳转到主页
                 res.redirect('/posts');
             });
-            // if(sha1(password) !== user.password){
-            //     req.flash('error', '用户名或是密码错误！');
-            //     return res.redirect('back');
-            // }
-
         })
         .catch(next);
 });

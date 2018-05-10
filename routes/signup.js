@@ -59,29 +59,17 @@ router.post('/', checkNotLogin, function (req, res, next) {
             return res.redirect('/signup')
         }
 
-        // 明文密码加密
-        // password = sha1(password);
-        bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt, next){
-            if(err){
-                return next(err);
-            }
-            bcrypt.hash(password, salt, function(err, hash){
-                // console.log('salt = ' + salt);
-                if(err){
-                    return next(err);
-                }
-                password = hash;
-                console.log('password = ' + password);
-
+        getBcryptPassword(password)
+            .then(function (value) {
                 // 待写入数据库的用户信息
                 let user = {
                     name: name,
-                    password: password,
+                    password: value,
                     gender: gender,
                     bio: bio,
                     avatar: avatar,
                 };
-                // console.log('user.password = ' + user.password)
+                console.log('user.password = ' + user.password);
 
                 // 用户信息写入数据库
                 UserModel.create(user)
@@ -104,12 +92,34 @@ router.post('/', checkNotLogin, function (req, res, next) {
                             req.flash('error', '用户名已被占用');
                             return res.redirect('/signup');
                         }
-                        next(e);
+                        // next(e);
+                        throw next(e);
                     });
+            })
+            .catch(function (err) {
+                next(err);
             });
-        });
+
     });
 });
 
+function getBcryptPassword(password) {
+    return new Promise(function (resolve) {
+        bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt, next) {
+            if (err) {
+                throw next(err);
+            }
+            bcrypt.hash(password, salt, function (err, hash) {
+                console.log('salt = ' + salt);
+                if (err) {
+                    throw next(err);
+                }
+                password = hash;
+                console.log('password = ' + password);
+                resolve(password);
+            })
+        })
+    });
+}
 
 module.exports = router;

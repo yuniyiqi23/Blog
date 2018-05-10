@@ -10,12 +10,13 @@ const app = require('../app');
 //引入debug模块，打印调试日志
 const debug = require('debug')('nodeapp:server');
 const http = require('http');
+const path = require('path');
 
 const https = require('https');
 // console.log('__dirname = ' + __dirname);
-var privateKey  = fs.readFileSync('../ssl/key.pem', 'utf8');
-var certificate = fs.readFileSync('../ssl/cert.pem', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
+// var privateKey  = fs.readFileSync(path.join(__dirname, '../ssl/key.pem'), 'utf8');
+// var certificate = fs.readFileSync(path.join(__dirname,'../ssl/cert.pem'), 'utf8');
+// var credentials = {key: privateKey, cert: certificate};
 
 //引入配置文件
 var config = require('../config/config');
@@ -33,8 +34,8 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-// const server = http.createServer(app);
-const server = https.createServer(credentials, app);
+const server = http.createServer(app);
+// const server = https.createServer(credentials, app);
 
 /**
  * Listen on provided port, on all network interfaces.
