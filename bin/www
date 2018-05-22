@@ -25,7 +25,7 @@ console.log('当前运行环境为：'+ config.env);
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(config.port || '3000');
+const port = normalizePort(config.port || '3001');
 // 打印输出端口号
 console.log('当前监听端口号为： ' + port);
 app.set('port', port);

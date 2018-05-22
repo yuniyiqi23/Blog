@@ -52,7 +52,7 @@ app.use(session({
     },
     store: new MongoStore({// 将 session 存储到 mongodb
         url: config.mongodb,// mongodb 地址
-        touchAfter:24*3600 //单位是秒
+        touchAfter: 24*3600 //单位是秒
     })
 }));
 // console.log('session.key = ' + config.session.key);
@@ -128,3 +128,6 @@ module.exports = app;
 
 //Debug
 //node --inspect-brk ./bin/www
+
+//Run
+//node ./bin/www

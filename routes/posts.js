@@ -6,8 +6,38 @@ const PostModel = require('../models/posts');
 const CommentModel = require('../models/comments');
 
 // GET /posts 所有用户或者特定用户的文章页
-// eg: GET /posts?author=xxx
 router.get('/', function (req, res, next) {
+    let page = req.query.page;
+    if (page === undefined) {
+        page = 1;
+    }
+
+    const pageSize = 3;
+
+    if (global.postsCount === undefined) {
+        PostModel.getPostsCount()
+            .then(function (result) {
+                global.postsCount = result;
+            })
+            .catch(next);
+    }
+
+    let postId = global.lastPostId;
+    PostModel.getPagingPosts(postId, pageSize)
+        .then(function (result) {
+            if(result !== null){
+                global.lastPostId = result[result.length - 1]._id;
+                res.render('posts', {
+                    postsCount: global.postsCount,
+                    posts: result,
+                })
+            }
+        })
+        .catch(next);
+});
+
+// eg: GET /posts?author=xxx
+router.get('/author/:authorId', function (req, res, next) {
     if (req.session.user) {//检查用户是否已经登录
         console.log(req.session);//打印session的值
     }
@@ -57,7 +87,7 @@ router.post('/create', checkLogin, function (req, res, next) {
             // 发表成功后跳转到该文章页
             res.redirect('/posts/' + post._id);
         })
-        .catch(next)    
+        .catch(next)
 
 })
 
@@ -87,7 +117,7 @@ router.get('/:postId', function (req, res, next) {
 
             res.render('post', {
                 post: post,
-                comments :comments,
+                comments: comments,
             })
         })
         .catch(next)
@@ -100,14 +130,14 @@ router.get('/:postId/edit', checkLogin, function (req, res, next) {
 
     PostModel.getRawPostById(postId)
         .then(function (post) {
-            if(!post){
+            if (!post) {
                 throw new Error('该文章不存在！');
             }
-            if(author.toString() !== post.author._id.toString()){
+            if (author.toString() !== post.author._id.toString()) {
                 throw new Error('权限不足！');
             }
             res.render('edit.ejs', {
-                post : post,
+                post: post,
             });
 
         })
@@ -122,14 +152,14 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
     const content = req.body.content;
 
     //校验参数
-    try{
-        if(!title.length){
+    try {
+        if (!title.length) {
             throw new Error('请填写标题!');
         }
         if (!content.length) {
             throw new Error('请填写内容')
         }
-    }catch (e) {
+    } catch (e) {
         req.flash('error', e.message)
         return res.redirect('back')
     }

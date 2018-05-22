@@ -79,6 +79,29 @@ module.exports = {
             .exec()
     },
 
+    //获取所有文章数量
+    getPostsCount: function(){
+        return Post
+            .count()
+            .exec();
+    },
+
+    //分页获取文章
+    getPagingPosts: function(_id, pageSize){
+        const query = {}
+        if (_id) {
+            query._id < _id;
+        }
+        return Post
+            .find(query)
+            .limit(pageSize)
+            .sort({ _id: -1 })
+            .addCreatedAt()
+            .addCommentsCount()
+            .contentToHtml()
+            .exec();
+    },
+
     // 通过文章 id 给 pv 加 1
     incPv: function incPv (postId) {
         return Post
@@ -89,7 +112,7 @@ module.exports = {
     // 通过文章 id 获取一篇原生文章（编辑文章）
     getRawPostById: function getRawPostById (postId) {
         return Post
-            .findOne({ _id: postId })
+            .findOne({ _id: postId})
             .populate({ path: 'author', model: 'User' })
             .exec()
     },
