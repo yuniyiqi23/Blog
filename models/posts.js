@@ -90,7 +90,7 @@ module.exports = {
     getPagingPosts: function(_id, pageSize){
         const query = {}
         if (_id) {
-            query._id < _id;
+            query._id = _id;
         }
         return Post
             .find(query)
