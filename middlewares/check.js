@@ -9,8 +9,8 @@ module.exports = {
 
     checkNotLogin : function checkNotLogin(req, res, next) {
         if(req.session.user){
-            req.flush('error', '已登录！');
-            return res.redirect('/sigin.ejs');
+            // req.flush('error', '已登录！');
+            return res.redirect('/posts');
         }
         next();
     }

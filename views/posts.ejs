@@ -1,68 +1,97 @@
 <%- include('header') %>
 
-<% posts.forEach(function (post) { %>
-<!-- <%- include('components/post-content', { post: post }) %> -->
-<div class="post-content">
-  <div class="ui grid">
-    <div class="three wide column">
-      <a class="avatar avatar-link"
-         href="/posts?author=<%= post.author._id %>"
-         data-title="<%= post.author.name %> | <%= ({m: '男', f: '女', x: '保密'})[post.author.gender] %>"
-         data-content="<%= post.author.bio %>">
-        <img class="avatar" src="/images/<%= post.author.avatar %>">
-      </a>
-    </div>
+  <% posts.forEach(function (post) { %>
+    <div class="post-content">
+      <div class="ui grid">
+        <div class="three wide column">
+          <a class="avatar avatar-link" href="/posts?author=<%= post.author._id %>" data-title="<%= post.author.name %> | <%= ({m: '男', f: '女', x: '保密'})[post.author.gender] %>"
+            data-content="<%= post.author.bio %>">
+            <img class="avatar" src="/images/<%= post.author.avatar %>">
+          </a>
+        </div>
 
-    <div class="nine wide column">
-      <div class="ui segment">
-        <h3><a href="/posts/<%= post._id %>"><%= post.title %></a></h3>
-        <!-- <pre><%- post.content %></pre> -->
-        <% 
-          let tag = '</p>';
-          let arr = post.content.split(tag);
-          <!-- console.log(arr);  -->
-          let content;
-          if(arr.length > 0){
-            if(arr.length == 1){
-              content = arr[0] + tag;
-            }else if(arr.length == 2){
-              content = arr[0] + tag + arr[1] + tag;
-            }else if(arr.length > 2){
-              content = arr[0] + tag + arr[1] + tag + arr[2] + '...' + tag;
-            }
-          }
-        %>
-        <pre><%- content %></pre>
-        
-        <div>
-          <span class="tag"><%= post.created_at %></span>
-          <span class="tag right">
-            <span>浏览(<%= post.pv || 0 %>)</span>
-            <span>留言(<%= post.commentsCount || 0 %>)</span>
+        <div class="nine wide column">
+          <div class="ui segment">
+            <h3>
+              <a href="/posts/<%= post._id %>">
+                <%= post.title %>
+              </a>
+            </h3>
+            <!-- <pre><%- post.content %></pre> -->
+            <% 
+              <!-- console.log(post.author.avatar); -->
+              let tag = '</p>';
+              let arr = post.content.split(tag);
+              <!-- console.log(arr);  -->
+              let content;
+              if(arr.length > 0){
+                if(arr.length == 1){
+                  content = arr[0] + tag;
+                }else if(arr.length == 2){
+                  content = arr[0] + tag + arr[1] + tag;
+                }else if(arr.length > 2){
+                  content = arr[0] + tag + arr[1] + tag + arr[2] + '...' + tag;
+                }
+              }
+            %>
+              <pre><%- content %></pre>
 
-            <% if (user && post.author._id && user._id.toString() === post.author._id.toString()) { %>
-              <div class="ui inline dropdown">
-                <div class="text"></div>
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                  <div class="item"><a href="/posts/<%= post._id %>/edit">编辑</a></div>
-                  <div class="item"><a href="/posts/<%= post._id %>/remove">删除</a></div>
-                </div>
+              <div>
+                <span class="tag">
+                  <%= post.created_at %>
+                </span>
+                <span class="tag right">
+                  <span>浏览(
+                    <%= post.pv || 0 %>)</span>
+                  <span>留言(
+                    <%= post.commentsCount || 0 %>)</span>
+
+                  <% if (user && post.author._id && user._id.toString() === post.author._id.toString()) { %>
+                    <div class="ui inline dropdown">
+                      <div class="text"></div>
+                      <i class="dropdown icon"></i>
+                      <div class="menu">
+                        <div class="item">
+                          <a href="/posts/<%= post._id %>/edit">编辑</a>
+                        </div>
+                        <div class="item">
+                          <a href="/posts/<%= post._id %>/remove">删除</a>
+                        </div>
+                      </div>
+                    </div>
+                    <% } %>
+                </span>
               </div>
-            <% } %>
-
-          </span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<% }) %>
+    <% }) %>
 
-<% for(i = 1, j = 0; j < postsCount; j = j + 3, i++){ %>
-  <div><a href="?page=<%= i %>"><%= i %></a></div>
-<% } %>
+      <!-- 实现分页页码 -->
+      <div class="ui grid">
+        <div class="three wide column"></div>
+        <div class="nine wide column">
+          <div style="padding-right: 0cm">
+            <ul class="pagination">
+              <li>
+                <!-- <a href="#">上一页</a> -->
+              </li>
+              <% for(i = 1, j = 0; j < postsCount; j = j + 3, i++){ %>
+                <li>
+                  <a href="/posts/page/<%= i %>">
+                    <%= i %>
+                  </a>
+                </li>
+                <% } %>
+                  <li>
+                    <!-- <a href="#">下一页</a> -->
+                  </li>
+            </ul>
+          </div>
+        </div>
 
-<p>博客总数：<%= postsCount %></p>
+      </div>
+      <!-- <p>博客总数：<%= postsCount %></p> -->
 
-<%- include('footer') %>
+      <%- include('footer') %>

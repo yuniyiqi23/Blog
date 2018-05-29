@@ -1,6 +1,7 @@
 const marked = require('marked');
 const Post = require('../lib/mongo').Post;
 const CommentModel = require('./comments');
+const ObjectId = require('mongodb').ObjectID
 
 // 将 post 的 content 从 markdown 转换成 html
 Post.plugin('contentToHtml', {
@@ -87,19 +88,36 @@ module.exports = {
     },
 
     //分页获取文章
-    getPagingPosts: function(_id, pageSize){
-        const query = {}
-        if (_id) {
-            query._id = _id;
-        }
+    getPagingPosts: function(page, pageSize = 3){
         return Post
-            .find(query)
+            .find()
+            .skip(page * pageSize)
             .limit(pageSize)
+            .populate({ path: 'author', model: 'User' })
             .sort({ _id: -1 })
             .addCreatedAt()
             .addCommentsCount()
             .contentToHtml()
             .exec();
+
+        // if(lastId) {
+        //     return Post
+        //     .find({'_id' :{ "$lt": lastId} })
+        //     .sort({ _id: -1 })
+        //     .addCreatedAt()
+        //     .addCommentsCount()
+        //     .contentToHtml()
+        //     .exec();
+        // }else{
+        //     return Post
+        //     .find()
+        //     .sort({ _id: -1 })
+        //     .addCreatedAt()
+        //     .addCommentsCount()
+        //     .contentToHtml()
+        //     .exec();
+        // }
+        
     },
 
     // 通过文章 id 给 pv 加 1

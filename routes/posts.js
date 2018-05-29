@@ -7,33 +7,59 @@ const CommentModel = require('../models/comments');
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get('/', function (req, res, next) {
-    let page = req.query.page;
-    if (page === undefined) {
-        page = 1;
-    }
-
-    const pageSize = 3;
-
-    if (global.postsCount === undefined) {
-        PostModel.getPostsCount()
-            .then(function (result) {
-                global.postsCount = result;
-            })
-            .catch(next);
-    }
-
-    let postId = global.lastPostId;
-    PostModel.getPagingPosts(postId, pageSize)
+    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(0)])
         .then(function (result) {
-            if(result !== null){
+            if (result[1].length > 0) {
                 global.lastPostId = result[result.length - 1]._id;
                 res.render('posts', {
-                    postsCount: global.postsCount,
-                    posts: result,
+                    postsCount: result[0],
+                    posts: result[1],
                 })
             }
         })
         .catch(next);
+
+    // if (global.postsCount === undefined) {
+    //     PostModel.getPostsCount()
+    //         .then(function (result) {
+    //             global.postsCount = result;
+    //         })
+    //         .catch(next);
+    // }
+
+    // // let postId = global.lastPostId;
+    // PostModel.getPagingPosts(0)
+    //     .then(function (result) {
+    //         if (result.length > 0) {
+    //             global.lastPostId = result[result.length - 1]._id;
+    //             res.render('posts', {
+    //                 postsCount: global.postsCount,
+    //                 posts: result,
+    //             })
+    //         }
+    //     })
+    //     .catch(next);
+});
+
+//GET /posts/page/xxx 
+router.get('/page/:pageNum', function (req, res, next) {
+    let page = req.params.pageNum;
+    if (page === undefined) {
+        page = 1;
+    }
+
+    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(page - 1)])
+        .then(function (result) {
+            if (result[1].length > 0) {
+                global.lastPostId = result[result.length - 1]._id;
+                res.render('posts', {
+                    postsCount: result[0],
+                    posts: result[1],
+                })
+            }
+        })
+        .catch(next);
+
 });
 
 // eg: GET /posts?author=xxx

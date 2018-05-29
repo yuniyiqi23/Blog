@@ -6,12 +6,12 @@ const bcrypt = require('bcryptjs');
 const UserModel = require('../models/users')
 const checkNotLogin = require('../middlewares/check').checkNotLogin;
 
-router.get('/', function (req, res, next) {
+router.get('/', checkNotLogin, function (req, res, next) {
     res.render('signin');
 });
 
-router.post('/', function (req, res, next) {
-    console.log('signin -- Post');
+router.post('/', checkNotLogin, function (req, res, next) {
+    // console.log('signin -- Post');
 
     const name = req.body.name;
     const password = req.body.password;
