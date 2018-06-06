@@ -7,7 +7,7 @@ const CommentModel = require('../models/comments');
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get('/', function (req, res, next) {
-    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(0)])
+    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(1)])
         .then(function (result) {
             if (result[1].length > 0) {
                 global.lastPostId = result[result.length - 1]._id;
@@ -43,12 +43,12 @@ router.get('/', function (req, res, next) {
 
 //GET /posts/page/xxx 
 router.get('/page/:pageNum', function (req, res, next) {
-    let page = req.params.pageNum;
-    if (page === undefined) {
-        page = 1;
-    }
+    let page = req.params.pageNum || 1;
+    // if (page === undefined) {
+    //     page = 1;
+    // }
 
-    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(page - 1)])
+    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(page)])
         .then(function (result) {
             if (result[1].length > 0) {
                 global.lastPostId = result[result.length - 1]._id;

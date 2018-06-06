@@ -25,7 +25,7 @@ Post.plugin('contentToHtml', {
 
 // 给 post 添加留言数 commentsCount
 Post.plugin('addCommentsCount', {
-    afterFind : function (posts) {
+    afterFind: function (posts) {
         return Promise.all(posts.map(function (post) {
             return CommentModel.getCommentsCount(post._id)
                 .then(function (commentsCount) {
@@ -35,8 +35,8 @@ Post.plugin('addCommentsCount', {
         }))
     },
 
-    afterFindOne : function (post) {
-        if(post){
+    afterFindOne: function (post) {
+        if (post) {
             return CommentModel.getCommentsCount(post._id)
                 .then(function (commentsCount) {
                     post.commentsCount = commentsCount;
@@ -54,7 +54,7 @@ module.exports = {
     },
 
     // 通过文章 id 获取一篇文章
-    getPostById: function getPostById (postId) {
+    getPostById: function getPostById(postId) {
         return Post
             .findOne({ _id: postId })
             .populate({ path: 'author', model: 'User' })
@@ -65,7 +65,7 @@ module.exports = {
     },
 
     // 按创建时间降序获取所有用户文章或者某个特定用户的所有文章
-    getPosts: function getPosts (author) {
+    getPosts: function getPosts(author) {
         const query = {}
         if (author) {
             query.author = author
@@ -81,17 +81,19 @@ module.exports = {
     },
 
     //获取所有文章数量
-    getPostsCount: function(){
+    getPostsCount: function () {
         return Post
             .count()
             .exec();
     },
 
     //分页获取文章
-    getPagingPosts: function(page, pageSize = 3){
+    getPagingPosts: function (page, pageSize = 5) {
+        let skipNum = (page - 1) * pageSize;
+
         return Post
             .find()
-            .skip(page * pageSize)
+            .skip(skipNum)
             .limit(pageSize)
             .populate({ path: 'author', model: 'User' })
             .sort({ _id: -1 })
@@ -117,35 +119,35 @@ module.exports = {
         //     .contentToHtml()
         //     .exec();
         // }
-        
+
     },
 
     // 通过文章 id 给 pv 加 1
-    incPv: function incPv (postId) {
+    incPv: function incPv(postId) {
         return Post
             .update({ _id: postId }, { $inc: { pv: 1 } })
             .exec()
     },
 
     // 通过文章 id 获取一篇原生文章（编辑文章）
-    getRawPostById: function getRawPostById (postId) {
+    getRawPostById: function getRawPostById(postId) {
         return Post
-            .findOne({ _id: postId})
+            .findOne({ _id: postId })
             .populate({ path: 'author', model: 'User' })
             .exec()
     },
 
     // 通过文章 id 更新一篇文章
-    updatePostById: function updatePostById (postId, data) {
+    updatePostById: function updatePostById(postId, data) {
         return Post
             .update({ _id: postId }, { $set: data })
             .exec()
     },
 
     // 通过用户 id 和文章 id 删除一篇文章
-    delPostById: function delPostById (postId, author) {
+    delPostById: function delPostById(postId, author) {
         return Post
-            .deleteOne({ _id: postId, author : author })
+            .deleteOne({ _id: postId, author: author })
             .exec()
             .then(function (value) {
                 // 文章删除后，再删除该文章下的所有留言
