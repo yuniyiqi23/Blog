@@ -306,9 +306,24 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 				}
 				var newUl = createPageList(curPage, totalPage, showCount);
 				reflash(page, newUl, option, curPage);
+				getPaginglist(curPage);
 			}
 		});
 	};
+
+	//getPaginglist
+	function getPaginglist(curPage) {
+		$.ajax({
+			type: "GET",
+			url: "http://localhost:3000/posts/page/" + curPage,
+			success: function (data) {
+				document.getElementById("postContent").innerHTML = data;
+				// $('#postContent').empty();
+				// $('#postContent').html(data);
+			}
+		});
+	}
+
 	//hover事件
 	function hover(page) {
 		//cm add
@@ -473,8 +488,9 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 	}
 
 	function createLink(str) {
-		console.log('url = ' + "<a href='/posts/page/" + str + "' >" + str + "</a>");
-		return "<a href='/posts/page/" + str + "' >" + str + "</a>";
+		// console.log('url = ' + "<a href='/posts/page/" + str + "' >" + str + "</a>");
+		// return "<a href='/posts/page/" + str + "' >" + str + "</a>";
+		return "<a href='#" + str + "' >" + str + "</a>";
 	}
 
 	function disable(arr) {

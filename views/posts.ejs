@@ -1,99 +1,35 @@
 <%- include('header') %>
 
-  <% posts.forEach(function (post) { %>
-    <div class="post-content">
-      <div class="ui grid">
-        <div class="three wide column">
-          <a class="avatar avatar-link" href="/posts?author=<%= post.author._id %>" data-title="<%= post.author.name %> | <%= ({m: '男', f: '女', x: '保密'})[post.author.gender] %>"
-            data-content="<%= post.author.bio %>">
-            <img class="avatar" src="/images/<%= post.author.avatar %>">
-          </a>
-        </div>
+  <div id="postContent">
+    <%- include('posts-content') %>
+  </div>
 
-        <div class="nine wide column">
-          <div class="ui segment">
-            <h3>
-              <a href="/posts/<%= post._id %>">
-                <%= post.title %>
-              </a>
-            </h3>
-            <!-- <pre><%- post.content %></pre> -->
-            <% 
-              <!-- console.log(post.author.avatar); -->
-              let tag = '</p>';
-              let arr = post.content.split(tag);
-              <!-- console.log(arr);  -->
-              let content;
-              if(arr.length > 0){
-                if(arr.length == 1){
-                  content = arr[0] + tag;
-                }else if(arr.length == 2){
-                  content = arr[0] + tag + arr[1] + tag;
-                }else if(arr.length > 2){
-                  content = arr[0] + tag + arr[1] + tag + arr[2] + '...' + tag;
-                }
-              }
-            %>
-              <pre><%- content %></pre>
-
-              <div>
-                <span class="tag">
-                  <%= post.created_at %>
-                </span>
-                <span class="tag right">
-                  <span>浏览(
-                    <%= post.pv || 0 %>)</span>
-                  <span>留言(
-                    <%= post.commentsCount || 0 %>)</span>
-
-                  <% if (user && post.author._id && user._id.toString() === post.author._id.toString()) { %>
-                    <div class="ui inline dropdown">
-                      <div class="text"></div>
-                      <i class="dropdown icon"></i>
-                      <div class="menu">
-                        <div class="item">
-                          <a href="/posts/<%= post._id %>/edit">编辑</a>
-                        </div>
-                        <div class="item">
-                          <a href="/posts/<%= post._id %>/remove">删除</a>
-                        </div>
-                      </div>
-                    </div>
-                    <% } %>
-                </span>
-              </div>
-          </div>
-        </div>
-      </div>
+  <!-- 实现分页页码 -->
+  <div class="ui grid">
+    <div class="three wide column"></div>
+    <div class="nine wide column">
+      <div id='page'></div>
     </div>
-    <% }) %>
+  </div>
 
-      <!-- 实现分页页码 -->
-      <div class="ui grid">
-        <div class="three wide column"></div>
-        <div class="nine wide column">
-            <div id='page'></div>
-        </div>
-      </div>
+  <script>
+    /**
+     * 纯粹的JS分页插件，代码缺点：JS操作DOM冗余太多，太繁琐
+     */
+    pageUtil.initPage('page', {
+      totalCount: '<%= postsCount%>',//总页数，一般从回调函数中获取。如果没有数据则默认为1页
+      curPage: 1,//初始化时的默认选中页，默认第一页。如果所填范围溢出或者非数字或者数字字符串，则默认第一页
+      showCount: 9,//分页栏显示的数量
+      pageSizeList: [5, 10, 15, 20, 25, 30],//自定义分页数，默认[5,10,15,20,50]
+      defaultPageSize: 1,//默认选中的分页数,默认选中第一个。如果未匹配到数组或者默认数组中，则也为第一个
+      isJump: true,//是否包含跳转功能，默认false
+      isPageNum: false,//是否显示分页下拉选择，默认false
+      isPN: true,//是否显示上一页和下一面，默认true
+      isFL: false,//是否显示首页和末页，默认true
+      jump: function (curPage, pageSize) {//跳转功能回调，传递回来2个参数，当前页和每页大小。如果没有设置分页下拉，则第二个参数永远为0。这里的this被指定为一个空对象，如果回调中需用到this请自行使用bind方法
+        console.log(curPage, pageSize);
+      },
+    });
+  </script>
 
-      <script>
-        /**
-         * 纯粹的JS分页插件，代码缺点：JS操作DOM冗余太多，太繁琐
-         */
-        pageUtil.initPage('page', {
-          totalCount: '<%= postsCount%>',//总页数，一般从回调函数中获取。如果没有数据则默认为1页
-          curPage: 1,//初始化时的默认选中页，默认第一页。如果所填范围溢出或者非数字或者数字字符串，则默认第一页
-          showCount: 9,//分页栏显示的数量
-          pageSizeList: [5, 10, 15, 20, 25, 30],//自定义分页数，默认[5,10,15,20,50]
-          defaultPageSize: 1,//默认选中的分页数,默认选中第一个。如果未匹配到数组或者默认数组中，则也为第一个
-          isJump: true,//是否包含跳转功能，默认false
-          isPageNum: false,//是否显示分页下拉选择，默认false
-          isPN: true,//是否显示上一页和下一面，默认true
-          isFL: false,//是否显示首页和末页，默认true
-          jump: function (curPage, pageSize) {//跳转功能回调，传递回来2个参数，当前页和每页大小。如果没有设置分页下拉，则第二个参数永远为0。这里的this被指定为一个空对象，如果回调中需用到this请自行使用bind方法
-            console.log(curPage, pageSize);
-          },
-        });
-      </script>
-
-      <%- include('footer') %>
+  <%- include('footer') %>

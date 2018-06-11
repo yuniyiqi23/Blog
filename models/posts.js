@@ -7,11 +7,7 @@ const ObjectId = require('mongodb').ObjectID
 Post.plugin('contentToHtml', {
     afterFind: function (posts) {
         return posts.map(function (post) {
-            // console.log('post.content : ');
-            // console.log(post.content);
             post.content = marked(post.content);
-            // console.log('marked content');
-            // console.log(post.content);
             return post;
         })
     },

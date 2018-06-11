@@ -132,5 +132,5 @@ module.exports = app;
 //Run
 //node ./bin/wwwe --inspect-brk ./bin/www
 
-//Run
-//node ./bin/www
+//autoRun
+//nodemon ./bin/www

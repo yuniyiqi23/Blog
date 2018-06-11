@@ -19,14 +19,6 @@ router.get('/', function (req, res, next) {
         })
         .catch(next);
 
-    // if (global.postsCount === undefined) {
-    //     PostModel.getPostsCount()
-    //         .then(function (result) {
-    //             global.postsCount = result;
-    //         })
-    //         .catch(next);
-    // }
-
     // // let postId = global.lastPostId;
     // PostModel.getPagingPosts(0)
     //     .then(function (result) {
@@ -44,15 +36,12 @@ router.get('/', function (req, res, next) {
 //GET /posts/page/xxx 
 router.get('/page/:pageNum', function (req, res, next) {
     let page = req.params.pageNum || 1;
-    // if (page === undefined) {
-    //     page = 1;
-    // }
 
     Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(page)])
         .then(function (result) {
             if (result[1].length > 0) {
-                global.lastPostId = result[result.length - 1]._id;
-                res.render('posts', {
+                // global.lastPostId = result[result.length - 1]._id;
+                res.render('posts-content', {
                     postsCount: result[0],
                     posts: result[1],
                 })
