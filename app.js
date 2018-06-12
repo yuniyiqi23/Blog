@@ -67,6 +67,9 @@ app.locals.blog = {
     description: pkg.description
 };
 
+//加载自定义全局方法  
+app.locals.Fun = require('./utils/global');  
+
 // 添加模板必需的三个变量
 app.use(function (req, res, next) {
     res.locals.user = req.session.user;

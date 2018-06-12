@@ -15,24 +15,8 @@
                             <%= post.title %>
                         </a>
                     </h3>
-                    <% 
-              <!-- console.log(post.author.avatar); -->
-
-              let tag = '</p>';
-              let arr = post.content.split(tag);
-              <!-- console.log(arr);  -->
-              let content;
-              if(arr.length > 0){
-                if(arr.length == 1){
-                  content = arr[0] + tag;
-                }else if(arr.length == 2){
-                  content = arr[0] + tag + arr[1] + tag;
-                }else if(arr.length > 2){
-                  content = arr[0] + tag + arr[1] + '...' + tag;
-                }
-              }
-            %>
-                        <pre><%- content %></pre>
+                    
+                        <pre><%- Fun.brifIntronduction(post.content) %></pre>
 
                         <div>
                             <span class="tag">

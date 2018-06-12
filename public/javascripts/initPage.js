@@ -267,6 +267,9 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 				if (curPage && curPage >= 1 && curPage <= totalPage) {
 					var newUl = createPageList(curPage, totalPage, showCount);
 					reflash(page, newUl, option, curPage, true);
+					getPaginglist(curPage);
+					//更新URL
+					window.history.pushState({}, 0, 'http://' + window.location.host + '/#' + curPage);
 				}
 			});
 			hover(page);
