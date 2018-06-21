@@ -97,25 +97,6 @@ module.exports = {
             .addCommentsCount()
             .contentToHtml()
             .exec();
-
-        // if(lastId) {
-        //     return Post
-        //     .find({'_id' :{ "$lt": lastId} })
-        //     .sort({ _id: -1 })
-        //     .addCreatedAt()
-        //     .addCommentsCount()
-        //     .contentToHtml()
-        //     .exec();
-        // }else{
-        //     return Post
-        //     .find()
-        //     .sort({ _id: -1 })
-        //     .addCreatedAt()
-        //     .addCommentsCount()
-        //     .contentToHtml()
-        //     .exec();
-        // }
-
     },
 
     // 通过文章 id 给 pv 加 1

@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
     Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(1)])
         .then(function (result) {
             if (result[1].length > 0) {
-                global.lastPostId = result[result.length - 1]._id;
+                // global.lastPostId = result[result.length - 1]._id;
                 res.render('posts', {
                     postsCount: result[0],
                     posts: result[1],
@@ -114,6 +114,12 @@ router.get('/create', checkLogin, function (req, res, next) {
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
     const postId = req.params.postId;
+
+    // CommentModel.getComments(postId)
+    //     .then(function (result) {
+    //         console.log(result);
+    //     })
+    //     .catch(next)
 
     Promise.all([
         // 获取文章信息

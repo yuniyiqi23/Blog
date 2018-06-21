@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const checkLogin = require('../middlewares/check').checkLogin
 const CommentModel = require('../models/comments');
+const Counter = require('../lib/mongo').Counter;
+const Mongolass = require('mongolass');
 
 // POST /comments 创建一条留言
 router.post('/', checkLogin, function (req, res, next) {
@@ -20,9 +22,9 @@ router.post('/', checkLogin, function (req, res, next) {
     }
 
     const comment = {
-        author : author,
-        postId : postId,
-        content : content,
+        postId: postId,
+        author: author,
+        content: content,
     };
 
     CommentModel.create(comment)
@@ -35,6 +37,37 @@ router.post('/', checkLogin, function (req, res, next) {
 
 });
 
+// POST /comments/addReply 回复留言
+router.post('/addReply', checkLogin, function (req, res, next) {
+    const commentId = req.body.commentId;
+    const content = req.body.content;
+    const author = req.session.user;
+    let nowDate = new Date();
+    let time = nowDate.toLocaleDateString() + " " + nowDate.toLocaleTimeString();
+
+    const replyComment = {
+        replyId: new Mongolass.ObjectId(),
+        author: author,
+        content: content,
+        time: time,
+    };
+
+    CommentModel.getCommentById(commentId)
+        .then(function (comment) {
+            if (!comment) {
+                throw new Error('留言不存在');
+            }
+            CommentModel.addReplyComment(commentId, replyComment)
+                .then(function () {
+                    req.flash('success', '留言成功');
+                    // 留言成功后跳转到上一页
+                    res.redirect('back');
+                })
+                .catch(next)
+        })
+
+});
+
 // GET /comments/:commentId/remove 删除一条留言
 router.get('/:commentId/remove', checkLogin, function (req, res, next) {
     const commentId = req.params.commentId;
@@ -42,15 +75,36 @@ router.get('/:commentId/remove', checkLogin, function (req, res, next) {
 
     CommentModel.getCommentById(commentId)
         .then(function (comment) {
-            if(!comment){
+            if (!comment) {
                 throw new Error('留言不存在');
             }
-            if(comment.author.toString() !== author.toString()){
+            if (comment.author.toString() !== author.toString()) {
                 throw new Error('没有权限删除留言');
             }
             CommentModel.delCommentById(commentId)
                 .then(function () {
                     req.flash('success', '删除留言成功')
+                    // 删除成功后跳转到上一页
+                    res.redirect('back')
+                })
+                .catch(next);
+        })
+});
+
+//GET /comments/reply/:replyId/remove 删除一条回复
+router.get('/:commentId/removeReply/:replyId', checkLogin, function(req, res, next){
+    const commentId = req.params.commentId;
+    const replyId = req.params.replyId;
+    const author = req.session.user._id;
+
+    CommentModel.getCommentById(commentId)
+        .then(function (comment) {
+            if (!comment) {
+                throw new Error('留言不存在');
+            }
+            CommentModel.delReplyById(commentId, replyId)
+                .then(function () {
+                    req.flash('success', '删除回复成功')
                     // 删除成功后跳转到上一页
                     res.redirect('back')
                 })

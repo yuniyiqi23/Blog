@@ -133,7 +133,7 @@ module.exports = app;
 //node --inspect-brk ./bin/www
 
 //Run
-//node ./bin/wwwe --inspect-brk ./bin/www
+//node ./bin/www --inspect-brk ./bin/www
 
 //autoRun
-//nodemon ./bin/www
+//nodemon ./bin/www 

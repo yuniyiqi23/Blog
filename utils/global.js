@@ -17,4 +17,6 @@ myFunction.brifIntronduction = function(content) {
     return intro;
 }
 
+// myFunction
+
 module.exports = myFunction;
