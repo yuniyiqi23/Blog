@@ -14,6 +14,5 @@ module.exports = function (app) {
             res.status(404).render('404')
         }
     });
-
 }
 
