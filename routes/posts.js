@@ -9,7 +9,7 @@ const CommentModel = require('../models/comments');
 router.get('/', function (req, res, next) {
     Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(1)])
         .then(function (result) {
-            if (result[1].length > 0) {
+            if (result[1].length >= 0) {
                 // global.lastPostId = result[result.length - 1]._id;
                 res.render('posts', {
                     postsCount: result[0],
