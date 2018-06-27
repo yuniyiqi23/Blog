@@ -1,136 +1,227 @@
-const marked = require('marked');
-const Post = require('../lib/mongo').Post;
-const CommentModel = require('./comments');
-const ObjectId = require('mongodb').ObjectID
+const express = require('express');
+const router = express.Router();
 
-// 将 post 的 content 从 markdown 转换成 html
-Post.plugin('contentToHtml', {
-    afterFind: function (posts) {
-        return posts.map(function (post) {
-            post.content = marked(post.content);
-            return post;
+const checkLogin = require('../middlewares/check').checkLogin;
+const PostModel = require('../models/posts');
+const CommentModel = require('../models/commentsDB');
+
+// GET /posts 所有用户或者特定用户的文章页
+router.get('/', function (req, res, next) {
+    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(1)])
+        .then(function (result) {
+            if (result[1].length > 0) {
+                // global.lastPostId = result[result.length - 1]._id;
+                res.render('posts', {
+                    postsCount: result[0],
+                    posts: result[1],
+                })
+            }
         })
-    },
-    afterFindOne: function (post) {
-        if (post) {
-            post.content = marked(post.content);
-        }
-        return post;
+        .catch(next);
+
+    // // let postId = global.lastPostId;
+    // PostModel.getPagingPosts(0)
+    //     .then(function (result) {
+    //         if (result.length > 0) {
+    //             global.lastPostId = result[result.length - 1]._id;
+    //             res.render('posts', {
+    //                 postsCount: global.postsCount,
+    //                 posts: result,
+    //             })
+    //         }
+    //     })
+    //     .catch(next);
+});
+
+//GET /posts/page/xxx 
+router.get('/page/:pageNum', function (req, res, next) {
+    let page = req.params.pageNum || 1;
+
+    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(page)])
+        .then(function (result) {
+            if (result[1].length > 0) {
+                // global.lastPostId = result[result.length - 1]._id;
+                res.render('posts-content', {
+                    postsCount: result[0],
+                    posts: result[1],
+                })
+            }
+        })
+        .catch(next);
+
+});
+
+// eg: GET /posts?author=xxx
+router.get('/author/:authorId', function (req, res, next) {
+    if (req.session.user) {//检查用户是否已经登录
+        console.log(req.session);//打印session的值
     }
-});
 
-// 给 post 添加留言数 commentsCount
-Post.plugin('addCommentsCount', {
-    afterFind: function (posts) {
-        return Promise.all(posts.map(function (post) {
-            return CommentModel.getCommentsCount(post._id)
-                .then(function (commentsCount) {
-                    post.commentsCount = commentsCount;
-                    return post;
-                })
-        }))
-    },
+    const author = req.query.author;
 
-    afterFindOne: function (post) {
-        if (post) {
-            return CommentModel.getCommentsCount(post._id)
-                .then(function (commentsCount) {
-                    post.commentsCount = commentsCount;
-                    return post;
-                })
-        }
-        return post;
-    },
-});
-
-module.exports = {
-    // 创建一篇文章
-    create: function create(post) {
-        return Post.create(post).exec()
-    },
-
-    // 通过文章 id 获取一篇文章
-    getPostById: function getPostById(postId) {
-        return Post
-            .findOne({ _id: postId })
-            .populate({ path: 'author', model: 'User' })
-            .addCreatedAt()
-            .addCommentsCount()
-            .contentToHtml()
-            .exec()
-    },
-
-    // 按创建时间降序获取所有用户文章或者某个特定用户的所有文章
-    getPosts: function getPosts(author) {
-        const query = {}
-        if (author) {
-            query.author = author
-        }
-        return Post
-            .find(query)
-            .populate({ path: 'author', model: 'User' })
-            .sort({ _id: -1 })
-            .addCreatedAt()
-            .addCommentsCount()
-            .contentToHtml()
-            .exec()
-    },
-
-    //获取所有文章数量
-    getPostsCount: function () {
-        return Post
-            .count()
-            .exec();
-    },
-
-    //分页获取文章
-    getPagingPosts: function (page, pageSize = 5) {
-        let skipNum = (page - 1) * pageSize;
-
-        return Post
-            .find()
-            .skip(skipNum)
-            .limit(pageSize)
-            .populate({ path: 'author', model: 'User' })
-            .sort({ _id: -1 })
-            .addCreatedAt()
-            .addCommentsCount()
-            .contentToHtml()
-            .exec();
-    },
-
-    // 通过文章 id 给 pv 加 1
-    incPv: function incPv(postId) {
-        return Post
-            .update({ _id: postId }, { $inc: { pv: 1 } })
-            .exec()
-    },
-
-    // 通过文章 id 获取一篇原生文章（编辑文章）
-    getRawPostById: function getRawPostById(postId) {
-        return Post
-            .findOne({ _id: postId })
-            .populate({ path: 'author', model: 'User' })
-            .exec()
-    },
-
-    // 通过文章 id 更新一篇文章
-    updatePostById: function updatePostById(postId, data) {
-        return Post
-            .update({ _id: postId }, { $set: data })
-            .exec()
-    },
-
-    // 通过用户 id 和文章 id 删除一篇文章
-    delPostById: function delPostById(postId, author) {
-        return Post
-            .deleteOne({ _id: postId, author: author })
-            .exec()
-            .then(function (value) {
-                // 文章删除后，再删除该文章下的所有留言
-                if (res.result.ok && res.result.n > 0) {
-                    return CommentModel.delCommentsByPostId(postId);
-                }
+    PostModel.getPosts(author)
+        .then(function (posts) {
+            res.render('posts', {
+                posts: posts
             })
+        })
+        .catch(next)
+});
+
+// POST /posts/create 发表一篇文章
+router.post('/create', checkLogin, function (req, res, next) {
+    const author = req.session.user._id;
+    const title = req.body.title;
+    const content = req.body.content;
+
+    // 校验参数
+    try {
+        if (!title.length) {
+            throw new Error('请填写标题')
+        }
+        if (!content.length) {
+            throw new Error('请填写内容')
+        }
+    } catch (e) {
+        req.flash('error', e.message)
+        return res.redirect('back')
     }
-}
+
+    let post = {
+        author: author,
+        title: title,
+        content: content
+    }
+
+    PostModel.create(post)
+        .then(function (result) {
+            // 此 post 是插入 mongodb 后的值，包含 _id
+            post = result.ops[0];
+            console.log('post._id = ' + post._id);
+            req.flash('success', '发表成功')
+            // 发表成功后跳转到该文章页
+            res.redirect('/posts/' + post._id);
+        })
+        .catch(next)
+
+})
+
+//发表文章
+router.get('/create', checkLogin, function (req, res, next) {
+    res.render('create.ejs');
+});
+
+// GET /posts/:postId 单独一篇的文章页
+router.get('/:postId', function (req, res, next) {
+    const postId = req.params.postId;
+
+    Promise.all([
+        // 获取文章信息
+        PostModel.getPostById(postId),
+        // 获取该文章所有留言
+        CommentModel.getComments(postId),
+        // pv 加 1
+        PostModel.incPv(postId),
+    ])
+        .then(function (result) {
+            const post = result[0];
+            const comments = result[1];
+            if (!post) {
+                throw new Error('该文章不存在')
+            }
+
+            res.render('post', {
+                post: post,
+                comments: comments,
+            })
+        })
+        .catch(next)
+})
+
+// GET /posts/:postId/edit 更新文章页
+router.get('/:postId/edit', checkLogin, function (req, res, next) {
+    const postId = req.params.postId;
+    const author = req.session.user._id;
+
+    PostModel.getRawPostById(postId)
+        .then(function (post) {
+            if (!post) {
+                throw new Error('该文章不存在！');
+            }
+            if (author.toString() !== post.author._id.toString()) {
+                throw new Error('权限不足！');
+            }
+            res.render('edit.ejs', {
+                post: post,
+            });
+
+        })
+        .catch(next);
+})
+
+// POST /posts/:postId/edit 更新一篇文章
+router.post('/:postId/edit', checkLogin, function (req, res, next) {
+    const postId = req.params.postId;
+    const author = req.session.user._id;
+    const title = req.body.title;
+    const content = req.body.content;
+
+    //校验参数
+    try {
+        if (!title.length) {
+            throw new Error('请填写标题!');
+        }
+        if (!content.length) {
+            throw new Error('请填写内容')
+        }
+    } catch (e) {
+        req.flash('error', e.message)
+        return res.redirect('back')
+    }
+
+    PostModel.getRawPostById(postId)
+        .then(function (post) {
+            if (!post) {
+                throw new Error('文章不存在')
+            }
+            if (post.author._id.toString() !== author.toString()) {
+                throw new Error('没有权限')
+            }
+
+            PostModel.updatePostById(postId, { title: title, content: content })
+                .then(function () {
+                    req.flash('success', '编辑文章成功')
+                    // 编辑成功后跳转到上一页
+                    res.redirect('/posts/' + postId)
+                })
+                .catch(next)
+        });
+})
+
+// GET /posts/:postId/remove 删除一篇文章
+router.get('/:postId/remove', checkLogin, function (req, res, next) {
+    const postId = req.params.postId;
+    const author = req.session.user._id;
+
+    PostModel.getRawPostById(postId)
+        .then(function (post) {
+            if (!post) {
+                throw new Error('文章不存在')
+            }
+            if (post.author._id.toString() !== author.toString()) {
+                throw new Error('没有权限')
+            }
+
+            PostModel.delPostById(postId)
+                .then(function (value) {
+                    req.flash('success', '删除文章成功');
+                    // 删除成功后跳转到主页
+                    res.redirect('/posts');
+
+                })
+
+        })
+        .catch(next)
+})
+
+module.exports = router;
