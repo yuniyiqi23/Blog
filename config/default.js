@@ -1,6 +1,5 @@
 
 module.exports = {
-  
   session: {
     secret: 'adamblogsecret',
     key: 'adamblogkey',
