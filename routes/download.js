@@ -1,6 +1,6 @@
-var express = require('express');
-var router = express.Router();
-var FS = require('fs');
+const express = require('express');
+const router = express.Router();
+const FS = require('fs');
 
 var download_files = require('../models/download_files');
 
