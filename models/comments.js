@@ -25,7 +25,7 @@ module.exports = {
             .update(
                 { _id: commentId },
                 {
-                    $push: { replys: [data] }
+                    $push: { replys: Object({'a' : 'data'}) }
                 })
             .exec();
     },
