@@ -3,10 +3,17 @@ const router = express.Router();
 
 const checkLogin = require('../middlewares/check').checkLogin;
 const PostModel = require('../models/posts');
-const CommentModel = require('../models/comments');
+const CommentModel = require('../models/commentsDB');
+const Comment = require('../lib/mongoose').Comment;
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get('/', function (req, res, next) {
+
+    // Comment.create({ name: '123' });
+    Comment.update({ name: '123' }, {
+        $push: { replys: {'a': 'data', 'b': 'sdfg'} }
+    })
+        .catch(next);
 
     Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(1)])
         .then(function (result) {
@@ -102,12 +109,6 @@ router.get('/create', checkLogin, function (req, res, next) {
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
     const postId = req.params.postId;
-
-    // CommentModel.getComments(postId)
-    //     .then(function (result) {
-    //         console.log(result);
-    //     })
-    //     .catch(next)
 
     Promise.all([
         // 获取文章信息

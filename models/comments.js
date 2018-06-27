@@ -1,16 +1,16 @@
 const marked = require('marked');
-const Comment = require('../lib/mongo').Comment;
+const Comment = require('../lib/mongoose').Comment;
 
 
 // 将 comment 的 content 从 markdown 转换成 html
-Comment.plugin('contentToHtml', {
-    afterFind: function (comments) {
-        return comments.map(function (comment) {
-            comment.content = marked(comment.content);
-            return comment;
-        });
-    }
-});
+// Comment.plugin('contentToHtml', {
+//     afterFind: function (comments) {
+//         return comments.map(function (comment) {
+//             comment.content = marked(comment.content);
+//             return comment;
+//         });
+//     }
+// });
 
 module.exports = {
     // 创建一个留言
@@ -62,8 +62,8 @@ module.exports = {
             .find({ postId: postId })
             .populate({ path: 'author', model: 'User' })
             .sort({ _id: 1 })
-            .addCreatedAt()
-            .contentToHtml()
+            // .addCreatedAt()
+            // .contentToHtml()
             .exec();
     },
 
