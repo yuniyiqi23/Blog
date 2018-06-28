@@ -46,7 +46,7 @@ Post.plugin('addCommentsCount', {
 module.exports = {
     // 创建一篇文章
     create: function create(post) {
-        return Post.create(post).exec()
+        return Post.create(post).exec();
     },
 
     // 通过文章 id 获取一篇文章

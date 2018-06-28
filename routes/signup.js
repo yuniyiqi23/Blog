@@ -43,9 +43,9 @@ router.post('/', checkNotLogin, function (req, res, next) {
             if (!(bio.length >= 1 && bio.length <= 30)) {
                 throw new Error('个人简介请限制在 1-30 个字符')
             }
-            if (!files.avatar.name) {
-                throw new Error('缺少头像')
-            }
+            // if (!files.avatar.name) {
+            //     throw new Error('缺少头像')
+            // }
             if (password.length < 6) {
                 throw new Error('密码至少 6 个字符')
             }
@@ -69,13 +69,13 @@ router.post('/', checkNotLogin, function (req, res, next) {
                     bio: bio,
                     avatar: avatar,
                 };
-                console.log('user.password = ' + user.password);
+                // console.log('user.password = ' + user.password);
 
                 // 用户信息写入数据库
                 UserModel.create(user)
                     .then(function (result) {
                         // 此 user 是插入 mongodb 后的值，包含 _id
-                        user = result.ops[0];
+                        user = result._doc;
                         // 删除密码这种敏感信息，将用户信息存入 session
                         delete user.password;
                         req.session.user = user;
@@ -110,12 +110,12 @@ function getBcryptPassword(password) {
                 throw next(err);
             }
             bcrypt.hash(password, salt, function (err, hash) {
-                console.log('salt = ' + salt);
+                // console.log('salt = ' + salt);
                 if (err) {
                     throw next(err);
                 }
                 password = hash;
-                console.log('password = ' + password);
+                // console.log('password = ' + password);
                 resolve(password);
             })
         })
