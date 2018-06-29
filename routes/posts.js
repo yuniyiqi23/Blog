@@ -3,17 +3,10 @@ const router = express.Router();
 
 const checkLogin = require('../middlewares/check').checkLogin;
 const PostModel = require('../models/posts');
-const CommentModel = require('../models/commentsDB');
-const Comment = require('../lib/mongoose').Comment;
+const CommentModel = require('../models/comments');
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get('/', function (req, res, next) {
-
-    // Comment.create({ name: '123' });
-    Comment.update({ name: '123' }, {
-        $push: { replys: {'a': 'data', 'b': 'sdfg'} }
-    })
-        .catch(next);
 
     Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(1)])
         .then(function (result) {
@@ -91,11 +84,12 @@ router.post('/create', checkLogin, function (req, res, next) {
     PostModel.create(post)
         .then(function (result) {
             // 此 post 是插入 mongodb 后的值，包含 _id
-            post = result.ops[0];
-            console.log('post._id = ' + post._id);
+            // post = result._doc;
+            // console.log('post._id = ' + post._id);
+            // console.log('result._id = ' + result._id);
             req.flash('success', '发表成功')
             // 发表成功后跳转到该文章页
-            res.redirect('/posts/' + post._id);
+            res.redirect('/posts/' + result._id);
         })
         .catch(next)
 

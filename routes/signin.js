@@ -11,8 +11,6 @@ router.get('/', checkNotLogin, function (req, res, next) {
 });
 
 router.post('/', checkNotLogin, function (req, res, next) {
-    // console.log('signin -- Post');
-
     const name = req.body.name;
     const password = req.body.password;
 
@@ -44,7 +42,9 @@ router.post('/', checkNotLogin, function (req, res, next) {
                 }
                 req.flash('success', '登录成功！');
                 // 用户信息写入 session
-                delete user.password;
+                // delete user.password;
+                user.password = null;
+                // console.log('password = ' + user.password);
                 req.session.user = user;
                 // 跳转到主页
                 res.redirect('/posts');

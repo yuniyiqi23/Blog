@@ -1,52 +1,59 @@
 const marked = require('marked');
-const Post = require('../lib/mongo').Post;
-const CommentModel = require('./commentsDB');
+const Post = require('../lib/mongoose').Post;
+const CommentModel = require('./comments');
 const ObjectId = require('mongodb').ObjectID
 
 // 将 post 的 content 从 markdown 转换成 html
-Post.plugin('contentToHtml', {
-    afterFind: function (posts) {
-        return posts.map(function (post) {
-            post.content = marked(post.content);
-            return post;
-        })
-    },
-    afterFindOne: function (post) {
-        if (post) {
-            post.content = marked(post.content);
-        }
-        return post;
-    }
-});
+// Post.plugin('contentToHtml', {
+//     afterFind: function (posts) {
+//         return posts.map(function (post) {
+//             post.content = marked(post.content);
+//             return post;
+//         })
+//     },
+//     afterFindOne: function (post) {
+//         if (post) {
+//             post.content = marked(post.content);
+//         }
+//         return post;
+//     }
+// });
 
-// 给 post 添加留言数 commentsCount
-Post.plugin('addCommentsCount', {
-    afterFind: function (posts) {
-        return Promise.all(posts.map(function (post) {
-            return CommentModel.getCommentsCount(post._id)
-                .then(function (commentsCount) {
-                    post.commentsCount = commentsCount;
-                    return post;
-                })
-        }))
-    },
+// // 给 post 添加留言数 commentsCount
+// Post.plugin('addCommentsCount', {
+//     afterFind: function (posts) {
+//         return Promise.all(posts.map(function (post) {
+//             return CommentModel.getCommentsCount(post._id)
+//                 .then(function (commentsCount) {
+//                     post.commentsCount = commentsCount;
+//                     return post;
+//                 })
+//         }))
+//     },
 
-    afterFindOne: function (post) {
-        if (post) {
-            return CommentModel.getCommentsCount(post._id)
-                .then(function (commentsCount) {
-                    post.commentsCount = commentsCount;
-                    return post;
-                })
-        }
-        return post;
-    },
-});
+//     afterFindOne: function (post) {
+//         if (post) {
+//             return CommentModel.getCommentsCount(post._id)
+//                 .then(function (commentsCount) {
+//                     post.commentsCount = commentsCount;
+//                     return post;
+//                 })
+//         }
+//         return post;
+//     },
+// });
 
 module.exports = {
     // 创建一篇文章
-    create: function create(post) {
-        return Post.create(post).exec();
+    create: function (post) {
+        return new Promise(function (resolve) {
+            Post.create(post, function (err, result) {
+                if (err) return handleError(err);
+                // console.log(result);
+                resolve(result);
+            })
+        });
+        // return Post.create(post).exec();
     },
 
     // 通过文章 id 获取一篇文章
@@ -54,9 +61,9 @@ module.exports = {
         return Post
             .findOne({ _id: postId })
             .populate({ path: 'author', model: 'User' })
-            .addCreatedAt()
-            .addCommentsCount()
-            .contentToHtml()
+            // .addCreatedAt()
+            // .addCommentsCount()
+            // .contentToHtml()
             .exec()
     },
 
@@ -70,9 +77,9 @@ module.exports = {
             .find(query)
             .populate({ path: 'author', model: 'User' })
             .sort({ _id: -1 })
-            .addCreatedAt()
-            .addCommentsCount()
-            .contentToHtml()
+            // .addCreatedAt()
+            // .addCommentsCount()
+            // .contentToHtml()
             .exec()
     },
 
@@ -93,9 +100,8 @@ module.exports = {
             .limit(pageSize)
             .populate({ path: 'author', model: 'User' })
             .sort({ _id: -1 })
-            .addCreatedAt()
-            .addCommentsCount()
-            .contentToHtml()
+            // .addCommentsCount()
+            // .contentToHtml()
             .exec();
     },
 
