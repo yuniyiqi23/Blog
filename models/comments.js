@@ -15,7 +15,15 @@ const Comment = require('../lib/mongoose').Comment;
 module.exports = {
     // 创建一个留言
     create: function (comment) {
-        return Comment.create(comment).exec();
+        // return Comment.create(comment).exec();
+        // 注册一个用户
+        return new Promise(function(res){
+            Comment.create(comment, function (err, result) {
+                if (err) return handleError(err);
+                // console.log(result);
+                res(result);
+            })
+        });
     },
 
     // 通过留言 id 添加回复
