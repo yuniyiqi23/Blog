@@ -16,7 +16,7 @@
               </a>
               <div class="metadata">
                 <span class="date">
-                  <%= comment.created_at %>
+                  <%= comment.createdAt %>
                 </span>
               </div>
               <div class="text">
@@ -40,7 +40,7 @@
               <div class="content">
                 <%
                 let replys = comment.replys;
-                console.log(replys);
+                //console.log(replys);
                 
                 if(replys){
                   replys.forEach(function (result){
