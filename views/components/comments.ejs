@@ -36,16 +36,14 @@
             </div>
           </div>
 
-          <div class="comment">
-              <div class="content">
+          <div class="commentReplys">
+              <div class="comment">
                 <%
                 let replys = comment.replys;
                 <!-- console.log(replys); -->
                 
                 if(replys){
-                  replys.forEach(function (result){
-                    let reply = result;
-                    <!-- console.log(result); -->
+                  replys.forEach(function (reply){
                 %>
                 <span class="avatar">
                   <img src="/images/<%= reply.author.avatar %>">

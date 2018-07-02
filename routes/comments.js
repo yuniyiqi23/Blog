@@ -66,7 +66,6 @@ router.post('/addReply', checkLogin, function (req, res, next) {
                 })
                 .catch(next)
         })
-
 });
 
 // GET /comments/:commentId/remove 删除一条留言
