@@ -1,5 +1,6 @@
 const marked = require('marked');
 const Comment = require('../lib/mongoose').Comment;
+const ObjectId = require('mongoose').Types.ObjectId;
 
 
 // 将 comment 的 content 从 markdown 转换成 html
@@ -17,7 +18,7 @@ module.exports = {
     create: function (comment) {
         // return Comment.create(comment).exec();
         // 注册一个用户
-        return new Promise(function(res){
+        return new Promise(function (res) {
             Comment.create(comment, function (err, result) {
                 if (err) return handleError(err);
                 // console.log(result);
@@ -33,7 +34,7 @@ module.exports = {
             .update(
                 { _id: commentId },
                 {
-                    $push: { replys: Object({'a' : 'data'}) }
+                    $push: { replys: data }
                 })
             .exec();
     },
@@ -41,12 +42,7 @@ module.exports = {
     //通过回复 id 删除一个回复
     delReplyById: function (commentId, replyId) {
         return Comment
-            .update(
-                { _id: commentId },
-                {
-                    $pull: { replys: [{ replyId: replyId }] }
-                })
-            .exec();
+            .update({ _id: commentId }, { $pull: { replys: { replyId: ObjectId(replyId) } } })
     },
 
     // 通过留言 id 获取一个留言
@@ -56,12 +52,12 @@ module.exports = {
 
     // 通过留言 id 删除一个留言
     delCommentById: function (commentId) {
-        return Comment.deleteOne({ _id: commentId }).exec();
+        return Comment.deleteOne({ _id: commentId });
     },
 
     // 通过文章 id 删除该文章下所有留言
     delCommentsByPostId: function (postId) {
-        return Comment.deleteMany({ postId: postId }).exec();
+        return Comment.deleteMany({ postId: postId });
     },
 
     // 通过文章 id 获取该文章下所有留言，按留言创建时间升序

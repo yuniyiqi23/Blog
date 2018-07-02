@@ -206,7 +206,6 @@ router.get('/:postId/remove', checkLogin, function (req, res, next) {
                     req.flash('success', '删除文章成功');
                     // 删除成功后跳转到主页
                     res.redirect('/posts');
-
                 })
 
         })

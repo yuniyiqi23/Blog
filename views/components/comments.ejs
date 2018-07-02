@@ -40,12 +40,12 @@
               <div class="content">
                 <%
                 let replys = comment.replys;
-                //console.log(replys);
+                <!-- console.log(replys); -->
                 
                 if(replys){
                   replys.forEach(function (result){
-                    let reply = result[0];
-                    //console.log(reply);
+                    let reply = result;
+                    <!-- console.log(result); -->
                 %>
                 <span class="avatar">
                   <img src="/images/<%= reply.author.avatar %>">

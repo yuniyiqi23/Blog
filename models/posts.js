@@ -128,13 +128,12 @@ module.exports = {
     },
 
     // 通过用户 id 和文章 id 删除一篇文章
-    delPostById: function delPostById(postId, author) {
+    delPostById: function delPostById(postId) {
         return Post
-            .deleteOne({ _id: postId, author: author })
-            .exec()
-            .then(function (value) {
+            .deleteOne({ _id: postId })
+            .then(function (res) {
                 // 文章删除后，再删除该文章下的所有留言
-                if (res.result.ok && res.result.n > 0) {
+                if (res.ok && res.n > 0) {
                     return CommentModel.delCommentsByPostId(postId);
                 }
             })
