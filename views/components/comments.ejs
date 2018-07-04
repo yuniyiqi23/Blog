@@ -1,43 +1,54 @@
 <div class="ui grid">
-  <div class="three wide column"></div>
+  <div class="four wide column"></div>
   <div class="nine wide column">
     <div class="ui segment">
-      <div class="ui minimal comments">
-        <h3 class="ui dividing header">留言</h3>
-
-        <% comments.forEach(function (comment) { %>
-          <div class="comment">
-            <span class="avatar">
-              <img src="/images/<%= comment.author.avatar %>">
-            </span>
-            <div class="content">
-              <a class="author" href="/posts?author=<%= comment.author._id %>">
-                <%= comment.author.name %>
-              </a>
-              <div class="metadata">
-                <span class="date">
-                  <%= comment.createdAt %>
-                </span>
-              </div>
-              <div class="text">
-                <%- comment.content %>
-              </div>
-
-              <% if (user && comment.author._id && user._id.toString() === comment.author._id.toString()) { %>
-                <div class="">
-                  <a class="reply" href="/comments/<%= comment._id %>/remove">删除</a>
-                </div>
-              <% } %>
-              <% if (user && comment.author._id && user._id.toString() !== comment.author._id.toString()) { %>
-                  <div class="">
-                    <a class="reply_btn" href="javascript:;" id="<%= comment._id %>">回复</a>
-                  </div>
-              <% } %>
-            </div>
+      <h3 class="ui dividing header">留言</h3>
+      <% if (user) { %>
+        <form class="ui reply form" method="post" action="/comments">
+          <input name="postId" value="<%= post._id %>" hidden>
+          <div class="field">
+            <textarea name="content"></textarea>
           </div>
-
-          <div class="commentReplys">
+          <input type="submit" class="ui icon button" value="留言" />
+        </form>
+        <% } %>
+          <div class="ui minimal comments">
+            <% tcomments.forEach(function (comment) { %>
               <div class="comment">
+                <span class="avatar">
+                  <img src="/images/<%= comment.author.avatar %>">
+                </span>
+                <div class="content">
+                  <a class="author" href="/posts?author=<%= comment.author._id %>">
+                    <%= comment.author.name %>
+                  </a>
+                  <div class="metadata">
+                    <span class="date">
+                      <%= comment.createdAt %>
+                    </span>
+                  </div>
+                  <div class="text">
+                    <%- comment.content %>
+                  </div>
+
+                  <% if (user && comment.author._id && user._id.toString() === comment.author._id.toString()) { %>
+                    <div class="">
+                      <a class="reply" href="/comments/<%= comment._id %>/remove">删除</a>
+                    </div>
+                    <% } %>
+                      <% if (user && comment.author._id && user._id.toString() !== comment.author._id.toString()) { %>
+                        <!-- <div class="">
+                          <a class="reply_btn" href="javascript:;" id="<%= comment._id %>">回复</a>
+                        </div> -->
+                        <!-- <input type="submit" class="ui icon button" value="回复"/> -->
+                        <button id="reply_btn" class="ui icon button" href="javascript:;" value="<%= comment._id %>">
+                          <i class="edit icon"></i>
+                        </button>
+                        <% } %>
+                </div>
+              </div>
+
+              <div class="ui very relaxed list">
                 <%
                 let replys = comment.replys;
                 <!-- console.log(replys); -->
@@ -45,54 +56,43 @@
                 if(replys){
                   replys.forEach(function (reply){
                 %>
-                <span class="avatar">
-                  <img src="/images/<%= reply.author.avatar %>">
-                </span>
-                <%= reply.author.name %>
-                <div class="metadata">
-                  <span class="date">
-                    <%= reply.time %>
-                  </span>
-                </div>
-                <div class="text">
-                  <%- reply.content %>
-                </div>
-                <% if (user && reply.author._id && user._id.toString() === reply.author._id.toString()) { %>
-                  <div class="">
-                    <a class="reply" href="/comments/<%= comment._id %>/removeReply/<%= reply.replyId %>">删除</a>
+                  <div class="item">
+                    <span class="avatar">
+                      <!-- <img src="/images/<%= reply.author.avatar %>"> -->
+                      <img class="ui avatar image" src="/images/<%= reply.author.avatar %>">
+                    </span>
+                    <!-- <img class="ui avatar image" src="/images/<%= reply.author.avatar %>"> -->
+                    <%= reply.author.name %>
+                      <div class="metadata">
+                        <span class="date">
+                          <%= reply.time %>
+                        </span>
+                      </div>
+                      <div class="text">
+                        <%- reply.content %>
+                      </div>
+                      <% if (user && reply.author._id && user._id.toString() === reply.author._id.toString()) { %>
+                        <div class="">
+                          <a class="reply" href="/comments/<%= comment._id %>/removeReply/<%= reply.replyId %>">删除</a>
+                        </div>
+                        <% } %>
                   </div>
-                <% } %>
-                <%
-            })
-          }
-          %>
-              </div>
+                  <%})
+                }%>
           </div>
           <% }) %>
-
-            <% if (user) { %>
-              <form class="ui reply form" method="post" action="/comments">
-                <input name="postId" value="<%= post._id %>" hidden>
-                <div class="field">
-                  <textarea name="content"></textarea>
-                </div>
-                <input type="submit" class="ui icon button" value="留言" />
-              </form>
-              <% } %>
-
-      </div>
     </div>
   </div>
+</div>
 </div>
 
 <script type="text/javascript">
   $(function () {
     //页面加载完毕后开始执行的事件
-    $(".reply_btn").click(function () {
-      var commentId = $(this).attr("id");
+    $("#reply_btn").click(function () {
+      var commentId = $(this).attr("value");
       $(".reply_textarea").remove();
       $(this).parent().append("<form class='ui reply form' method='post' action='/comments/addReply'><input name = 'commentId' value ='" + commentId + "' hidden /> <div class='reply_textarea'><textarea name='content' cols='70' rows='1'></textarea><br /><input type='submit' class='ui icon button' value='回复' /></div></form>");
     });
   });
-
 </script>
