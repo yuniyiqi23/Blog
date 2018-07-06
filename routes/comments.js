@@ -107,7 +107,7 @@ router.get('/:commentId/removeReply/:replyId', checkLogin, function (req, res, n
                 throw new Error('留言不存在');
             }
             CommentModel.delReplyById(commentId, replyId)
-                .then(function (result) {
+                .then(function (value) {
                     // console.log(result);
                     if (value.ok && value.n > 0 && value.nModified > 0) {
                         req.flash('success', '删除回复成功')
