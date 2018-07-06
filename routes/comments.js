@@ -5,6 +5,7 @@ const CommentModel = require('../models/comments');
 // const Counter = require('../lib/mongo').Counter;
 // const Mongolass = require('mongolass');
 const ObjectId = require('mongoose').Types.ObjectId;
+const moment = require('moment');
 
 // POST /comments 创建一条留言
 router.post('/', checkLogin, function (req, res, next) {
@@ -43,14 +44,13 @@ router.post('/addReply', checkLogin, function (req, res, next) {
     const commentId = req.body.commentId;
     const content = req.body.content;
     const author = req.session.user;
-    let nowDate = new Date();
-    let time = nowDate.toLocaleDateString() + " " + nowDate.toLocaleTimeString();
+    // console.log(moment().format('YYYY-MM-DD HH:mm'));
 
     const replyComment = {
         replyId: new ObjectId(),
         author: author,
         content: content,
-        time: time,
+        time: moment().format('YYYY-MM-DD HH:mm'),
     };
 
     CommentModel.getCommentById(commentId)

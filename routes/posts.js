@@ -85,8 +85,6 @@ router.post('/create', checkLogin, function (req, res, next) {
         .then(function (result) {
             // 此 post 是插入 mongodb 后的值，包含 _id
             // post = result._doc;
-            // console.log('post._id = ' + post._id);
-            // console.log('result._id = ' + result._id);
             req.flash('success', '发表成功')
             // 发表成功后跳转到该文章页
             res.redirect('/posts/' + result._id);
