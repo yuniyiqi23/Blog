@@ -119,7 +119,7 @@ router.get('/:postId', function (req, res, next) {
 
             res.render('post', {
                 post: post,
-                tcomments: comments,
+                comments: comments,
             })
         })
         .catch(next)

@@ -1,47 +1,8 @@
 const marked = require('marked');
 const Post = require('../lib/mongoose').Post;
+const PostSchema = require('../lib/mongoose').PostSchema;
 const CommentModel = require('./comments');
 const ObjectId = require('mongodb').ObjectID
-
-// 将 post 的 content 从 markdown 转换成 html
-// Post.plugin('contentToHtml', {
-//     afterFind: function (posts) {
-//         return posts.map(function (post) {
-//             post.content = marked(post.content);
-//             return post;
-//         })
-//     },
-//     afterFindOne: function (post) {
-//         if (post) {
-//             post.content = marked(post.content);
-//         }
-//         return post;
-//     }
-// });
-
-// // 给 post 添加留言数 commentsCount
-// Post.plugin('addCommentsCount', {
-//     afterFind: function (posts) {
-//         return Promise.all(posts.map(function (post) {
-//             return CommentModel.getCommentsCount(post._id)
-//                 .then(function (commentsCount) {
-//                     post.commentsCount = commentsCount;
-//                     return post;
-//                 })
-//         }))
-//     },
-
-//     afterFindOne: function (post) {
-//         if (post) {
-//             return CommentModel.getCommentsCount(post._id)
-//                 .then(function (commentsCount) {
-//                     post.commentsCount = commentsCount;
-//                     return post;
-//                 })
-//         }
-//         return post;
-//     },
-// });
 
 module.exports = {
     // 创建一篇文章
@@ -61,10 +22,6 @@ module.exports = {
         return Post
             .findOne({ _id: postId })
             .populate({ path: 'author', model: 'User' })
-            // .addCreatedAt()
-            // .addCommentsCount()
-            // .contentToHtml()
-            .exec()
     },
 
     // 按创建时间降序获取所有用户文章或者某个特定用户的所有文章
@@ -77,10 +34,10 @@ module.exports = {
             .find(query)
             .populate({ path: 'author', model: 'User' })
             .sort({ _id: -1 })
-            // .addCreatedAt()
-            // .addCommentsCount()
-            // .contentToHtml()
-            .exec()
+        // .addCreatedAt()
+        // .addCommentsCount()
+        // .contentToHtml()
+        // .exec()
     },
 
     //获取所有文章数量
@@ -100,9 +57,9 @@ module.exports = {
             .limit(pageSize)
             .populate({ path: 'author', model: 'User' })
             .sort({ _id: -1 })
-            // .addCommentsCount()
-            // .contentToHtml()
-            .exec();
+        // .addCommentsCount()
+        // .contentToHtml()
+        // .exec();
     },
 
     // 通过文章 id 给 pv 加 1
