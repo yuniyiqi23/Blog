@@ -3,9 +3,9 @@
     <!-- console.log(replys); -->
     if(replys.length > 0){
 %>
-    <div class="ui grid">
-        <div class="one wide column"> </div>
-        <div class="fifteen wide column">
+    <div class="ui grid" style="margin-left: 2em">
+        <!-- <div class="one wide column"> </div> -->
+        <div class="sixteen wide column">
             <div class="ui segment">
                 <div class="ui very relaxed list">
                     <%replys.forEach(function (reply){%>
@@ -34,9 +34,10 @@
                                 </div>
                             </div>
                         </div>
-                        <%})%>
-                            <% }%>
+                    <%})%>
                 </div>
             </div>
         </div>
     </div>
+    <% }%>
+        
