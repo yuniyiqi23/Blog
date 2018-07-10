@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const moment = require('moment');
 const checkLogin = require('../middlewares/check').checkLogin;
 const PostModel = require('../models/posts');
 const CommentModel = require('../models/comments');
@@ -175,7 +175,7 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
                 throw new Error('没有权限')
             }
 
-            PostModel.updatePostById(postId, { title: title, content: content })
+            PostModel.updatePostById(postId, { title: title, content: content, updatedAt: moment().format('YYYY-MM-DD HH:mm')})
                 .then(function () {
                     req.flash('success', '编辑文章成功')
                     // 编辑成功后跳转到上一页

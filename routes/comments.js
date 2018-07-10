@@ -44,7 +44,6 @@ router.post('/addReply', checkLogin, function (req, res, next) {
     const commentId = req.body.commentId;
     const content = req.body.content;
     const author = req.session.user;
-    // console.log(moment().format('YYYY-MM-DD HH:mm'));
 
     const replyComment = {
         replyId: new ObjectId(),

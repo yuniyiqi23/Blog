@@ -5,7 +5,6 @@ const ObjectId = require('mongoose').Types.ObjectId;
 module.exports = {
     // 创建一个留言
     create: function (comment) {
-        // return Comment.create(comment).exec();
         // 注册一个用户
         return new Promise(function (res) {
             Comment.create(comment, function (err, result) {
@@ -55,7 +54,6 @@ module.exports = {
             .find({ postId: postId })
             .populate({ path: 'author', model: 'User' })
             .sort({ _id: 1 })
-            // .addCreatedAt()
             // .contentToHtml()
             .exec();
     },
