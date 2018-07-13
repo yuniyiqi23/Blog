@@ -1,0 +1,34 @@
+一、 学习计划
+1. HTTP权威指南（Node、Express其他参考书）
+2. ApacheBench压力测试（并发量）
+
+二、 项目迭代计划
+1. 搜索功能
+    标签功能
+    回到顶端按钮
+    忘记密码（邮件、手机验证）
+    安全机制（XSS防护等）
+    分享到朋友圈
+2. 守护进程ChildProcess
+3. request请求不可靠(IP验证、cookie验证、session)
+4. MongoDB驱动库
+https://zhuanlan.zhihu.com/p/24308524
+5. Promise
+https://zhuanlan.zhihu.com/p/25178630
+6. 分析代码（压力测试）没有达到最终的成果
+
+参考资料：
+https://goo.gl/6NJLrh
+https://github.com/nodejs/node/issues/19199
+7. 下载文件并提示下载成功
+8. 
+
+
+
+2018/7/10
+1. 修改统计评论数量（评论+二级回复）
+2. 修改文章更新时间
+
+
+2018/7/8
+1. 二级评论（设计UI）
