@@ -1,47 +1,35 @@
 
-const arr = [1, 2, 3, 4, 5];
-var len = arr.length,
-    i = 0;
 
-// for (; i < len; ++i) {
-//     arr[i] = sync(arr[i]);
-//     console.log(arr[i]);
-// }
+// (function contain(arr, value) {
+//     console.log(1);
+//     if (Array.prototype.includes) {
+//         return arr.includes(value);
+//     }
+//     return arr.some(el => el === value);
+// });
 
-// function sync(arr){
-//     return arr + 1;
-// }
+// const contains = (() =>
+//     Array.prototype.includes
+//         ? (arr, value) => arr.includes(value)
+//         : (arr, value) => arr.some(el => el === value)
+// )();
+// console.log(global.con); // => false
 
-function async(fn, callback) {
-    // Code execution path breaks here.
-    setTimeout(function () {
-        try {
-            callback(null, fn());
-        }
-        catch (err) {
-            callback(err);
-        }
-    }, 0);
-}
-
-async(null, function (err, data) {
-    if(err){
-        
-    }else{
-        let 
+function mixFunction(a) {
+    var result = [], i, n;
+    n = a.length;
+    for (i = 0; i < n; i++) {
+        (function (j) {
+            result[i] = function () {
+                //Closure对外部变量是引用
+                console.log("for i=" + i);
+                return a[j];//a[i-1]
+            }
+        })(i)
     }
-});
-
-try {
-    async(null, function (error, data) {
-        if (error) {
-            console.log(error.message);
-        } else {
-            // Do something.
-        }
-    });
-} catch (err) {
-    console.log('Error: %s', err.message);
+    return result;
 }
-
-
+var mixcall = mixFunction([10, 20, 30]);
+// console.log(mixcall);
+var f = mixcall[0];
+console.log(mixcall[0]());//?应该输出什么值
