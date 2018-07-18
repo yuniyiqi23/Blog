@@ -1,7 +1,7 @@
 <%- include('header') %>
 
   <div id="postContent">
-    <%- include('posts-content') %>
+    <%- include('components/posts-content') %>
   </div>
 
   <!-- 实现分页页码 -->
@@ -27,7 +27,7 @@
       isPN: true,//是否显示上一页和下一面，默认true
       isFL: false,//是否显示首页和末页，默认true
       jump: function (curPage, pageSize) {//跳转功能回调，传递回来2个参数，当前页和每页大小。如果没有设置分页下拉，则第二个参数永远为0。这里的this被指定为一个空对象，如果回调中需用到this请自行使用bind方法
-        console.log(curPage, pageSize);
+        //console.log(curPage, pageSize);
       },
     });
   </script>

@@ -7,39 +7,29 @@ const CommentModel = require('../models/comments');
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get('/', function (req, res, next) {
-     if (req.session.user) {//检查用户是否已经登录
-        console.log(req.session);//打印session的值
-    }
+    //     if (req.session.user) {//检查用户是否已经登录
+    //         console.log(req.session);//打印session的值
+    //     }
+    let author = req.query.author;
+    let page = req.query.page || 1;
 
-    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(1)])
+    Promise.all([PostModel.getPostsCount(author), PostModel.getPagingPosts({ author: author, page: page })])
         .then(function (result) {
             if (result[1].length >= 0) {
-                // global.lastPostId = result[result.length - 1]._id;
-                res.render('posts', {
-                    postsCount: result[0],
-                    posts: result[1],
-                })
+                if (req.query.page) {
+                    res.render('components/posts-content', {
+                        postsCount: result[0],
+                        posts: result[1],
+                    })
+                } else {
+                    res.render('posts', {
+                        postsCount: result[0],
+                        posts: result[1],
+                    })
+                }
             }
         })
         .catch(next);
-});
-
-//GET /posts/page/xxx 
-router.get('/page/:pageNum', function (req, res, next) {
-    let page = req.params.pageNum || 1;
-
-    Promise.all([PostModel.getPostsCount(), PostModel.getPagingPosts(page)])
-        .then(function (result) {
-            if (result[1].length > 0) {
-                // global.lastPostId = result[result.length - 1]._id;
-                res.render('posts-content', {
-                    postsCount: result[0],
-                    posts: result[1],
-                })
-            }
-        })
-        .catch(next);
-
 });
 
 // eg: GET /posts?author=xxx
@@ -178,7 +168,7 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
                 throw new Error('没有权限')
             }
 
-            PostModel.updatePostById(postId, { title: title, content: content, updatedAt: moment().format('YYYY-MM-DD HH:mm')})
+            PostModel.updatePostById(postId, { title: title, content: content, updatedAt: moment().format('YYYY-MM-DD HH:mm') })
                 .then(function () {
                     req.flash('success', '编辑文章成功')
                     // 编辑成功后跳转到上一页

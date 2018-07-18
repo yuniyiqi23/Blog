@@ -26,7 +26,7 @@ module.exports = {
 
     // 按创建时间降序获取所有用户文章或者某个特定用户的所有文章
     getPosts: function getPosts(author) {
-        const query = {}
+        let query = {}
         if (author) {
             query.author = author
         }
@@ -41,18 +41,28 @@ module.exports = {
     },
 
     //获取所有文章数量
-    getPostsCount: function () {
+    getPostsCount: function (author) {
+        let query = {}
+        if (author) {
+            query.author = author
+        }
         return Post
+            .find(query)
+            .populate({ path: 'author', model: 'User' })
             .count()
             .exec();
     },
 
     //分页获取文章
-    getPagingPosts: function (page, pageSize = 5) {
+    getPagingPosts: function ({author, page = 1, pageSize = 5}) {
+        let query = {}
+        if (author) {
+            query.author = author
+        }
         let skipNum = (page - 1) * pageSize;
 
         return Post
-            .find()
+            .find(query)
             .skip(skipNum)
             .limit(pageSize)
             .populate({ path: 'author', model: 'User' })

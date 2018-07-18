@@ -267,9 +267,11 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 				if (curPage && curPage >= 1 && curPage <= totalPage) {
 					var newUl = createPageList(curPage, totalPage, showCount);
 					reflash(page, newUl, option, curPage, true);
-					getPaginglist(curPage);
+					console.log('newUl :' + newUl);
+					var baseURL = 'http://' + window.location.host;
+					getPaginglist(baseURL, curPage);
 					//更新URL
-					window.history.pushState({}, 0, 'http://' + window.location.host + '/#' + curPage);
+					window.history.pushState({}, 0, baseURL + '/#' + curPage);
 				}
 			});
 			hover(page);
@@ -285,9 +287,12 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 		 */
 		eventUtil.addEvent(page, 'click', function (e) {
 			var target = e.target,
-				nodeName = target.nodeName.toLocaleLowerCase();
+				nodeName = target.nodeName.toLocaleLowerCase()
+				baseURL = e.target.baseURI;
+// 			console.log(e.target.baseURI);
 			if (nodeName != 'li' && nodeName != 'a') return;
 			target = nodeName == 'li' ? target : target.parentNode;
+	
 			if (!hasClass(target, 'no-active') &&
 				!hasClass(target, 'active')) {
 				switch (true) {
@@ -309,22 +314,36 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 				}
 				var newUl = createPageList(curPage, totalPage, showCount);
 				reflash(page, newUl, option, curPage);
-				getPaginglist(curPage);
+				getPaginglist(baseURL, curPage);
 			}
 		});
 	};
 
 	//getPaginglist
-	function getPaginglist(curPage) {
-		$.ajax({
-			type: "GET",
-			url: "http://localhost:3000/posts/page/" + curPage,
-			success: function (data) {
-				document.getElementById("postContent").innerHTML = data;
-				// $('#postContent').empty();
-				// $('#postContent').html(data);
-			}
-		});
+	function getPaginglist(baseURL, curPage) {
+		var arr = baseURL.split('#');
+		console.log('baseURL = ' + arr[0]);
+		if(baseURL.includes('posts?author=')){
+			$.ajax({
+				type: "GET",
+				url: arr[0] + "&page=" + curPage,
+				success: function (data) {
+					document.getElementById("postContent").innerHTML = data;
+				}
+			});
+		}else{
+			$.ajax({
+				type: "GET",
+				url: arr[0] + "posts?page=" + curPage,
+				success: function (data) {
+					document.getElementById("postContent").innerHTML = data;
+					// console.log(data);
+					// $('#postContent').empty();
+					// $('#postContent').html(data);
+				}
+			});
+		}
+		
 	}
 
 	//hover事件
@@ -373,7 +392,7 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 			input = page.getElementsByTagName('input')[0];
 			input.value = curPage;
 		}
-		console.log('reflash');
+		// console.log('reflash');
 	}
 	/**
 	 * 判断节点中是否含有某个class
