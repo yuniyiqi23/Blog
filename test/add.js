@@ -38,4 +38,7 @@ const a = {
     name: 'Adam'
 };
 a.age = 'asd';
-console.log(a);
+
+var getTempItem = id => id;
+
+console.log([1,2,3].map(x => x * x));
