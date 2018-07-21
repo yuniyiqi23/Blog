@@ -27,7 +27,7 @@ module.exports = {
             .exec();
     },
 
-    //通过回复 id 删除一个回复
+    // 通过回复 id 删除一个回复
     delReplyById: function (commentId, replyId) {
         return Comment
             .update({ _id: commentId }, { $pull: { replys: { replyId: ObjectId(replyId) } } })
