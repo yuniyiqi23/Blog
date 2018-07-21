@@ -1,6 +1,6 @@
 <div class="ui grid">
   <div class="four wide column"></div>
-  <div class="nine wide column">
+  <div class="eight wide column">
     <div class="ui segment">
       <h3 class="ui dividing header">留言</h3>
       <% if (user) { %>
@@ -15,13 +15,21 @@
           <div class="ui minimal comments">
             <% comments.forEach(function (comment) { %>
               <div class="comment">
+                <% 
+                let avatar = 'default.jpg';
+                if(comment.author){
+                  avatar = comment.author.avatar;
+                }
+                %>
                 <span class="avatar">
-                  <img src="/images/<%= comment.author.avatar %>">
+                    <img src="/images/<%= avatar %>">
                 </span>
                 <div class="content">
-                  <a class="author" href="/posts?author=<%= comment.author._id %>">
-                    <%= comment.author.name %>
-                  </a>
+                    <% if(comment.author){%>
+                      <a class="author" href="/posts?author=<%= comment.author._id %>">
+                        <%= comment.author.name %>
+                      </a>
+                    <%}%>
                   <div class="metadata">
                     <span class="date">
                       <%= comment.createdAt %>
