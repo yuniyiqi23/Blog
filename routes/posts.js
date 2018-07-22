@@ -4,6 +4,7 @@ const moment = require('moment');
 const checkLogin = require('../middlewares/check').checkLogin;
 const PostModel = require('../models/posts');
 const CommentModel = require('../models/comments');
+// const CategoryModel = require('../models/categories');
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get('/', function (req, res, next) {
@@ -12,6 +13,16 @@ router.get('/', function (req, res, next) {
     //     }
     let author = req.query.author;
     let page = req.query.page || 1;
+
+    // let category = {
+    //     author: req.session.user._id,
+    //     categories: '新建文档',
+    // }
+    // CategoryModel.create(category)
+    //     .then(function(res){
+    //         console.log(res);
+    //     })
+    //     .catch(next);
 
     Promise.all([PostModel.getPostsCount(author), PostModel.getPagingPosts({ author: author, page: page })])
         .then(function (result) {
@@ -41,6 +52,10 @@ router.get('/author/:authorId', function (req, res, next) {
     const author = req.query.author;
 
     PostModel.getPosts(author)
+        .then(function (posts) {
+
+
+        })
         .then(function (posts) {
             res.render('posts', {
                 posts: posts
@@ -174,6 +189,7 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
                     // 编辑成功后跳转到上一页
                     res.redirect('/posts/' + postId)
                 })
+                    
                 .catch(next)
         });
 })

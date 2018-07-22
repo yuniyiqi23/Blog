@@ -14,18 +14,17 @@ module.exports = {
                 resolve(result);
             })
         });
-        // return Post.create(post).exec();
     },
 
     // 通过文章 id 获取一篇文章
-    getPostById: function getPostById(postId) {
+    getPostById: function (postId) {
         return Post
             .findOne({ _id: postId })
             .populate({ path: 'author', model: 'User' })
     },
 
     // 按创建时间降序获取所有用户文章或者某个特定用户的所有文章
-    getPosts: function getPosts(author) {
+    getPosts: function (author) {
         let query = {}
         if (author) {
             query.author = author
@@ -34,10 +33,6 @@ module.exports = {
             .find(query)
             .populate({ path: 'author', model: 'User' })
             .sort({ _id: -1 })
-        // .addCreatedAt()
-        // .addCommentsCount()
-        // .contentToHtml()
-        // .exec()
     },
 
     //获取所有文章数量
@@ -54,7 +49,7 @@ module.exports = {
     },
 
     //分页获取文章
-    getPagingPosts: function ({author, page = 1, pageSize = 5}) {
+    getPagingPosts: function ({ author, page = 1, pageSize = 5 }) {
         let query = {}
         if (author) {
             query.author = author
@@ -67,20 +62,17 @@ module.exports = {
             .limit(pageSize)
             .populate({ path: 'author', model: 'User' })
             .sort({ _id: -1 })
-        // .addCommentsCount()
-        // .contentToHtml()
-        // .exec();
     },
 
     // 通过文章 id 给 pv 加 1
-    incPv: function incPv(postId) {
+    incPv: function (postId) {
         return Post
             .update({ _id: postId }, { $inc: { pv: 1 } })
             .exec()
     },
 
     // 通过文章 id 获取一篇原生文章（编辑文章）
-    getRawPostById: function getRawPostById(postId) {
+    getRawPostById: function (postId) {
         return Post
             .findOne({ _id: postId })
             .populate({ path: 'author', model: 'User' })
@@ -88,14 +80,14 @@ module.exports = {
     },
 
     // 通过文章 id 更新一篇文章
-    updatePostById: function updatePostById(postId, data) {
+    updatePostById: function (postId, data) {
         return Post
             .update({ _id: postId }, { $set: data })
             .exec()
     },
 
     // 通过用户 id 和文章 id 删除一篇文章
-    delPostById: function delPostById(postId) {
+    delPostById: function (postId) {
         return Post
             .deleteOne({ _id: postId })
             .then(function (res) {
@@ -104,5 +96,20 @@ module.exports = {
                     return CommentModel.delCommentsByPostId(postId);
                 }
             })
-    }
+    },
+
+    // 通过分类 id 删除文章
+    delPostsByCategoryId: function (categoryId) {
+        return Post.find({ categoryId: categoryId })
+            .then(function (res) {
+                console.log(res);
+                if (res) {
+                    // console
+                    // res.map(function (ele) {
+
+                    // })
+                }
+            })
+            // .then(Post.deleteMany({ categoryId: categoryId }))
+    },
 }

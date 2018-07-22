@@ -6,7 +6,7 @@ module.exports = {
     create: function (category) {
         return new Promise(function(resolver){
             Category.create(category, function (err, result) {
-                if (err) return handleError(err);
+                if (err) return new Error(err);
                 // console.log(result);
                 resolver(result);
             })
@@ -14,9 +14,9 @@ module.exports = {
     },
 
     // 通过名称删除分类
-    delCategoryByName: function (name) {
+    delCategoryById: function (categoryId) {
         return Category
-            .deleteOne({ name: name })
+            .deleteOne({ _id: categoryId })
             .then(function (res) {
                 // 分类删除后，再删除该分类下的所有文章
                 if (res.ok && res.n > 0) {
