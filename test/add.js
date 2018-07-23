@@ -8,7 +8,7 @@
 //     return arr.some(el => el === value);
 // });
 
-// const contains = (() =>
+// const contains = (() =>  
 //     Array.prototype.includes
 //         ? (arr, value) => arr.includes(value)
 //         : (arr, value) => arr.some(el => el === value)

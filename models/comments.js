@@ -27,7 +27,7 @@ module.exports = {
             .exec();
     },
 
-    //通过回复 id 删除一个回复
+    // 通过回复 id 删除一个回复
     delReplyById: function (commentId, replyId) {
         return Comment
             .update({ _id: commentId }, { $pull: { replys: { replyId: ObjectId(replyId) } } })
@@ -59,7 +59,7 @@ module.exports = {
     },
 
     // 通过文章 id 获取该文章下留言数
-    getCommentsCount: function getCommentsCount(postId) {
+    getCommentsCount: function (postId) {
         return Comment.count({ postId: postId }).exec()
     },
 
