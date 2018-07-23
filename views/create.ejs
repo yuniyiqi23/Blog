@@ -1,7 +1,7 @@
 <%- include('header') %>
   <div class="ui grid">
     <div class="three wide column">
-      <form class="ui form segment" method="post">
+      <form class="ui form segment" method="post" >
         <div class="field">
           <label>文集</label>
           <input type="text" name="title">
@@ -15,6 +15,7 @@
           <a class="item">Team</a>
         </div>
     </div>
+
     <div class="one wide column">
       <a class="avatar avatar-link" href="/posts?author=<%= user._id %>" data-title="<%= user.name %> | <%= ({m: '男', f: '女', x: '保密'})[user.gender] %>"
         data-content="<%= user.bio %>">

@@ -322,7 +322,7 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 	//getPaginglist
 	function getPaginglist(baseURL, curPage) {
 		var arr = baseURL.split('#');
-		console.log('baseURL = ' + arr[0]);
+		// console.log('baseURL = ' + arr[0]);
 		if(baseURL.includes('posts?author=')){
 			$.ajax({
 				type: "GET",
