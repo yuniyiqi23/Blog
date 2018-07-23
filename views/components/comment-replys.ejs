@@ -3,41 +3,37 @@
     <!-- console.log(replys); -->
     if(replys.length > 0){
 %>
-    <div class="ui grid" style="margin-left: 2em">
-        <!-- <div class="one wide column"> </div> -->
-        <div class="sixteen wide column">
-            <div class="ui segment">
-                <div class="ui very relaxed list">
-                    <%replys.forEach(function (reply){%>
-                        <div class="item">
-                            <div class="ui comments">
-                                <div class="comment">
-                                    <div class="content">
-                                        <span class="left floated">
-                                            <img class="ui mini rounded image" src="/images/<%= reply.author.avatar %>">
-                                        </span>
-                                        <span style="color: rgba(0,0,0,.87);font-weight: 700;">
-                                            <%= reply.author.name %>
-                                        </span>
-                                        <span class="ui grey" style="display:inline-block;margin-left:.5em;color:rgba(0,0,0,.4);font-size:.875em">
-                                            <%= reply.time %>
-                                        </span>
-                                        <div class="text" style="margin-top:.3em;">
-                                            <%- reply.content %>
-                                        </div>
-                                        <% if (user && reply.author._id && user._id.toString() === reply.author._id.toString()) { %>
-                                            <div class="actions">
-                                                <a class="delete" href="/comments/<%= comment._id %>/removeReply/<%= reply.replyId %>">删除</a>
-                                            </div>
-                                            <% } %>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="comments">
+        <%
+            replys.forEach(function (reply){
+                let avatar = 'default.jpg';
+                if(reply.author){
+                    avatar = reply.author.avatar;
+                }  
+        %>
+            <div class="comment">
+                <span class="avatar">
+                    <img src="/images/<%= avatar %>">
+                </span>
+                <div class="content">
+                    <a class="author" href="/posts?author=<%= reply.author._id %>">
+                        <%= reply.author.name %>
+                    </a>
+                    <div class="metadata">
+                        <span class="date">
+                            <%= reply.time %>
+                        </span>
+                    </div>
+                    <div class="text">
+                        <%- reply.content %>
+                    </div>
+                    <% if (user && reply.author._id && user._id.toString() === reply.author._id.toString()) { %>
+                        <div class="actions">
+                            <a class="delete" href="/comments/<%= comment._id %>/removeReply/<%= reply.replyId %>">删除</a>
                         </div>
-                    <%})%>
+                        <% } %>
                 </div>
             </div>
-        </div>
+            <%})%>
     </div>
     <% }%>
-        

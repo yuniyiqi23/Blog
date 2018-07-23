@@ -2,7 +2,7 @@
   <div class="four wide column"></div>
   <div class="eight wide column">
     <div class="ui segment">
-      <h3 class="ui dividing header">留言</h3>
+      <h3 class="ui threaded header">留言</h3>
       <% if (user) { %>
         <form class="ui reply form" method="post" action="/comments">
           <input name="postId" value="<%= post._id %>" hidden>
@@ -13,14 +13,14 @@
         </form>
         <% } %>
           <div class="ui minimal comments">
-            <% comments.forEach(function (comment) { %>
-              <div class="comment">
-                <% 
-                let avatar = 'default.jpg';
+            <% 
+              comments.forEach(function (comment) { 
+              let avatar = 'default.jpg';
                 if(comment.author){
                   avatar = comment.author.avatar;
                 }
-                %>
+              %>
+              <div class="comment">
                 <span class="avatar">
                     <img src="/images/<%= avatar %>">
                 </span>
@@ -50,11 +50,10 @@
                         </div>
                         <% } %>
                 </div>
-              </div>
-              <br />
-              <!-- 二级评论 -->
-              <%- include('comment-replys',{comment: comment}) %>
+                 <!-- 二级评论 -->
+                <%- include('comment-replys',{comment: comment}) %>
                 <% }) %>
+              </div>
           </div>
     </div>
   </div>

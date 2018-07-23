@@ -1,29 +1,37 @@
 <%- include('header') %>
-<!-- <% //console.log(user)%>
+  <!-- <% //console.log(user)%>
 <% //console.log(user.avatar)%> -->
-<div class="ui grid">
-  <div class="four wide column">
-    <a class="avatar avatar-link"
-       href="/posts?author=<%= user._id %>"
-       data-title="<%= user.name %> | <%= ({m: '男', f: '女', x: '保密'})[user.gender] %>"
-       data-content="<%= user.bio %>">
-      <img class="avatar" src="/images/<%= user.avatar %>">
-    </a>
+  <div class="ui grid">
+    <div class="three wide column">
+      <form class="ui form segment" method="post">
+        <div class="field">
+          <label>文集</label>
+          <input type="text" name="title">
+        </div>
+        <input type="submit" class="ui button" value="添加">
+      </form>
+      
+    </div>
+    <div class="one wide column">
+      <a class="avatar avatar-link" href="/posts?author=<%= user._id %>" data-title="<%= user.name %> | <%= ({m: '男', f: '女', x: '保密'})[user.gender] %>"
+        data-content="<%= user.bio %>">
+        <img class="avatar" src="/images/<%= user.avatar %>">
+      </a>
+    </div>
+
+    <div class="eight wide column">
+      <form class="ui form segment" method="post">
+        <div class="field required">
+          <label>标题</label>
+          <input type="text" name="title">
+        </div>
+        <div class="field required">
+          <label>内容</label>
+          <textarea name="content" rows="15"></textarea>
+        </div>
+        <input type="submit" class="ui button" value="发布">
+      </form>
+    </div>
   </div>
 
-  <div class="eight wide column">
-    <form class="ui form segment" method="post">
-      <div class="field required">
-        <label>标题</label>
-        <input type="text" name="title">
-      </div>
-      <div class="field required">
-        <label>内容</label>
-        <textarea name="content" rows="15"></textarea>
-      </div>
-      <input type="submit" class="ui button" value="发布">
-    </form>
-  </div>
-</div>
-
-<%- include('footer') %>
+  <%- include('footer') %>
