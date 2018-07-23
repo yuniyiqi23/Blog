@@ -1,6 +1,4 @@
 <%- include('header') %>
-  <!-- <% //console.log(user)%>
-<% //console.log(user.avatar)%> -->
   <div class="ui grid">
     <div class="three wide column">
       <form class="ui form segment" method="post">
@@ -10,7 +8,12 @@
         </div>
         <input type="submit" class="ui button" value="添加">
       </form>
-      
+      <div class="ui list">
+          <div class="active item">Home</div>
+          <a class="item">About</a>
+          <a class="item">Jobs</a>
+          <a class="item">Team</a>
+        </div>
     </div>
     <div class="one wide column">
       <a class="avatar avatar-link" href="/posts?author=<%= user._id %>" data-title="<%= user.name %> | <%= ({m: '男', f: '女', x: '保密'})[user.gender] %>"
