@@ -1,0 +1,15 @@
+<div id="div_category">
+    <form class="ui form segment" <div class="field">
+        <label>文集</label>
+        <input id="categoryName" type="text">
+        <input id="addCategory" type="button" class="ui button" value="添加">
+    </form>
+
+    <div class="ui list">
+        <% categories.forEach(function (category) { %>
+            <a class="item">
+                <%= category %>
+            </a>
+            <%})%>
+    </div>
+</div>

@@ -1,19 +1,8 @@
 <%- include('header') %>
   <div class="ui grid">
     <div class="three wide column">
-      <form class="ui form segment" method="post" >
-        <div class="field">
-          <label>文集</label>
-          <input type="text" name="title">
-        </div>
-        <input type="submit" class="ui button" value="添加">
-      </form>
-      <div class="ui list">
-          <div class="active item">Home</div>
-          <a class="item">About</a>
-          <a class="item">Jobs</a>
-          <a class="item">Team</a>
-        </div>
+      <!-- <form class="ui form segment" method="post" action='categories/addCategory'> -->
+        <%- include('components/categories') %>
     </div>
 
     <div class="one wide column">
@@ -39,3 +28,26 @@
   </div>
 
   <%- include('footer') %>
+
+  <script type="text/javascript">
+    $(function () {
+        //页面加载完毕后开始执行的事件
+        $("#addCategory").click(function () {
+            let category = $("#categoryName").val();
+            // console.log('category :' + category);
+            $.ajax({
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: "http://localhost:3000/categories/addCategory",
+                data: JSON.stringify({ 'category': category }),
+                success: function (data) {
+                    console.log(data);
+                    $("#div_category").innerHTML = data;
+                },
+                error: function (msg) {
+                    console.log(msg);
+                }
+            });
+        });
+    });
+</script>

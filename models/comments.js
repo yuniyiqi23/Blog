@@ -5,7 +5,6 @@ const ObjectId = require('mongoose').Types.ObjectId;
 module.exports = {
     // 创建一个留言
     create: function (comment) {
-        // 注册一个用户
         return new Promise(function (res) {
             Comment.create(comment, function (err, result) {
                 if (err) return handleError(err);

@@ -4,13 +4,30 @@ const PostModel = require('./posts');
 module.exports = {
     // 创建一个博文分类
     create: function (category) {
-        return new Promise(function(resolver){
+        return new Promise(function (resolver) {
             Category.create(category, function (err, result) {
                 if (err) return new Error(err);
                 // console.log(result);
                 resolver(result);
             })
         });
+    },
+
+    // 通过用户获取分类列表
+    getCategoryByAuthorId: function (authorId) {
+        return Category
+            .find({ author: authorId })
+            .exec();
+    },
+
+    // 添加分类
+    addCategoryByAuthorId: function (authorId, category) {
+        return Category
+            .update(
+                { author: authorId },
+                {
+                    $addToSet: { categories: category }
+                })
     },
 
     // 通过名称删除分类

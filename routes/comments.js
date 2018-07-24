@@ -2,8 +2,6 @@ const express = require('express')
 const router = express.Router()
 const checkLogin = require('../middlewares/check').checkLogin
 const CommentModel = require('../models/comments');
-// const Counter = require('../lib/mongo').Counter;
-// const Mongolass = require('mongolass');
 const ObjectId = require('mongoose').Types.ObjectId;
 const moment = require('moment');
 
