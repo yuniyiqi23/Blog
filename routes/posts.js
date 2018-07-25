@@ -89,9 +89,9 @@ router.get('/create', checkLogin, function (req, res, next) {
     let authorId = req.session.user._id;
     CategoryModel.getCategoryByAuthorId(authorId)
         .then(function (result) {
-            if (result.length > 0) {
+            if (result) {
                 res.render('create.ejs', {
-                    categories: result[0].categories,
+                    categories: result.categories,
                 });
             } else {
                 res.render('create.ejs', {

@@ -16,7 +16,7 @@ module.exports = {
     // 通过用户获取分类列表
     getCategoryByAuthorId: function (authorId) {
         return Category
-            .find({ author: authorId })
+            .findOne({ author: authorId })
             // .exec();
     },
 

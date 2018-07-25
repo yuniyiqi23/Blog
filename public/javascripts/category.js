@@ -1,3 +1,4 @@
+// Ajax 添加一个分类
 $("#addCategory").click(function () {
     let category = $("#categoryName").val();
     // console.log('addCategory :' + category);
@@ -16,6 +17,7 @@ $("#addCategory").click(function () {
     });
 });
 
+// Ajax 删除一个分类
 $("#delCategory").click(function () {
     let category = $("#categoryName").val();
     // console.log('delCategory :' + category);
@@ -33,3 +35,8 @@ $("#delCategory").click(function () {
         }
     });
 });
+
+//设置最后一个checkbox为选中值
+$('input:radio:last').attr('checked', 'checked');
+
+
