@@ -17,16 +17,19 @@ module.exports = {
     getCategoryByAuthorId: function (authorId) {
         return Category
             .find({ author: authorId })
-            .exec();
+            // .exec();
     },
 
     // 添加分类
     addCategoryByAuthorId: function (authorId, category) {
         return Category
-            .update(
+            .findOneAndUpdate(
                 { author: authorId },
                 {
                     $addToSet: { categories: category }
+                },
+                {
+                    new: true
                 })
     },
 

@@ -40,10 +40,6 @@ router.get('/author/:authorId', function (req, res, next) {
 
     PostModel.getPosts(author)
         .then(function (posts) {
-
-
-        })
-        .then(function (posts) {
             res.render('posts', {
                 posts: posts
             })
@@ -97,30 +93,13 @@ router.get('/create', checkLogin, function (req, res, next) {
                 res.render('create.ejs', {
                     categories: result[0].categories,
                 });
-                // let category = '新建文档';
-                // CategoryModel.addCategoryByAuthorId(authorId, category)
-                //     .then(function (res) {
-                //         console.log(res);
-                //     })
-                //     .catch(next);
             } else {
-                let category = {
-                    author: authorId,
-                    categories: '新建文档1',
-                }
-                CategoryModel.create(category)
-                    .then(function (res) {
-                        console.log(res);
-                    })
-                    .catch(next);
-                console.log(result);
+                res.render('create.ejs', {
+                    categories: null,
+                });
             }
         })
         .catch(next);
-
-    // res.render('create.ejs', {
-    //     categories: result,
-    // });
 });
 
 // GET /posts/:postId 单独一篇的文章页

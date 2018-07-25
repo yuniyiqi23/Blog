@@ -1,8 +1,7 @@
 <%- include('header') %>
   <div class="ui grid">
-    <div class="three wide column">
-      <!-- <form class="ui form segment" method="post" action='categories/addCategory'> -->
-        <%- include('components/categories') %>
+    <div id="div_category" class="three wide column">
+      <%- include('components/categories') %>
     </div>
 
     <div class="one wide column">
@@ -29,25 +28,3 @@
 
   <%- include('footer') %>
 
-  <script type="text/javascript">
-    $(function () {
-        //页面加载完毕后开始执行的事件
-        $("#addCategory").click(function () {
-            let category = $("#categoryName").val();
-            // console.log('category :' + category);
-            $.ajax({
-                type: "POST",
-                contentType: "application/json;charset=utf-8",
-                url: "http://localhost:3000/categories/addCategory",
-                data: JSON.stringify({ 'category': category }),
-                success: function (data) {
-                    console.log(data);
-                    $("#div_category").innerHTML = data;
-                },
-                error: function (msg) {
-                    console.log(msg);
-                }
-            });
-        });
-    });
-</script>

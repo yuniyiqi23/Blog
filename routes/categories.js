@@ -6,46 +6,32 @@ const CategoryModel = require('../models/categories');
 // POST categories/addCategory 
 router.post('/addCategory', checkLogin, function (req, res, next) {
     const authorId = req.session.user._id;
-    const category = req.body.category;
+    const categoryName = req.body.category;
 
-    return CategoryModel.getCategoryByAuthorId(authorId)
+    return CategoryModel.addCategoryByAuthorId(authorId, categoryName)
         .then(function (result) {
-            if (result.length > 0) {
-                CategoryModel.addCategoryByAuthorId(authorId, category)
-                    .then(function (result) {
-                        if (result.ok && result.n > 0) {
-                            CategoryModel.getCategoryByAuthorId(authorId)
-                                .then(function (result) {
-                                    res.render('components/categories.ejs', {
-                                        categories: result[0].categories,
-                                    });
-                                })
-                        }
-                        // console.log(result);
-                        // res.render('components/categories.ejs', {
-                        //     categories: result[0].categories,
-                        // });
-                    })
-                // let category = '新建文档';
-                // CategoryModel.addCategoryByAuthorId(authorId, category)
-                //     .then(function (res) {
-                //         console.log(res);
-                //     })
-                //     .catch(next);
+            // console.log(result);
+            if (result) {
+                res.render('components/categories.ejs', {
+                    categories: result.categories,
+                });
             } else {
                 let category = {
                     author: authorId,
-                    categories: '新建文档1',
+                    categories: categoryName,
                 }
                 CategoryModel.create(category)
-                    .then(function (res) {
-                        console.log(res);
+                    .then(function (result) {
+                        res.render('components/categories.ejs', {
+                            categories: result.categories,
+                        });
                     })
                     .catch(next);
-                console.log(result);
             }
         })
         .catch(next);
 });
+
+
 
 module.exports = router;

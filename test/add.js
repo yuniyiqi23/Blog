@@ -34,11 +34,21 @@
 // var f = mixcall[0];
 // console.log(mixcall[0]());//?应该输出什么值
 
-const a = {
-    name: 'Adam'
-};
-a.age = 'asd';
+// const a = {
+//     name: 'Adam'
+// };
+// a.age = 'asd';
 
-var getTempItem = id => id;
+// var getTempItem = id => id;
 
-console.log([1,2,3].map(x => x * x));
+// console.log([1,2,3].map(x => x * x));
+
+var wm = new WeakMap();
+var element = document.querySelector(".element");
+
+wm.set(element, "Original");
+wm.get(element) // "Original"
+
+element.parentNode.removeChild(element);
+element = null;
+wm.get(element) // undefined
