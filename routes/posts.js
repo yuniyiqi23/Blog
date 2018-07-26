@@ -52,6 +52,7 @@ router.post('/create', checkLogin, function (req, res, next) {
     const author = req.session.user._id;
     const title = req.body.title;
     const content = req.body.content;
+    const categoryName = req.body.categoryName;
 
     // 校验参数
     try {
@@ -69,19 +70,21 @@ router.post('/create', checkLogin, function (req, res, next) {
     let post = {
         author: author,
         title: title,
-        content: content
+        content: content,
+        category: categoryName
     }
 
     PostModel.create(post)
         .then(function (result) {
-            // 此 post 是插入 mongodb 后的值，包含 _id
-            // post = result._doc;
-            req.flash('success', '发表成功')
-            // 发表成功后跳转到该文章页
-            res.redirect('/posts/' + result._id);
+            if (result) {
+                CategoryModel.addPostByCategory(categoryName, result._id)
+                    .catch(next);
+                req.flash('success', '发表成功');
+                // 发表成功后跳转到该文章页
+                res.redirect('/posts/' + result._id);
+            }
         })
-        .catch(next)
-
+        .catch(next);
 })
 
 // GET /posts/create 发表文章

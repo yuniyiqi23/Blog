@@ -21,11 +21,11 @@ module.exports = {
     },
 
     // 添加分类
-    addCategoryByAuthorId: function (authorId, categoryName) {
+    addCategoryByAuthorId: function (authorId, category) {
         return Category
             .findOneAndUpdate(
                 { author: authorId },
-                { $addToSet: { categories: categoryName }},
+                { $addToSet: { categories: category } },
                 { new: true })
     },
 
@@ -34,8 +34,16 @@ module.exports = {
         return Category
             .findOneAndUpdate(
                 { author: authorId },
-                { $pull: { categories: categoryName }},
+                { $pull: { categories: categoryName } },
                 { new: true })
+    },
+
+    // 通过 category 添加 post
+    addPostByCategory: function (category, postId) {
+        return Category
+            .findOneAndUpdate(
+                { categories: category },
+                { $addToSet: { categories: { category: { postId: postId } } } })
     },
 
 }

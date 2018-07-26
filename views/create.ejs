@@ -13,7 +13,7 @@
     </div>
 
     <div class="eight wide column">
-      <form class="ui form segment" method="post">
+      <form id="createPostform" class="ui form segment" method="post">
         <div class="field required">
           <label>标题</label>
           <input type="text" name="title">
@@ -22,9 +22,26 @@
           <label>内容</label>
           <textarea name="content" rows="15"></textarea>
         </div>
-        <input type="submit" class="ui button" value="发布">
+        <input id="submit" type="submit" class="ui button" value="发布">
       </form>
     </div>
   </div>
 
   <%- include('footer') %>
+
+    <script type="text/javascript">
+      $("#submit").click(function () {
+        let categoryName;
+        $.each($('input:radio:checked'), function () {
+          categoryName = $(this).val();
+        })
+        console.log('categoryName = ' + categoryName);
+        if (categoryName) {
+          let createPostform = $('#createPostform'); //得到form对象
+          let tmpInput = $("<input type='text' name='categoryName' type='hidden'/>");
+          tmpInput.attr("value", categoryName);
+          createPostform.append(tmpInput);
+          createPostform.submit();
+        }
+      })
+    </script>
