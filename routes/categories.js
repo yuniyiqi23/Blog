@@ -32,6 +32,21 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
         .catch(next);
 });
 
+// POST categories/delCategory 
+router.post('/delCategory', checkLogin, function (req, res, next) {
+    const authorId = req.session.user._id;
+    const categoryName = req.body.category;
 
+    return CategoryModel.delCategoryByName(authorId, categoryName)
+        .then(function (result) {
+            // console.log(result);
+            if (result) {
+                res.render('components/categories.ejs', {
+                    categories: result.categories,
+                });
+            } 
+        })
+        .catch(next);
+});
 
 module.exports = router;

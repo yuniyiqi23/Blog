@@ -20,16 +20,20 @@ module.exports = {
         return Comment
             .update(
                 { _id: commentId },
-                {
-                    $push: { replys: data    }
-                })
+                { $push: { replys: data } })
             .exec();
     },
 
     // 通过回复 id 删除一个回复
     delReplyById: function (commentId, replyId) {
         return Comment
-            .update({ _id: commentId }, { $pull: { replys: { replyId: ObjectId(replyId) } } })
+            .update(
+                { _id: commentId },
+                {
+                    $pull: {
+                        replys: { replyId: ObjectId(replyId) }
+                    }
+                })
     },
 
     // 通过留言 id 获取一个留言

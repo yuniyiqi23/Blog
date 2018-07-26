@@ -17,32 +17,25 @@ module.exports = {
     getCategoryByAuthorId: function (authorId) {
         return Category
             .findOne({ author: authorId })
-            // .exec();
+        // .exec();
     },
 
     // 添加分类
-    addCategoryByAuthorId: function (authorId, category) {
+    addCategoryByAuthorId: function (authorId, categoryName) {
         return Category
             .findOneAndUpdate(
                 { author: authorId },
-                {
-                    $addToSet: { categories: category }
-                },
-                {
-                    new: true
-                })
+                { $addToSet: { categories: categoryName }},
+                { new: true })
     },
 
     // 通过名称删除分类
-    delCategoryById: function (categoryId) {
+    delCategoryByName: function (authorId, categoryName) {
         return Category
-            .deleteOne({ _id: categoryId })
-            .then(function (res) {
-                // 分类删除后，再删除该分类下的所有文章
-                if (res.ok && res.n > 0) {
-                    return PostModel.delPostById(postId);
-                }
-            })
+            .findOneAndUpdate(
+                { author: authorId },
+                { $pull: { categories: categoryName }},
+                { new: true })
     },
 
 }

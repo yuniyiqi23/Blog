@@ -1,25 +1,30 @@
-<form class="ui form segment" <div class="field">
-    <div class="grouped fields">
-        <label>分类</label>
-        <div class="field required">
+<div class="column" style="overflow-y:auto; overflow-x:auto; height:1000px;">
+    <div class="ui raised segment">
+        <a class="ui green ribbon label">分类</a>
+        <p></p>
+        <div class="ui input">
             <input id="categoryName" type="text">
         </div>
-        <input id="addCategory" type="button" class="ui button" value="添加">
-
-        <% if(categories){
+        <p></p>
+        <input id="addCategory" type="button" class="mini ui button" value="添加">
+        <p></p>
+        <div class="grouped fields">
+            <% if(categories){
             categories.forEach(function (category) { %>
-            <div class="field">
-                <div class="ui radio checkbox">
-                    <input type="radio" name="checkbox_Category" value="<%= category %>">
-                    <label>
-                        <%= category %>
-                    </label>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="checkbox_Category" value="<%= category %>">
+                        <label>
+                            <%= category %>
+                        </label>
+                    </div>
                 </div>
-            </div>
-            <%})%>
-            <button id="delCategory" class="ui red button">删除</button>
-        <%}%>
+                <p></p>
+                <%})%>
+                <button id="delCategory" class="mini ui red button">删除</button>
+            <%}%>
+        </div>
     </div>
-</form>
+</div>
 
 <script type="text/javascript" src="/javascripts/category.js"></script>
