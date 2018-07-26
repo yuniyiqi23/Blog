@@ -45,12 +45,12 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
             // console.log(result);
             if (result) {
                 // 分类删除后，再删除该分类下的所有文章
-                if (result.ok && result.n > 0) {
-                    PostModel.delPostById(postId).catch(next);
+                // if (result.ok && result.n > 0) {
+                //     PostModel.delPostById(postId).catch(next);
                     res.render('components/categories.ejs', {
                         categories: result.categories,
                     });
-                }
+                // }
             } 
         })
         .catch(next);

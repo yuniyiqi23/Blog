@@ -77,11 +77,13 @@ router.post('/create', checkLogin, function (req, res, next) {
     PostModel.create(post)
         .then(function (result) {
             if (result) {
-                CategoryModel.addPostByCategory(categoryName, result._id)
+                CategoryModel.addPostByCategory(author, categoryName, result._id)
+                    .then(function (res) {
+                        req.flash('success', '发表成功');
+                        // 发表成功后跳转到该文章页
+                        res.redirect('/posts/' + result._id);
+                    })
                     .catch(next);
-                req.flash('success', '发表成功');
-                // 发表成功后跳转到该文章页
-                res.redirect('/posts/' + result._id);
             }
         })
         .catch(next);

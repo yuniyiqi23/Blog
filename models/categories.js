@@ -34,16 +34,16 @@ module.exports = {
         return Category
             .findOneAndUpdate(
                 { author: authorId },
-                { $pull: { categories: categoryName } },
+                { $pull: { categories: { category: categoryName } } },
                 { new: true })
     },
 
     // 通过 category 添加 post
-    addPostByCategory: function (category, postId) {
+    addPostByCategory: function (authorId, category, postId) {
         return Category
             .findOneAndUpdate(
-                { categories: category },
-                { $addToSet: { categories: { category: { postId: postId } } } })
+                { author: authorId, 'categories.category': category  },
+                { $push: { 'categories.$.postList': [postId] } })
     },
 
 }

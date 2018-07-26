@@ -22,7 +22,7 @@
     $("#delCategory").click(function () {
         $.each($('input:radio:checked'), function () {
             let category = $(this).val();
-            // console.log('delCategory :' + category);
+            console.log('delCategory :' + category);
             $.ajax({
                 type: "POST",
                 contentType: "application/json;charset=utf-8",

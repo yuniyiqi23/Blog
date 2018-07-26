@@ -10,12 +10,12 @@
         <p></p>
         <div class="grouped fields">
             <% if(categories){
-            categories.forEach(function (category) { %>
+            categories.forEach(function (obj) { %>
                 <div class="field">
                     <div class="ui radio checkbox">
-                        <input type="radio" name="checkbox_Category" value="<%= category %>">
+                        <input type="radio" name="checkbox_Category" value="<%= obj.category %>">
                         <label>
-                            <%= category %>
+                            <%= obj.category %>
                         </label>
                     </div>
                 </div>
