@@ -42,8 +42,15 @@ module.exports = {
     addPostByCategory: function (authorId, category, postId) {
         return Category
             .findOneAndUpdate(
-                { author: authorId, 'categories.category': category  },
-                { $push: { 'categories.$.postList': [postId] } })
+                { author: authorId, 'categories.category': category },
+                { $push: { 'categories.$.postList': { postId: postId } } })
     },
 
+    // 通过 category 删除 post
+    delPostByCategory: function (authorId, category, postId) {
+        return Category
+            .findOneAndUpdate(
+                { author: authorId, 'categories.category': category },
+                { $pull: { 'categories.$.postList': { postId: postId } } })
+    },
 }

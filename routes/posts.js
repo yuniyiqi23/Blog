@@ -78,7 +78,7 @@ router.post('/create', checkLogin, function (req, res, next) {
         .then(function (result) {
             if (result) {
                 CategoryModel.addPostByCategory(author, categoryName, result._id)
-                    .then(function (res) {
+                    .then(function (value) {
                         req.flash('success', '发表成功');
                         // 发表成功后跳转到该文章页
                         res.redirect('/posts/' + result._id);
@@ -211,11 +211,14 @@ router.get('/:postId/remove', checkLogin, function (req, res, next) {
 
             PostModel.delPostById(postId)
                 .then(function (value) {
-                    req.flash('success', '删除文章成功');
-                    // 删除成功后跳转到主页
-                    res.redirect('/posts');
+                    CategoryModel.delPostByCategory(author, post.category, postId)
+                        .then(function (value) {
+                            req.flash('success', '删除文章成功');
+                            // 删除成功后跳转到主页
+                            res.redirect('/posts');
+                        })
+                        .catch(next);
                 })
-
         })
         .catch(next)
 })
