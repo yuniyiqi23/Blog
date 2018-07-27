@@ -1,5 +1,6 @@
 const Category = require('../lib/mongoose').Category;
 const PostModel = require('./posts');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = {
     // 创建一个博文分类
@@ -51,6 +52,6 @@ module.exports = {
         return Category
             .findOneAndUpdate(
                 { author: authorId, 'categories.category': category },
-                { $pull: { 'categories.$.postList': { postId: postId } } })
+                { $pull: { 'categories.$.postList': { postId: ObjectId(postId) } } })
     },
 }
