@@ -8,7 +8,7 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
     const authorId = req.session.user._id;
     const category = {
         category: req.body.category,
-        postList:[]
+        postList: []
     };
 
     return CategoryModel.addCategoryByAuthorId(authorId, category)
@@ -40,20 +40,34 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
     const authorId = req.session.user._id;
     const categoryName = req.body.category;
 
-    return CategoryModel.delCategoryByName(authorId, categoryName)
+    return CategoryModel.getPostListByCategory(authorId, categoryName)
         .then(function (result) {
-            // console.log(result);
             if (result) {
-                // 分类删除后，再删除该分类下的所有文章
-                // if (result.ok && result.n > 0) {
-                //     PostModel.delPostById(postId).catch(next);
-                    res.render('components/categories.ejs', {
-                        categories: result.categories,
+                let postList = result.categories.postList;
+                if (postList.length > 0) {
+                    postList.forEach(element => {
+                        console.log(element);
+
                     });
-                // }
-            } 
+                }
+            }
         })
         .catch(next);
+
+    // return CategoryModel.delCategoryByName(authorId, categoryName)
+    //     .then(function (result) {
+    //         // console.log(result);
+    //         if (result) {
+    //             // 分类删除后，再删除该分类下的所有文章
+    //             // if (result.ok && result.n > 0) {
+    //             //     PostModel.delPostById(postId).catch(next);
+    //             res.render('components/categories.ejs', {
+    //                 categories: result.categories,
+    //             });
+    //             // }
+    //         }
+    //     })
+    //     .catch(next);
 });
 
 module.exports = router;

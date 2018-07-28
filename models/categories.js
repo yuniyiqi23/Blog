@@ -18,7 +18,12 @@ module.exports = {
     getCategoryByAuthorId: function (authorId) {
         return Category
             .findOne({ author: authorId })
-        // .exec();
+    },
+
+    // 通过分类名称获取 postList
+    getPostListByCategory: function (authorId, category) {
+        return Category
+            .findOne({ author: authorId, 'categories.category': category })
     },
 
     // 添加分类
