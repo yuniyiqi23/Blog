@@ -38,7 +38,7 @@
         console.log('categoryName = ' + categoryName);
         if (categoryName) {
           let createPostform = $('#createPostform'); //得到form对象
-          let tmpInput = $("<input type='text' name='categoryName' type='hidden'/>");
+          let tmpInput = $("<input type='text' name='categoryName'  hidden/>");
           tmpInput.attr("value", categoryName);
           createPostform.append(tmpInput);
           createPostform.submit();
