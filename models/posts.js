@@ -98,18 +98,4 @@ module.exports = {
             })
     },
 
-    // 通过分类 id 删除文章
-    delPostsByCategoryId: function (categoryId) {
-        return Post.find({ categoryId: categoryId })
-            .then(function (res) {
-                console.log(res);
-                if (res) {
-                    // console
-                    // res.map(function (ele) {
-
-                    // })
-                }
-            })
-            // .then(Post.deleteMany({ categoryId: categoryId }))
-    },
 }

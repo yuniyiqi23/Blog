@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const checkLogin = require('../middlewares/check').checkLogin
 const CategoryModel = require('../models/categories');
+const PostModel = require('../models/posts');
 
 // POST categories/addCategory 
 router.post('/addCategory', checkLogin, function (req, res, next) {
@@ -47,27 +48,27 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
                 if (postList.length > 0) {
                     postList.forEach(element => {
                         console.log(element);
-
+                        PostModel.delPostById(element).catch(next);
                     });
                 }
             }
         })
         .catch(next);
 
-    // return CategoryModel.delCategoryByName(authorId, categoryName)
-    //     .then(function (result) {
-    //         // console.log(result);
-    //         if (result) {
-    //             // 分类删除后，再删除该分类下的所有文章
-    //             // if (result.ok && result.n > 0) {
-    //             //     PostModel.delPostById(postId).catch(next);
-    //             res.render('components/categories.ejs', {
-    //                 categories: result.categories,
-    //             });
-    //             // }
-    //         }
-    //     })
-    //     .catch(next);
+    return CategoryModel.delCategoryByName(authorId, categoryName)
+        .then(function (result) {
+            // console.log(result);
+            if (result) {
+                // 分类删除后，再删除该分类下的所有文章
+                // if (result.ok && result.n > 0) {
+                //     PostModel.delPostById(postId).catch(next);
+                res.render('components/categories.ejs', {
+                    categories: result.categories,
+                });
+                // }
+            }
+        })
+        .catch(next);
 });
 
 module.exports = router;
