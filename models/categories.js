@@ -20,10 +20,10 @@ module.exports = {
             .findOne({ author: authorId })
     },
 
-    // 通过分类名称获取 postList
-    getPostListByCategory: function (authorId, category) {
+    // 通过 authorId 获取 Category
+    getPostListByCategory: function (authorId) {
         return Category
-            .findOne({ author: authorId, 'categories.category': category })
+            .findOne({ author: authorId })
     },
 
     // 添加分类

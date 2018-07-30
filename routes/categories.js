@@ -41,34 +41,37 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
     const authorId = req.session.user._id;
     const categoryName = req.body.category;
 
-    return CategoryModel.getPostListByCategory(authorId, categoryName)
+    return CategoryModel.getPostListByCategory(authorId)
         .then(function (result) {
             if (result) {
-                let postList = result.categories.postList;
+                let postList = null;
+                result.categories.forEach(ele => {
+                    if (ele.category === categoryName) {
+                        postList = ele.postList;
+                    }
+                });
                 if (postList.length > 0) {
                     postList.forEach(element => {
-                        console.log(element);
-                        PostModel.delPostById(element).catch(next);
+                        // console.log(element.postId);
+                        // 通过博文 Id 删除博文
+                        PostModel.delPostById(element.postId).catch(next);
                     });
                 }
             }
         })
-        .catch(next);
-
-    return CategoryModel.delCategoryByName(authorId, categoryName)
         .then(function (result) {
-            // console.log(result);
-            if (result) {
-                // 分类删除后，再删除该分类下的所有文章
-                // if (result.ok && result.n > 0) {
-                //     PostModel.delPostById(postId).catch(next);
-                res.render('components/categories.ejs', {
-                    categories: result.categories,
-                });
-                // }
-            }
+            CategoryModel.delCategoryByName(authorId, categoryName)
+                .then(function (result) {
+                    // console.log(result);
+                    if (result) {
+                        res.render('components/categories.ejs', {
+                            categories: result.categories,
+                        });
+                    }
+                })
         })
         .catch(next);
+
 });
 
 module.exports = router;
