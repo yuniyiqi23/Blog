@@ -12,7 +12,7 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
         postList: []
     };
 
-    return CategoryModel.addCategoryByAuthorId(authorId, category)
+    CategoryModel.addCategoryByAuthorId(authorId, category)
         .then(function (result) {
             // console.log(result);
             if (result) {
@@ -41,37 +41,33 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
     const authorId = req.session.user._id;
     const categoryName = req.body.category;
 
-    return CategoryModel.getPostListByCategory(authorId)
+    Promise.all([
+        // 获取分类信息
+        CategoryModel.getPostListByCategory(authorId),
+        // 删除分类
+        CategoryModel.delCategoryByName(authorId, categoryName),
+    ])
         .then(function (result) {
-            if (result) {
-                let postList = null;
-                result.categories.forEach(ele => {
-                    if (ele.category === categoryName) {
-                        postList = ele.postList;
-                    }
-                });
-                if (postList.length > 0) {
-                    postList.forEach(element => {
-                        // console.log(element.postId);
-                        // 通过博文 Id 删除博文
-                        PostModel.delPostById(element.postId).catch(next);
-                    });
+            let postList = null;
+            result[0].categories.forEach(ele => {
+                if (ele.category === categoryName) {
+                    postList = ele.postList;
                 }
+            });
+            if (postList.length > 0) {
+                postList.forEach(element => {
+                    // 通过博文 Id 删除博文
+                    PostModel.delPostById(element.postId).catch(next);
+                });
+            }
+            // 删除分类成功
+            if (result[1]) {
+                res.render('components/categories.ejs', {
+                    categories: result[1].categories,
+                });
             }
         })
-        .then(function (result) {
-            CategoryModel.delCategoryByName(authorId, categoryName)
-                .then(function (result) {
-                    // console.log(result);
-                    if (result) {
-                        res.render('components/categories.ejs', {
-                            categories: result.categories,
-                        });
-                    }
-                })
-        })
-        .catch(next);
-
+        .catch(next)
 });
 
 module.exports = router;

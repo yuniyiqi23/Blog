@@ -8,43 +8,37 @@ const CategoryModel = require('../models/categories');
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get('/', function (req, res, next) {
-    let author = req.query.author;
+    let authorId = req.query.author;
     let page = req.query.page || 1;
 
-    Promise.all([PostModel.getPostsCount(author), PostModel.getPagingPosts({ author: author, page: page })])
+    Promise.all([
+        PostModel.getPostsCount(authorId),
+        PostModel.getPagingPosts({ author: authorId, page: page }),
+        // 获取用户分类数据
+        CategoryModel.getCategoryByAuthorId(authorId)
+    ])
         .then(function (result) {
             if (result[1].length >= 0) {
+                let categoryList = null;
+                if (result[2]) {
+                    categoryList = result[2].categories;
+                }
                 if (req.query.page) {
                     res.render('components/posts-content', {
                         postsCount: result[0],
                         posts: result[1],
+                        categories: categoryList
                     })
                 } else {
                     res.render('posts', {
                         postsCount: result[0],
                         posts: result[1],
+                        categories: categoryList
                     })
                 }
             }
         })
         .catch(next);
-});
-
-// eg: GET /posts?author=xxx
-router.get('/author/:authorId', function (req, res, next) {
-    if (req.session.user) {//检查用户是否已经登录
-        console.log(req.session);//打印session的值
-    }
-
-    const author = req.query.author;
-
-    PostModel.getPosts(author)
-        .then(function (posts) {
-            res.render('posts', {
-                posts: posts
-            })
-        })
-        .catch(next)
 });
 
 // POST /posts/create 发表一篇文章
@@ -190,7 +184,6 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
                     // 编辑成功后跳转到上一页
                     res.redirect('/posts/' + postId)
                 })
-
                 .catch(next)
         });
 })

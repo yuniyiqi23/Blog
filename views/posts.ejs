@@ -1,8 +1,19 @@
 <%- include('header') %>
-<script type="text/javascript" src="/javascripts/pagination.js" ></script>
+  <script type="text/javascript" src="/javascripts/pagination.js"></script>
 
-  <div id="postContent">
-    <%- include('components/posts-content') %>
+  <div class="ui grid">
+    <!-- 分类列表 -->
+    <% if(categories){%>
+      <div id="div_category" class="three wide column">
+        <%- include('components/categories') %>
+      </div>
+      <%}%>
+        <!-- 博文列表 -->
+        <div class="thirteen wide column">
+          <div id="postContent" class="post-content">
+            <%- include('components/posts-content') %>
+          </div>
+        </div>
   </div>
 
   <!-- 实现分页页码 -->
