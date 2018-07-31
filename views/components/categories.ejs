@@ -9,7 +9,7 @@
         <input id="addCategory" type="button" class="mini ui button" value="添加">
         <p></p>
         <div class="grouped fields">
-            <% if(categories){
+            <% if(categories.length > 0){
             categories.forEach(function (obj) { %>
                 <div class="field">
                     <div class="ui radio checkbox">

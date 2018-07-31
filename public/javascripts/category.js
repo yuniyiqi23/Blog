@@ -22,14 +22,14 @@
     $("#delCategory").click(function () {
         $.each($('input:radio:checked'), function () {
             let category = $(this).val();
-            console.log('delCategory :' + category);
+            // console.log('delCategory :' + category);
             $.ajax({
                 type: "POST",
                 contentType: "application/json;charset=utf-8",
                 url: "http://localhost:3000/categories/delCategory",
                 data: JSON.stringify({ 'category': category }),
                 success: function (data) {
-                    // console.log(data);
+                    // console.log(data);express mongodb 事务
                     $("#div_category").html(data);
                 },
                 error: function (msg) {
