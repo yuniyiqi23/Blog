@@ -1,13 +1,13 @@
 <% posts.forEach(function (post) { %>
     <div class="ui grid">
-        <div class="four wide column">
+        <div class="two wide column">
             <a class="avatar avatar-link" href="/posts?author=<%= post.author._id %>" data-title="<%= post.author.name %> | <%= ({m: '男', f: '女', x: '保密'})[post.author.gender] %>"
                 data-content="<%= post.author.bio %>">
                 <img class="avatar" src="/images/<%= post.author.avatar %>">
             </a>
         </div>
 
-        <div class="eight wide column">
+        <div class="ten wide column">
             <div class="ui segment">
                 <h3>
                     <a href="/posts/<%= post._id %>">

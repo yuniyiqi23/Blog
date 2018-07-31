@@ -7,13 +7,15 @@
       <div id="div_category" class="three wide column">
         <%- include('components/categories') %>
       </div>
-      <%}%>
-        <!-- 博文列表 -->
-        <div class="thirteen wide column">
-          <div id="postContent" class="post-content">
-            <%- include('components/posts-content') %>
+      <%}else{%>
+        <div class="three wide column"></div>
+        <%}%>
+          <!-- 博文列表 -->
+          <div class="thirteen wide column">
+            <div id="postContent" class="post-content">
+              <%- include('components/posts-content') %>
+            </div>
           </div>
-        </div>
   </div>
 
   <!-- 实现分页页码 -->

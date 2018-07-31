@@ -70,4 +70,6 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
         .catch(next)
 });
 
+
+
 module.exports = router;
