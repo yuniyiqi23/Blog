@@ -10,4 +10,14 @@ myFunction.brifIntronduction = function (content) {
     }
 }
 
-module.exports = myFunction;
+if (typeof DataState == "undefined") {
+    var DataState = {};
+    DataState.Normal = 0;
+    DataState.Publish = 1;
+    DataState.Delete = 2;
+}
+
+module.exports = {
+    myFunction: myFunction,
+    DataState: DataState
+};
