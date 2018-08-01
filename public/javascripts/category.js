@@ -37,11 +37,21 @@
                 }
             });
         });
-
-
     });
 
-    //设置最后一个checkbox为选中值
+    // 设置最后一个checkbox为选中值
     $('input:radio:last').attr('checked', 'checked');
+
+    // 设置初始值
+    $.each($('input:radio:checked'), function () {
+        $("#categoryValue").attr("value", $(this).val());
+    });
+
+    // 修改提交的参数值
+    $('input:radio').click(function (event) {
+        // let category = $(this).val();
+        // console.log(category);
+        $("#categoryValue").attr("value", $(this).val());
+    })
 
 })(window)

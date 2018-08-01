@@ -63,10 +63,7 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
         .then(function (result) {
             // 删除分类成功
             if (result) {
-                res.redirect('/posts?author=' + authorId);
-                // res.render('components/categories.ejs', {
-                //     categories: result.categories,
-                // });
+                res.redirect('back');
             }
         })
         .catch(next);

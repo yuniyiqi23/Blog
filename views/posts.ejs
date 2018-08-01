@@ -5,7 +5,7 @@
     <!-- 分类列表 -->
     <% if(categories){%>
       <div id="div_category" class="three wide column">
-        <%- include('components/categories') %>
+        <%- include('components/categories',{hasDel:true}) %>
       </div>
       <%}else{%>
         <div class="three wide column"></div>
