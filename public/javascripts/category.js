@@ -42,7 +42,7 @@
     // 设置最后一个checkbox为选中值
     $('input:radio:last').attr('checked', 'checked');
 
-    // 设置初始值
+    // 设置 Category 初始值
     $.each($('input:radio:checked'), function () {
         $("#categoryValue").attr("value", $(this).val());
     });

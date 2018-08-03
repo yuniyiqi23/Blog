@@ -68,7 +68,7 @@ app.locals.blog = {
 };
 
 //加载自定义全局方法  
-app.locals.Fun = require('./utils/global');  
+app.locals.global = require('./utils/global');  
 
 // 添加模板必需的三个变量
 app.use(function (req, res, next) {
