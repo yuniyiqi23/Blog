@@ -18,6 +18,7 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
             if (result) {
                 res.render('components/categories.ejs', {
                     categories: result.categories,
+                    hasDel: false
                 });
             } else {
                 let value = {
@@ -28,6 +29,7 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
                     .then(function (result) {
                         res.render('components/categories.ejs', {
                             categories: result.categories,
+                            hasDel: false
                         });
                     })
                     .catch(next);

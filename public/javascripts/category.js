@@ -1,15 +1,15 @@
-(function (window, undefined) {
+// (function (window, undefined) {
     // Ajax 添加一个分类
     $("#addCategory").click(function () {
         let category = $("#categoryName").val();
-        // console.log('addCategory :' + category);
+        console.log('addCategory :' + category);
         $.ajax({
             type: "POST",
             contentType: "application/json;charset=utf-8",
             url: "http://localhost:3000/categories/addCategory",
             data: JSON.stringify({ 'category': category }),
             success: function (data) {
-                // console.log(data);
+                console.log(data);
                 $("#div_category").html(data);
             },
             error: function (msg) {
@@ -49,9 +49,24 @@
 
     // 修改提交的参数值
     $('input:radio').click(function (event) {
-        // let category = $(this).val();
-        // console.log(category);
+        console.log($(this).val());
         $("#categoryValue").attr("value", $(this).val());
     })
 
-})(window)
+    // 提交
+    $("#submit").click(function () {
+        let categoryName;
+        $.each($('input:radio:checked'), function () {
+          categoryName = $(this).val();
+        })
+        console.log('categoryName = ' + categoryName);
+        if (categoryName) {
+          let createPostform = $('#createPostform'); //得到form对象
+          let tmpInput = $("<input type='text' name='categoryName'  hidden/>");
+          tmpInput.attr("value", categoryName);
+          createPostform.append(tmpInput);
+          createPostform.submit();
+        }
+      })
+
+// })(window)

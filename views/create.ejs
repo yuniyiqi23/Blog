@@ -9,7 +9,7 @@
     </div>
 
     <div id="div_category" class="three wide column">
-      <%- include('components/categories',{hasDel:false}) %>
+      <%- include('components/categories',{hasDel: false}) %>
     </div>
 
     <div class="eight wide column">
@@ -22,14 +22,17 @@
           <label>内容</label>
           <textarea name="content" rows="15"></textarea>
         </div>
-          <input id="submit" type="submit" class="ui button" value="发布">
+        <input id="submit" type="submit" class="ui button" value="发布">
       </form>
     </div>
   </div>
 
+  <script type="text/javascript" src="/javascripts/category.js"></script>
+
   <%- include('footer') %>
 
-    <script type="text/javascript">
+
+    <!-- <script type="text/javascript">
       $("#submit").click(function () {
         let categoryName;
         $.each($('input:radio:checked'), function () {
@@ -44,4 +47,4 @@
           createPostform.submit();
         }
       })
-    </script>
+    </script> -->
