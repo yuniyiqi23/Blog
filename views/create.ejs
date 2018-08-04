@@ -27,24 +27,4 @@
     </div>
   </div>
 
-  <script type="text/javascript" src="/javascripts/category.js"></script>
-
   <%- include('footer') %>
-
-
-    <!-- <script type="text/javascript">
-      $("#submit").click(function () {
-        let categoryName;
-        $.each($('input:radio:checked'), function () {
-          categoryName = $(this).val();
-        })
-        console.log('categoryName = ' + categoryName);
-        if (categoryName) {
-          let createPostform = $('#createPostform'); //得到form对象
-          let tmpInput = $("<input type='text' name='categoryName'  hidden/>");
-          tmpInput.attr("value", categoryName);
-          createPostform.append(tmpInput);
-          createPostform.submit();
-        }
-      })
-    </script> -->
