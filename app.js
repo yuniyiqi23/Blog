@@ -55,8 +55,6 @@ app.use(session({
         touchAfter: 24*3600 //单位是秒
     })
 }));
-// console.log('session.key = ' + config.session.key);
-// console.log('session.secret = ' + config.session.secret);
 
 // flash 中间件，用来显示通知
 app.use(flash());

@@ -10,11 +10,4 @@ helpFun.brifIntr = function (content) {
     }
 }
 
-// 数据状态枚举
-helpFun.DataState = {
-    Draft: 0,
-    Publish: 1,
-    Delete: 2
-}
-
 module.exports = helpFun;

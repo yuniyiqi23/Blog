@@ -5,6 +5,7 @@ const checkLogin = require('../middlewares/check').checkLogin;
 const PostModel = require('../models/posts');
 const CommentModel = require('../models/comments');
 const CategoryModel = require('../models/categories');
+const DataState = require('../middlewares/enum').DataState;
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get('/', function (req, res, next) {
@@ -65,7 +66,8 @@ router.post('/create', checkLogin, function (req, res, next) {
         author: author,
         title: title,
         content: content,
-        category: categoryName
+        category: categoryName,
+        state: DataState.Publish,
     }
 
     PostModel.create(post)
