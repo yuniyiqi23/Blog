@@ -4,6 +4,7 @@ const moment = require('moment');
 const checkLogin = require('../middlewares/check').checkLogin;
 const PostModel = require('../models/posts');
 const CommentModel = require('../models/comments');
+const TagModel = require('../models/tags');
 const CategoryModel = require('../models/categories');
 const DataState = require('../middlewares/enum').DataState;
 
@@ -49,6 +50,9 @@ router.post('/create', checkLogin, function (req, res, next) {
     const content = req.body.content;
     const categoryName = req.body.categoryName;
 
+    // 测试标签
+    const tags = Array.of('Node', 'Express');
+
     // 校验参数
     try {
         if (!title.length) {
@@ -68,22 +72,64 @@ router.post('/create', checkLogin, function (req, res, next) {
         content: content,
         category: categoryName,
         state: DataState.Publish,
+        tags: tags
     }
 
     PostModel.create(post)
         .then(function (result) {
             if (result) {
-                CategoryModel.addPostByCategory(author, categoryName, result._id)
-                    .then(function (value) {
+                Promise.all([firstStep(post, result), secondStep(author, categoryName, result)])
+                    .then(function () {
+                        console.log('flash');
                         req.flash('success', '发表成功');
                         // 发表成功后跳转到该文章页
                         res.redirect('/posts/' + result._id);
                     })
-                    .catch(next);
+
             }
         })
         .catch(next);
 })
+
+
+
+function firstStep(post, result) {
+    return new Promise(function (res, rej) {
+        if (post.tags) {
+            let postId = result._id;
+            post.tags.map(element => {
+                TagModel.getTagByName(element)
+                    .then(function (res) {
+                        let postTagRel = {
+                            postId: postId,
+                            name: element
+                        };
+                        if (res) {
+                            TagModel.createPostTagRel(postTagRel);
+                        } else {
+                            let tag = {
+                                name: element
+                            }
+                            TagModel.create(tag)
+                                .then(function (res) {
+                                    if (res) {
+                                        let postTagRel = {
+                                            name: element,
+                                            postId: postId
+                                        };
+                                        TagModel.createPostTagRel(postTagRel);
+                                    }
+                                })
+                        }
+                    })
+            })
+        }
+    })
+}
+
+function secondStep(author, categoryName, result) {
+    return CategoryModel.addPostByCategory(author, categoryName, result._id);
+}
 
 // GET /posts/create 发表文章
 router.get('/create', checkLogin, function (req, res, next) {

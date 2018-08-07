@@ -8,7 +8,6 @@ module.exports = {
         return new Promise(function (resolver) {
             Category.create(category, function (err, result) {
                 if (err) return new Error(err);
-                // console.log(result);
                 resolver(result);
             })
         });

@@ -1,19 +1,19 @@
-const marked = require('marked');
 const Post = require('../lib/mongoose').Post;
-const PostSchema = require('../lib/mongoose').PostSchema;
 const CommentModel = require('./comments');
-const ObjectId = require('mongodb').ObjectID;
+
 const DataState = require('../middlewares/enum').DataState;
 
 module.exports = {
     // 创建一篇文章
     create: function (post) {
-        return new Promise(function (resolve) {
-            Post.create(post, function (err, result) {
-                if (err) return handleError(err);
-                resolve(result);
-            })
-        });
+        return Post.create(post)
+        // return new Promise(function (res) {
+        //     Post.create(post, function (err, value) {
+        //         if (err) return handleError(err);
+        //         console.log(value);
+        //         res(value);
+        //     })
+        // });
     },
 
     // 通过文章 id 获取一篇文章
@@ -40,7 +40,7 @@ module.exports = {
         let query = {}
         if (author) {
             query.author = author
-        }else{
+        } else {
             query.state = DataState.Publish
         }
         return Post
@@ -55,7 +55,7 @@ module.exports = {
         let query = {}
         if (author) {
             query.author = author
-        }else{
+        } else {
             query.state = DataState.Publish
         }
         let skipNum = (page - 1) * pageSize;
@@ -78,7 +78,7 @@ module.exports = {
     // 通过文章 id 获取一篇原生文章（编辑文章）
     getRawPostById: function (postId) {
         return Post
-            .findOne({ _id: postId, state: DataState.Publish})
+            .findOne({ _id: postId, state: DataState.Publish })
             .populate({ path: 'author', model: 'User' })
             .exec()
     },
@@ -93,7 +93,7 @@ module.exports = {
     // 通过用户 id 和文章 id 删除一篇文章
     delPostById: function (postId) {
         return Post
-            .updateOne({ _id: postId }, {state: DataState.Delete})
+            .updateOne({ _id: postId }, { state: DataState.Delete })
             .then(function (res) {
                 // 文章删除后，再删除该文章下的所有留言
                 if (res.ok && res.n > 0 && res.nModified == 1) {
