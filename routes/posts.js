@@ -51,7 +51,7 @@ router.post('/create', checkLogin, function (req, res, next) {
     const categoryName = req.body.categoryName;
 
     // 测试标签
-    const tags = Array.of('Node', 'Express');
+    const tags = Array.of();
 
     // 校验参数
     try {
@@ -75,61 +75,61 @@ router.post('/create', checkLogin, function (req, res, next) {
         tags: tags
     }
 
-    PostModel.create(post)
+    Promise.all([
+        funCreatePost(post),
+        funCreateTags(post.tags)])
         .then(function (result) {
-            if (result) {
-                Promise.all([firstStep(post, result), secondStep(author, categoryName, result)])
-                    .then(function () {
-                        console.log('flash');
-                        req.flash('success', '发表成功');
-                        // 发表成功后跳转到该文章页
-                        res.redirect('/posts/' + result._id);
-                    })
-
-            }
+            
+            req.flash('success', '发表成功');
+            // 发表成功后跳转到该文章页
+            res.redirect('/posts/' + result[0]._id);
         })
         .catch(next);
 })
 
+async function funCreatePost(post) {
+    try {
+        const postResult = await new Promise(function (res) {
+            PostModel.create(post)
+                .then(function (value) {
+                    res(value);
+                })
+        })
 
+        return new Promise(function (res) {
+            console.log(post);
+            console.log('postResult._id = ' + postResult._id);
+            CategoryModel.addPostByCategory(post.author, post.category, postResult._id)
+                .then(function (value) {
+                    console.log(value);
+                    res(postResult);
+                })
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-function firstStep(post, result) {
-    return new Promise(function (res, rej) {
-        if (post.tags) {
-            let postId = result._id;
-            post.tags.map(element => {
-                TagModel.getTagByName(element)
-                    .then(function (res) {
-                        let postTagRel = {
-                            postId: postId,
-                            name: element
-                        };
-                        if (res) {
-                            TagModel.createPostTagRel(postTagRel);
-                        } else {
-                            let tag = {
-                                name: element
-                            }
-                            TagModel.create(tag)
-                                .then(function (res) {
-                                    if (res) {
-                                        let postTagRel = {
-                                            name: element,
-                                            postId: postId
-                                        };
-                                        TagModel.createPostTagRel(postTagRel);
-                                    }
-                                })
-                        }
-                    })
+function asyncThing(value) {
+    return new Promise((res) => {
+        TagModel.getTagByName(value)
+            .then(function (value) {
+                console.log(value);
+                if (!value) {
+                    return TagModel.create(tag)
+                } else res();
             })
-        }
     })
 }
 
-function secondStep(author, categoryName, result) {
-    return CategoryModel.addPostByCategory(author, categoryName, result._id);
+async function funCreateTags(tags) {
+    console.log(tags);
+    return tags.map(async (value) => {
+        const v = await asyncThing(value)
+        return v;
+    })
 }
+
 
 // GET /posts/create 发表文章
 router.get('/create', checkLogin, function (req, res, next) {
