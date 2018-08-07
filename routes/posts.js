@@ -51,7 +51,7 @@ router.post('/create', checkLogin, function (req, res, next) {
     const categoryName = req.body.categoryName;
 
     // 测试标签
-    const tags = Array.of();
+    const tags = Array.of('Node1', 'Node2');
 
     // 校验参数
     try {
@@ -79,7 +79,6 @@ router.post('/create', checkLogin, function (req, res, next) {
         funCreatePost(post),
         funCreateTags(post.tags)])
         .then(function (result) {
-            
             req.flash('success', '发表成功');
             // 发表成功后跳转到该文章页
             res.redirect('/posts/' + result[0]._id);
@@ -97,37 +96,40 @@ async function funCreatePost(post) {
         })
 
         return new Promise(function (res) {
-            console.log(post);
-            console.log('postResult._id = ' + postResult._id);
-            CategoryModel.addPostByCategory(post.author, post.category, postResult._id)
-                .then(function (value) {
-                    console.log(value);
-                    res(postResult);
-                })
+            if (post.author && post.category && postResult._id) {
+                console.log('CategoryModel--addPostByCategory');
+                CategoryModel.addPostByCategory(post.author, post.category, postResult._id)
+                    .then(function (value) {
+                        console.log(value);
+                        res(postResult);
+                    })
+            }
         })
     } catch (error) {
         console.log(error);
     }
 }
 
-function asyncThing(value) {
+function asyncThing(tag) {
     return new Promise((res) => {
-        TagModel.getTagByName(value)
+        TagModel.getTagByName(tag)
             .then(function (value) {
-                console.log(value);
+                // console.log(value);
                 if (!value) {
-                    return TagModel.create(tag)
-                } else res();
+                    TagModel.create({ name: tag })
+                        .then(function (result) {
+                            res(result);
+                        })
+                }
             })
     })
 }
 
 async function funCreateTags(tags) {
-    console.log(tags);
-    return tags.map(async (value) => {
-        const v = await asyncThing(value)
-        return v;
-    })
+    // console.log(tags);
+    return Promise.all(tags.map(async (value) => {
+        await asyncThing(value)
+    }))
 }
 
 

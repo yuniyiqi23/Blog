@@ -1,4 +1,4 @@
-// (function (window, undefined) {
+$(window).load(function() {
     // Ajax 添加一个分类
     $("#addCategory").click(function () {
         let category = $("#categoryName").val();
@@ -54,7 +54,7 @@
     })
 
     // 提交
-    $("#submit").click(function () {
+    $('#submit').click(function () {
         let categoryName;
         $.each($('input:radio:checked'), function () {
           categoryName = $(this).val();
@@ -69,4 +69,4 @@
         }
       })
 
-// })(window)
+})

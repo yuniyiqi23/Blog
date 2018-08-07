@@ -35,14 +35,17 @@ function asyncThing(value) {
         })
 }
 
-async function main() {
-    return [1, 2, 3, 4].map(async (value) => {
-        const v = await asyncThing(value)
-        return v
-    })
+// async function main() {
+//     return [1, 2, 3, 4].map(async (value) => {
+//         const v = await asyncThing(value)
+//         return v
+//     })
+// }
+
+function main() {
+    return Promise.all([1, 2, 3, 4].map((value) => asyncThing(value)))
 }
 
 main()
-    .then(v => Promise.all(v))
     .then(v => console.log(v))
     .catch(err => console.error(err))
