@@ -26,26 +26,40 @@
 //     console.log(res);
 // });
 
-function asyncThing(value) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(value * 2), 1000)
-    })
-        .then(function (a) {
-            return a + 1;
+const list = [];
+for (let i = 0; i < 10; ++i) {
+    list.push(i);
+}
+
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+        result = result.then(() => {
+            return cb(a).then((res) => {
+                realResult.push(res)
+            })
         })
+    })
+
+    return result.then(() => {
+        return realResult
+    })
 }
 
-// async function main() {
-//     return [1, 2, 3, 4].map(async (value) => {
-//         const v = await asyncThing(value)
-//         return v
-//     })
-// }
+PromiseForEach(list, (number) => {
 
-function main() {
-    return Promise.all([1, 2, 3, 4].map((value) => asyncThing(value)))
-}
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            // console.log(number);
+            return resolve(number);
+        }, 100);
+    })
 
-main()
-    .then(v => console.log(v))
-    .catch(err => console.error(err))
+}).then((data) => {
+    console.log("成功");
+    console.log(data);
+}).catch((err) => {
+    console.log("失败");
+    console.log(err)
+}); 

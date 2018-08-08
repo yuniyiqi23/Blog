@@ -51,20 +51,20 @@ router.post('/create', checkLogin, function (req, res, next) {
     const categoryName = req.body.categoryName;
 
     // 测试标签
-    const tags = Array.of('Node1', 'Node2');
+    const tags = Array.of('Node5', 'Node6');
 
     // 校验参数
-    try {
-        if (!title.length) {
-            throw new Error('请填写标题')
-        }
-        if (!content.length) {
-            throw new Error('请填写内容')
-        }
-    } catch (e) {
-        req.flash('error', e.message)
-        return res.redirect('back')
-    }
+    // try {
+    //     if (!title.length) {
+    //         throw new Error('请填写标题')
+    //     }
+    //     if (!content.length) {
+    //         throw new Error('请填写内容')
+    //     }
+    // } catch (e) {
+    //     req.flash('error', e.message)
+    //     return res.redirect('back')
+    // }
 
     let post = {
         author: author,
@@ -88,47 +88,33 @@ router.post('/create', checkLogin, function (req, res, next) {
 
 async function funCreatePost(post) {
     try {
-        const postResult = await new Promise(function (res) {
-            PostModel.create(post)
-                .then(function (value) {
-                    res(value);
-                })
-        })
-
-        return new Promise(function (res) {
-            if (post.author && post.category && postResult._id) {
-                console.log('CategoryModel--addPostByCategory');
-                CategoryModel.addPostByCategory(post.author, post.category, postResult._id)
-                    .then(function (value) {
-                        console.log(value);
-                        res(postResult);
-                    })
-            }
-        })
+        // 创建 post 并获取返回值
+        const postResult = await Promise.resolve(PostModel.create(post));
+        // 将 post 添加进 category
+        await Promise.resolve(CategoryModel
+            .addPostByCategory(post.author, post.category, postResult._id));
+        return Promise.resolve(postResult)
     } catch (error) {
         console.log(error);
     }
 }
 
-function asyncThing(tag) {
-    return new Promise((res) => {
-        TagModel.getTagByName(tag)
-            .then(function (value) {
-                // console.log(value);
-                if (!value) {
-                    TagModel.create({ name: tag })
-                        .then(function (result) {
-                            res(result);
-                        })
-                }
-            })
-    })
+function submit(tag) {
+    return Promise.resolve()
+        .then(() => {
+            return TagModel.getTagByName(tag)
+                .then(function (value) {
+                    if (!value) {
+                        console.log('tag = ' + tag);
+                        return TagModel.create({ name: tag });
+                    }
+                })
+        })
 }
 
-async function funCreateTags(tags) {
-    // console.log(tags);
-    return Promise.all(tags.map(async (value) => {
-        await asyncThing(value)
+function funCreateTags(tags) {
+    return Promise.all(tags.map((tag) => {
+        return submit(tag)
     }))
 }
 
