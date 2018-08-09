@@ -13,11 +13,6 @@ router.get('/', function (req, res, next) {
     let authorId = req.query.author;
     let page = req.query.page || 1;
 
-    // TagModel.getTagsBySearch('N')
-    //     .then(function (res) {
-    //         console.log('getTagsBySearch : ' + res);
-    //     })
-
     Promise.all([
         PostModel.getPostsCount(authorId),
         PostModel.getPagingPosts({ author: authorId, page: page }),

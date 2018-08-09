@@ -24,17 +24,27 @@
         </div>
         <div class="field">
           <label>标签</label>
+
           <div class="ui category search">
             <div class="ui icon input">
-              <input class="prompt" type="text" placeholder="Search tags...">
+              <input id="search-text" class="prompt" type="text" placeholder="Search tags...">
               <i class="search icon"></i>
             </div>
-            <div class="results"></div>
-          </div>
-          <br>
+            <p></p>
             <input id="addTag" type="button" class="ui button" value="添加">
+            <!-- <div id='search-result' class="results"></div> -->
+            <a class="ui label">
+              Node
+              <i class="delete icon"></i>
+            </a>
+            <a class="ui label">
+              Express
+              <i class="delete icon"></i>
+            </a>
+            <p><span id='search-result'></span></p>
+          </div>
+          <p></p>
         </div>
-
         <input id="submit" type="submit" class="ui button" value="发布">
       </form>
     </div>
@@ -42,3 +52,24 @@
 
   <script type="text/javascript" src="/js/create.js"></script>
   <%- include('footer') %>
+
+    <script>
+      $(document).ready(function () {
+        $("#search-text").keyup(function () {
+          var paremeter = $("#search-text").val();
+          // console.log('paremeter =' + paremeter);
+          $.get("http://" + window.location.host + "/tags", { 'tag': paremeter }, function (data) {
+            console.log(data);
+            for (var i = data.length - 1; i >= 0; i--) {
+              $('#search-result').append(data[i].name + '<br/>')
+            };
+          })
+        });
+        $('#search-text').keydown(function () {
+          $('#search-result').empty();
+        })
+        $('#search-text').blur(function () {
+          $('#search-result').empty();
+        })
+      });
+    </script>
