@@ -25,14 +25,14 @@
         <div class="field">
           <label>标签</label>
 
-          <div class="ui category search">
+          <div class="ui search">
             <div class="ui icon input">
               <input id="search-text" class="prompt" type="text" placeholder="Search tags...">
               <i class="search icon"></i>
             </div>
             <p></p>
             <input id="addTag" type="button" class="ui button" value="添加">
-            <!-- <div id='search-result' class="results"></div> -->
+            <div class="results"></div>
             <a class="ui label">
               Node
               <i class="delete icon"></i>
@@ -41,7 +41,6 @@
               Express
               <i class="delete icon"></i>
             </a>
-            <p><span id='search-result'></span></p>
           </div>
           <p></p>
         </div>
@@ -60,9 +59,14 @@
           // console.log('paremeter =' + paremeter);
           $.get("http://" + window.location.host + "/tags", { 'tag': paremeter }, function (data) {
             console.log(data);
-            for (var i = data.length - 1; i >= 0; i--) {
-              $('#search-result').append(data[i].name + '<br/>')
-            };
+
+            $('.ui.search')
+              .search({
+                source: data
+              })
+            // for (var i = data.length - 1; i >= 0; i--) {
+            //   $('#search-result').append(data[i].name + '<br/>')
+            // };
           })
         });
         $('#search-text').keydown(function () {
