@@ -14,23 +14,24 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
 
     CategoryModel.addCategoryByAuthorId(authorId, category)
         .then(function (result) {
-            // console.log(result);
             if (result) {
                 res.render('components/categories.ejs', {
                     categories: result.categories,
                 });
+                return;
             } else {
                 let value = {
                     author: authorId,
                     categories: [category],
                 }
-                CategoryModel.create(value)
-                    .then(function (result) {
-                        res.render('components/categories.ejs', {
-                            categories: result.categories,
-                        });
-                    })
-                    .catch(next);
+                return CategoryModel.create(value);
+            }
+        })
+        .then(function (result) {
+            if (result) {
+                res.render('components/categories.ejs', {
+                    categories: result.categories,
+                });
             }
         })
         .catch(next);
@@ -40,8 +41,26 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
 router.post('/delCategory', checkLogin, function (req, res, next) {
     const authorId = req.session.user._id;
     const categoryName = req.body.category;
+    // 
+    const delCategoryProcess = async function (authorId, categoryName) {
+        try {
+            // 获取 postList
+            const postList = await getPostList(authorId, categoryName);
+            // 删除 posts
+            await delPosts(postList);
+            // 删除 category
+            await delCategory(authorId, categoryName);
+            res.redirect('back');
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-    CategoryModel.getPostListByCategory(authorId)
+    delCategoryProcess(authorId, categoryName);
+});
+
+function getPostList(authorId, categoryName) {
+    return CategoryModel.getPostListByCategory(authorId)
         .then(function (result) {
             let postList = null;
             result.categories.forEach(ele => {
@@ -49,27 +68,23 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
                     postList = ele.postList;
                 }
             });
-            if(postList){
-                if (postList.length > 0) {
-                    postList.forEach(element => {
-                        // 通过博文 Id 删除博文
-                        PostModel.delPostById(element.postId).catch(next);
-                    });
-                }
-            }
+            return postList;
         })
-        .then(function () {
-            // 删除分类
-            return CategoryModel.delCategoryByName(authorId, categoryName);
-        })
-        .then(function (result) {
-            // 删除分类成功
-            if (result) {
-                res.redirect('back');
-            }
-        })
-        .catch(next);
+}
 
-});
+function delPosts(postList) {
+    if (postList) {
+        if (postList.length > 0) {
+            Promise.all(postList.forEach(element => {
+                // 通过博文 Id 删除博文
+                return PostModel.delPostById(element.postId);
+            }));
+        }
+    }
+}
+
+function delCategory(authorId, categoryName) {
+    return CategoryModel.delCategoryByName(authorId, categoryName);
+}
 
 module.exports = router;

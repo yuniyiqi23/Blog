@@ -7,7 +7,7 @@
         $.ajax({
             type: "POST",
             contentType: "application/json;charset=utf-8",
-            url: "http://localhost:3000/categories/addCategory",
+            url: "http://" + window.location.host + "/categories/addCategory",
             data: JSON.stringify({ 'category': category }),
             success: function (data) {
                 console.log(data);
@@ -27,7 +27,7 @@
             $.ajax({
                 type: "POST",
                 contentType: "application/json;charset=utf-8",
-                url: "http://localhost:3000/categories/delCategory",
+                url: "http://" + window.location.host + "/categories/delCategory",
                 data: JSON.stringify({ 'category': category }),
                 success: function (data) {
                     // console.log(data);express mongodb 事务
