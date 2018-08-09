@@ -54,17 +54,17 @@ router.post('/create', checkLogin, function (req, res, next) {
     const tags = Array.of('Node5', 'Node6');
 
     // 校验参数
-    // try {
-    //     if (!title.length) {
-    //         throw new Error('请填写标题')
-    //     }
-    //     if (!content.length) {
-    //         throw new Error('请填写内容')
-    //     }
-    // } catch (e) {
-    //     req.flash('error', e.message)
-    //     return res.redirect('back')
-    // }
+    try {
+        if (!title.length) {
+            throw new Error('请填写标题')
+        }
+        if (!content.length) {
+            throw new Error('请填写内容')
+        }
+    } catch (e) {
+        req.flash('error', e.message)
+        return res.redirect('back')
+    }
 
     let post = {
         author: author,
@@ -76,8 +76,8 @@ router.post('/create', checkLogin, function (req, res, next) {
     }
 
     Promise.all([
-        funCreatePost(post),
-        funCreateTags(post.tags)])
+        createPost(post),
+        createTags(post.tags)])
         .then(function (result) {
             req.flash('success', '发表成功');
             // 发表成功后跳转到该文章页
@@ -86,7 +86,7 @@ router.post('/create', checkLogin, function (req, res, next) {
         .catch(next);
 })
 
-async function funCreatePost(post) {
+async function createPost(post) {
     try {
         // 创建 post 并获取返回值
         const postResult = await Promise.resolve(PostModel.create(post));
@@ -99,22 +99,21 @@ async function funCreatePost(post) {
     }
 }
 
-function submit(tag) {
+function submitTag(tag) {
     return Promise.resolve()
         .then(() => {
             return TagModel.getTagByName(tag)
                 .then(function (value) {
                     if (!value) {
-                        console.log('tag = ' + tag);
                         return TagModel.create({ name: tag });
                     }
                 })
         })
 }
 
-function funCreateTags(tags) {
+function createTags(tags) {
     return Promise.all(tags.map((tag) => {
-        return submit(tag)
+        return submitTag(tag)
     }))
 }
 
