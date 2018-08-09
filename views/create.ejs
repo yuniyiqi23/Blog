@@ -9,7 +9,7 @@
     </div>
 
     <div id="div_category" class="three wide column">
-      <%- include('components/categories',{hasDel: false}) %>
+      <%- include('components/categories') %>
     </div>
 
     <div class="eight wide column">
@@ -22,9 +22,23 @@
           <label>内容</label>
           <textarea name="content" rows="15"></textarea>
         </div>
+        <div class="field">
+          <label>标签</label>
+          <div class="ui category search">
+            <div class="ui icon input">
+              <input class="prompt" type="text" placeholder="Search tags...">
+              <i class="search icon"></i>
+            </div>
+            <div class="results"></div>
+          </div>
+          <br>
+            <input id="addTag" type="button" class="ui button" value="添加">
+        </div>
+
         <input id="submit" type="submit" class="ui button" value="发布">
       </form>
     </div>
   </div>
 
+  <script type="text/javascript" src="/js/create.js"></script>
   <%- include('footer') %>

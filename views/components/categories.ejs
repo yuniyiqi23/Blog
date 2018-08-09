@@ -21,15 +21,13 @@
                 </div>
                 <p></p>
                 <%})%>
-                <%if(hasDel){%>
-                    <form class="ui reply form" method="post" action="/categories/delCategory">
-                        <input id="categoryValue" name="category" hidden>
-                        <input type="submit" class="ui icon button" value="删除" />
-                    </form>
-                <%}%>
+                <form class="ui reply form" method="post" action="/categories/delCategory">
+                    <input id="categoryValue" name="category" hidden>
+                    <input type="submit" class="mini ui button" value="删除" />
+                </form>    
             <%}%>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" src="/javascripts/category.js"></script>
+<script type="text/javascript" src="/js/category.js"></script>

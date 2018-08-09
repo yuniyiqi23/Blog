@@ -11,4 +11,9 @@ module.exports = {
         return Tag.findOne({ name: name })
     },
 
+    // 通过模糊搜索获取 Tags
+    getTagsBySearch: function (value) {
+        return Tag.find({ name: { $regex: value, $options: 'i' } })
+    }
+
 }

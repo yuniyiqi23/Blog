@@ -18,7 +18,6 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
             if (result) {
                 res.render('components/categories.ejs', {
                     categories: result.categories,
-                    hasDel: false
                 });
             } else {
                 let value = {
@@ -29,7 +28,6 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
                     .then(function (result) {
                         res.render('components/categories.ejs', {
                             categories: result.categories,
-                            hasDel: false
                         });
                     })
                     .catch(next);
@@ -51,11 +49,13 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
                     postList = ele.postList;
                 }
             });
-            if (postList.length > 0) {
-                postList.forEach(element => {
-                    // 通过博文 Id 删除博文
-                    PostModel.delPostById(element.postId).catch(next);
-                });
+            if(postList){
+                if (postList.length > 0) {
+                    postList.forEach(element => {
+                        // 通过博文 Id 删除博文
+                        PostModel.delPostById(element.postId).catch(next);
+                    });
+                }
             }
         })
         .then(function () {
@@ -71,7 +71,5 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
         .catch(next);
 
 });
-
-
 
 module.exports = router;

@@ -13,6 +13,11 @@ router.get('/', function (req, res, next) {
     let authorId = req.query.author;
     let page = req.query.page || 1;
 
+    // TagModel.getTagsBySearch('N')
+    //     .then(function (res) {
+    //         console.log('getTagsBySearch : ' + res);
+    //     })
+
     Promise.all([
         PostModel.getPostsCount(authorId),
         PostModel.getPagingPosts({ author: authorId, page: page }),
@@ -51,7 +56,7 @@ router.post('/create', checkLogin, function (req, res, next) {
     const categoryName = req.body.categoryName;
 
     // 测试标签
-    const tags = Array.of('Node5', 'Node6');
+    // const tags = Array.of('Node5', 'Node6');
 
     // 校验参数
     try {
