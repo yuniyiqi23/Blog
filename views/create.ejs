@@ -30,9 +30,9 @@
               <input id="search-text" class="prompt" type="text" placeholder="Search tags...">
               <i class="search icon"></i>
             </div>
+            <div class="results"></div>
             <p></p>
             <input id="addTag" type="button" class="ui button" value="添加">
-            <div class="results"></div>
             <a class="ui label">
               Node
               <i class="delete icon"></i>
@@ -58,15 +58,13 @@
           var paremeter = $("#search-text").val();
           // console.log('paremeter =' + paremeter);
           $.get("http://" + window.location.host + "/tags", { 'tag': paremeter }, function (data) {
-            console.log(data);
-
+            // console.log(data);
+            var content = data.map(ele => ele.name);
+            console.log(content);
             $('.ui.search')
               .search({
-                source: data
+                source: content
               })
-            // for (var i = data.length - 1; i >= 0; i--) {
-            //   $('#search-result').append(data[i].name + '<br/>')
-            // };
           })
         });
         $('#search-text').keydown(function () {
