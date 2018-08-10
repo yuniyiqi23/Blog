@@ -8,11 +8,9 @@
 
 二、 项目迭代计划
 1. 搜索功能
-    标签功能
     回到顶端按钮
     忘记密码（邮件、手机验证）
     安全机制（XSS防护等）
-    分享到朋友圈
 2. 守护进程ChildProcess
 3. request请求不可靠(IP验证、cookie验证、session)
 4. MongoDB驱动库
@@ -25,7 +23,6 @@ https://zhuanlan.zhihu.com/p/25178630
 https://goo.gl/6NJLrh
 https://github.com/nodejs/node/issues/19199
 7. 下载文件并提示下载成功
-8. 
 
 
 

@@ -27,7 +27,6 @@ $(window).load(function () {
     // 实时搜索 tags
     $("#search-text").keyup(function () {
         let paremeter = $("#search-text").val();
-        // console.log('paremeter =' + paremeter);
         $.get("http://" + window.location.host + "/tags", { 'tag': paremeter }, function (data) {
             let content = data.map(function (ele) {
                 return { title: ele.name }
@@ -49,9 +48,18 @@ $(window).load(function () {
     // 添加 Tag
     $('#addTag').click(function () {
         let value = $("#search-text").val();
-        const tagList = $('#tagList');
-        const tag = $("<a class='ui label'>" + value + "<i id='" + value + "' class='delete icon'></i></a>");
-        tagList.append(tag);
+        let tagList = new Array();
+        $.each($('.delete.icon'), function () {
+            console.log('tag = ' + $(this).attr("id"));
+            tagList.push($(this).attr("id"));
+        })
+        if(tagList.includes(value)){
+            alert('已添加相同的标签！');
+        }else{
+            const tagList = $('#tagList');
+            const tag = $("<a class='ui label'>" + value + "<i id='" + value + "' class='delete icon'></i></a>");
+            tagList.append(tag);
+        }
     })
 
     // 删除 Tag
