@@ -49,9 +49,8 @@ router.post('/create', checkLogin, function (req, res, next) {
     const title = req.body.title;
     const content = req.body.content;
     const categoryName = req.body.categoryName;
-
-    // 测试标签
-    // const tags = Array.of('Node5', 'Node6');
+    const tags = req.body.tags.split(',');
+    // tags.map(ele => console.log(ele));
 
     // 校验参数
     try {
@@ -100,14 +99,11 @@ async function createPost(post) {
 }
 
 function submitTag(tag) {
-    return Promise.resolve()
-        .then(() => {
-            return TagModel.getTagByName(tag)
-                .then(function (value) {
-                    if (!value) {
-                        return TagModel.create({ name: tag });
-                    }
-                })
+    return TagModel.getTagByName(tag)
+        .then(function (value) {
+            if (!value) {
+                return TagModel.create({ name: tag });
+            }
         })
 }
 

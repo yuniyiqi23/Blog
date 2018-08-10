@@ -25,22 +25,16 @@
         <div class="field">
           <label>标签</label>
 
-          <div class="ui search">
+          <div class="ui loading search">
             <div class="ui icon input">
               <input id="search-text" class="prompt" type="text" placeholder="Search tags...">
               <i class="search icon"></i>
             </div>
             <div class="results"></div>
-            <p></p>
+          </div>
+          <p></p>
+          <div id="tagList">
             <input id="addTag" type="button" class="ui button" value="添加">
-            <a class="ui label">
-              Node
-              <i class="delete icon"></i>
-            </a>
-            <a class="ui label">
-              Express
-              <i class="delete icon"></i>
-            </a>
           </div>
           <p></p>
         </div>
@@ -51,27 +45,3 @@
 
   <script type="text/javascript" src="/js/create.js"></script>
   <%- include('footer') %>
-
-    <script>
-      $(document).ready(function () {
-        $("#search-text").keyup(function () {
-          var paremeter = $("#search-text").val();
-          // console.log('paremeter =' + paremeter);
-          $.get("http://" + window.location.host + "/tags", { 'tag': paremeter }, function (data) {
-            // console.log(data);
-            var content = data.map(ele => ele.name);
-            console.log(content);
-            $('.ui.search')
-              .search({
-                source: content
-              })
-          })
-        });
-        $('#search-text').keydown(function () {
-          $('#search-result').empty();
-        })
-        $('#search-text').blur(function () {
-          $('#search-result').empty();
-        })
-      });
-    </script>
