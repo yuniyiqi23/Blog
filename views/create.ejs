@@ -1,17 +1,9 @@
 <%- include('header') %>
   <div class="ui grid">
-
-    <div class="one wide column">
-      <a class="avatar avatar-link" href="/posts?author=<%= user._id %>" data-title="<%= user.name %> | <%= ({m: '男', f: '女', x: '保密'})[user.gender] %>"
-        data-content="<%= user.bio %>">
-        <img class="avatar" src="/images/<%= user.avatar %>">
-      </a>
-    </div>
-
+    <div class="one wide column"></div>
     <div id="div_category" class="three wide column">
       <%- include('components/categories') %>
     </div>
-
     <div class="eight wide column">
       <form id="createPostform" class="ui form segment" method="post">
         <div class="field required">
@@ -24,18 +16,16 @@
         </div>
         <div class="field">
           <label>标签</label>
-
-          <div class="ui loading search">
-            <div class="ui icon input">
-              <input id="search-text" class="prompt" type="text" placeholder="Search tags...">
+          <div class="ui search">
+            <div class="ui action left icon input">
               <i class="search icon"></i>
+              <input id="search-text" class="prompt" type="text" placeholder="Search tags...">
+              <div id="addTag" class="ui teal button">添加</div>
             </div>
             <div class="results"></div>
           </div>
           <p></p>
-          <div id="tagList">
-            <input id="addTag" type="button" class="ui button" value="添加">
-          </div>
+          <div id="tagList"></div>
           <p></p>
         </div>
         <input id="submit" type="submit" class="ui button" value="发布">
@@ -44,4 +34,5 @@
   </div>
 
   <script type="text/javascript" src="/js/create.js"></script>
+
   <%- include('footer') %>
