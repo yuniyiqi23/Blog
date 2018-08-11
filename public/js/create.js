@@ -14,10 +14,10 @@ $(window).load(function () {
         console.log(tagList);
         if (categoryName) {
             const form = $('#createPostform'); //得到form对象
-            const tmpInput = $("<input type='text' name='categoryName'  hidden/>");
+            const tmpInput = $("<input type='text' name='categoryName' hidden/>");
             tmpInput.attr("value", categoryName);
             form.append(tmpInput);
-            const tagsInput = $("<input type='text' name='tags'  hidden/>");
+            const tagsInput = $("<input type='text' name='tags' hidden/>");
             tagsInput.attr("value", tagList);
             form.append(tagsInput);
             form.submit();
@@ -50,15 +50,15 @@ $(window).load(function () {
         let value = $("#search-text").val();
         let tagList = new Array();
         $.each($('.delete.icon'), function () {
-            console.log('tag = ' + $(this).attr("id"));
+            // console.log('tag = ' + $(this).attr("id"));
             tagList.push($(this).attr("id"));
         })
-        if(tagList.includes(value)){
-            alert('已添加相同的标签！');
-        }else{
-            const tagList = $('#tagList');
+        if (tagList.includes(value)) {
+            $('#tag_label').show().delay(1200).fadeOut();
+        } else {
+            const tag_label = $('#tag_label');
             const tag = $("<a class='ui label'>" + value + "<i id='" + value + "' class='delete icon'></i></a>");
-            tagList.append(tag);
+            tag_label.before(tag);
         }
     })
 
