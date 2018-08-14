@@ -88,13 +88,13 @@ router.post('/create', checkLogin, function (req, res, next) {
 async function createPost(post) {
     try {
         // 创建 post 并获取返回值
-        const postResult = await Promise.resolve(PostModel.create(post));
+        const postResult = await PostModel.create(post);
         // 将 post 添加进 category
         await Promise.resolve(CategoryModel
             .addPostByCategory(post.author, post.category, postResult._id));
         return Promise.resolve(postResult)
     } catch (error) {
-        console.log(error);
+        return Promise.reject(error);
     }
 }
 
