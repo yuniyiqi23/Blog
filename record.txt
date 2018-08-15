@@ -8,8 +8,9 @@
 
 二、 项目迭代计划
 1. 搜索功能
+create or update
+update ids
     回到顶端按钮
-    忘记密码（邮件、手机验证）
     安全机制（XSS防护等）
 2. 守护进程ChildProcess
 3. request请求不可靠(IP验证、cookie验证、session)

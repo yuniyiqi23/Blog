@@ -7,13 +7,6 @@ module.exports = {
     // 创建一篇文章
     create: function (post) {
         return Post.create(post)
-        // return new Promise(function (res) {
-        //     Post.create(post, function (err, value) {
-        //         if (err) return handleError(err);
-        //         console.log(value);
-        //         res(value);
-        //     })
-        // });
     },
 
     // 通过文章 id 获取一篇文章
@@ -24,11 +17,12 @@ module.exports = {
     },
 
     // 按创建时间降序获取所有用户文章或者某个特定用户的所有文章
-    getPosts: function (author) {
+    getPosts: function (author = null) {
         let query = {}
         if (author) {
             query.author = author
         }
+        query.state = DataState.Publish;
         return Post
             .find(query)
             .populate({ path: 'author', model: 'User' })
@@ -36,13 +30,13 @@ module.exports = {
     },
 
     //获取所有文章数量
-    getPostsCount: function (author) {
+    getPostsCount: function (author = null, param = null) {
         let query = {}
         if (author) {
             query.author = author
-        } else {
-            query.state = DataState.Publish
         }
+        
+        query.state = DataState.Publish;
         return Post
             .find(query)
             .populate({ path: 'author', model: 'User' })
@@ -51,13 +45,15 @@ module.exports = {
     },
 
     //分页获取文章
-    getPagingPosts: function ({ author, page = 1, pageSize = 5 }) {
+    getPagingPosts: function ({ author = null, page = 1, pageSize = 5, param = null }) {
         let query = {}
         if (author) {
             query.author = author
-        } else {
-            query.state = DataState.Publish
         }
+        
+        // 设置文章状态 Publish
+        query.state = DataState.Publish
+        // 分页 
         let skipNum = (page - 1) * pageSize;
 
         return Post

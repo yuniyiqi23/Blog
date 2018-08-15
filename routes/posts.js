@@ -247,4 +247,40 @@ router.get('/:postId/remove', checkLogin, function (req, res, next) {
         .catch(next)
 })
 
+// GET /posts/search 搜索相关文章
+router.get('/search', checkLogin, function (req, res, next){
+    let param = req.query.param;
+    let page = req.query.page || 1;
+
+    Promise.all([
+        PostModel.getPostsCount({query: param}),
+        PostModel.getPagingPosts({ page: page }),
+        // 获取用户分类数据
+        CategoryModel.getCategoryByAuthorId(authorId)
+    ])
+        .then(function (result) {
+            if (result[1].length >= 0) {
+                let categoryList = null;
+                if (result[2]) {
+                    categoryList = result[2].categories;
+                }
+                if (req.query.page) {
+                    res.render('components/posts-content', {
+                        postsCount: result[0],
+                        posts: result[1],
+                        categories: categoryList
+                    })
+                } else {
+                    res.render('posts', {
+                        postsCount: result[0],
+                        posts: result[1],
+                        categories: categoryList
+                    })
+                }
+            }
+        })
+        .catch(next);
+
+})
+
 module.exports = router;
