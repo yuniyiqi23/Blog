@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
     let page = req.query.page || 1;
 
     Promise.all([
-        PostModel.getPostsCount(authorId),
+        PostModel.getPostsCount({ author: authorId }),
         PostModel.getPagingPosts({ author: authorId, page: page }),
         // 获取用户分类数据
         CategoryModel.getCategoryByAuthorId(authorId)
@@ -49,8 +49,11 @@ router.post('/create', checkLogin, function (req, res, next) {
     const title = req.body.title;
     const content = req.body.content;
     const categoryName = req.body.categoryName;
-    const tags = req.body.tags.split(',');
+    let tags = null;
     // tags.map(ele => console.log(ele));
+    if(req.body.tags !== ""){
+        tags = req.body.tags.split(',');
+    }
 
     // 校验参数
     try {
@@ -108,9 +111,11 @@ function submitTag(tag) {
 }
 
 function createTags(tags) {
-    return Promise.all(tags.map((tag) => {
-        return submitTag(tag)
-    }))
+    if(tags){
+        return Promise.all(tags.map((tag) => {
+            return submitTag(tag)
+        }))
+    }
 }
 
 
@@ -131,6 +136,36 @@ router.get('/create', checkLogin, function (req, res, next) {
         })
         .catch(next);
 });
+
+// GET /posts/search 搜索相关文章
+router.get('/search', checkLogin, function (req, res, next) {
+    let keyword = req.query.keyword;
+    let page = req.query.page || 1;
+
+    Promise.all([
+        PostModel.getPostsCount({ keyword: keyword }),
+        PostModel.getPagingPosts({ page: page, keyword: keyword }),
+    ])
+        .then(function (result) {
+            if (result[1].length >= 0) {
+                if (req.query.page) {
+                    res.render('components/posts-content', {
+                        postsCount: result[0],
+                        posts: result[1],
+                        categories: null
+                    })
+                } else {
+                    res.render('posts', {
+                        postsCount: result[0],
+                        posts: result[1],
+                        categories: null
+                    })
+                }
+            }
+        })
+        .catch(next);
+
+})
 
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
@@ -162,20 +197,22 @@ router.get('/:postId', function (req, res, next) {
 // GET /posts/:postId/edit 更新文章页
 router.get('/:postId/edit', checkLogin, function (req, res, next) {
     const postId = req.params.postId;
-    const author = req.session.user._id;
+    const authorId = req.session.user._id;
 
-    PostModel.getRawPostById(postId)
-        .then(function (post) {
-            if (!post) {
+    Promise.all([
+        PostModel.getRawPostById(postId),
+        CategoryModel.getCategoryByAuthorId(authorId)])
+        .then(function (result) {
+            if (!result[0]) {
                 throw new Error('该文章不存在！');
             }
-            if (author.toString() !== post.author._id.toString()) {
+            if (author.toString() !== result[0].author._id.toString()) {
                 throw new Error('权限不足！');
             }
             res.render('edit.ejs', {
-                post: post,
+                post: result[0],
+                categories: result[1].categories
             });
-
         })
         .catch(next);
 })
@@ -247,40 +284,6 @@ router.get('/:postId/remove', checkLogin, function (req, res, next) {
         .catch(next)
 })
 
-// GET /posts/search 搜索相关文章
-router.get('/search', checkLogin, function (req, res, next){
-    let param = req.query.param;
-    let page = req.query.page || 1;
 
-    Promise.all([
-        PostModel.getPostsCount({query: param}),
-        PostModel.getPagingPosts({ page: page }),
-        // 获取用户分类数据
-        CategoryModel.getCategoryByAuthorId(authorId)
-    ])
-        .then(function (result) {
-            if (result[1].length >= 0) {
-                let categoryList = null;
-                if (result[2]) {
-                    categoryList = result[2].categories;
-                }
-                if (req.query.page) {
-                    res.render('components/posts-content', {
-                        postsCount: result[0],
-                        posts: result[1],
-                        categories: categoryList
-                    })
-                } else {
-                    res.render('posts', {
-                        postsCount: result[0],
-                        posts: result[1],
-                        categories: categoryList
-                    })
-                }
-            }
-        })
-        .catch(next);
-
-})
 
 module.exports = router;

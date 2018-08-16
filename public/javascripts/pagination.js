@@ -322,7 +322,7 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 	//getPaginglist
 	function getPaginglist(baseURL, curPage) {
 		var arr = baseURL.split('#');
-		// console.log('baseURL = ' + arr[0]);
+		console.log('baseURL = ' + arr[0]);
 		if(baseURL.includes('posts?author=')){
 			$.ajax({
 				type: "GET",
@@ -331,7 +331,16 @@ if (typeof layui === 'undefined' && typeof layer === 'undefined') {
 					document.getElementById("postContent").innerHTML = data;
 				}
 			});
-		}else{
+		}else if(baseURL.includes('posts/search?')){
+			$.ajax({
+				type: "GET",
+				url: arr[0] + "&page=" + curPage,
+				success: function (data) {
+					document.getElementById("postContent").innerHTML = data;
+				}
+			});
+		}
+		else{
 			$.ajax({
 				type: "GET",
 				url: arr[0] + "posts?page=" + curPage,

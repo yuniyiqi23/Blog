@@ -30,12 +30,19 @@ module.exports = {
     },
 
     //获取所有文章数量
-    getPostsCount: function (author = null, param = null) {
+    getPostsCount: function ({author = null, keyword = null}) {
         let query = {}
         if (author) {
             query.author = author
         }
-        
+        if (keyword) {
+            query = {
+                $or: [
+                    { title: { $regex: keyword, $options: '$i' } }, //  $options: '$i' 忽略大小写
+                    { tags: { $regex: keyword, $options: '$i' } }
+                ],
+            }
+        }
         query.state = DataState.Publish;
         return Post
             .find(query)
@@ -45,12 +52,19 @@ module.exports = {
     },
 
     //分页获取文章
-    getPagingPosts: function ({ author = null, page = 1, pageSize = 5, param = null }) {
+    getPagingPosts: function ({ author = null, page = 1, pageSize = 5, keyword = null }) {
         let query = {}
         if (author) {
             query.author = author
         }
-        
+        if (keyword) {
+            query = {
+                $or: [
+                    { title: { $regex: keyword, $options: '$i' } }, //  $options: '$i' 忽略大小写
+                    { tags: { $regex: keyword, $options: '$i' } }
+                ],
+            }
+        }
         // 设置文章状态 Publish
         query.state = DataState.Publish
         // 分页 
