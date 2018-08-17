@@ -51,6 +51,14 @@ module.exports = {
         return Comment.deleteMany({ postId: postId });
     },
 
+    // 通过文章 id 删除该文章下所有留言
+    delCommentsByPostIdList: function(postIdList){
+        // let query = postIdList.map(ele => {
+        //     return { _id: ele.postId };
+        // })
+        return Comment.deleteMany({ $or: postIdList });
+    },
+
     // 通过文章 id 获取该文章下所有留言，按留言创建时间升序
     getComments: function (postId) {
         return Comment

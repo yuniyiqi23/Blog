@@ -33,8 +33,7 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
             // 删除 posts
             await delPosts(postList);
             // 删除 category
-            let a = await delCategory(authorId, categoryName);
-            console.log(a);
+            await delCategory(authorId, categoryName);
             res.redirect('back');
         } catch (error) {
             console.log(error);
@@ -60,10 +59,8 @@ function getPostList(authorId, categoryName) {
 function delPosts(postList) {
     if (postList) {
         if (postList.length > 0) {
-            Promise.all(postList.forEach(element => {
-                // 通过博文 Id 删除博文
-                return PostModel.delPostById(element.postId);
-            }));
+            // 通过博文 IdList 删除博文
+            return PostModel.delPostsByIdList(postList);
         }
     }
 }

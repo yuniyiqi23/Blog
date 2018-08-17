@@ -11,8 +11,7 @@
 二、 项目迭代计划
 1. 
 更新文章页
-create or update
-update ids
+
     回到顶端按钮
     安全机制（XSS防护等）
 2. 守护进程ChildProcess
@@ -37,3 +36,8 @@ https://github.com/nodejs/node/issues/19199
 
 2018/7/8
 1. 二级评论（设计UI）
+
+2018/8/17
+重构代码：
+create or update
+删除分类 --> 一个语句更新多条博文状态（update idList）--> 一个语句删除多个Comments

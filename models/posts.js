@@ -30,7 +30,7 @@ module.exports = {
     },
 
     //获取所有文章数量
-    getPostsCount: function ({author = null, keyword = null}) {
+    getPostsCount: function ({ author = null, keyword = null }) {
         let query = {}
         if (author) {
             query.author = author
@@ -102,7 +102,7 @@ module.exports = {
             .exec()
     },
 
-    // 通过用户 id 和文章 id 删除一篇文章
+    // 通过文章 id 删除一篇文章
     delPostById: function (postId) {
         return Post
             .updateOne({ _id: postId }, { state: DataState.Delete })
@@ -110,6 +110,22 @@ module.exports = {
                 // 文章删除后，再删除该文章下的所有留言
                 if (res.ok && res.n > 0 && res.nModified == 1) {
                     return CommentModel.delCommentsByPostId(postId);
+                }
+            })
+    },
+
+    // 通过文章 ids 删除多篇文章
+    delPostsByIdList: function (postIdList) {
+        let query = postIdList.map(ele => {
+            return { _id: ele.postId };
+        })
+        // console.log(query);
+        return Post
+            .updateMany({ $or: query }, { state: DataState.Delete })
+            .then(function (res) {
+                // 文章删除后，再删除该文章下的所有留言
+                if (res.ok && res.n > 0 && res.nModified == 1) {
+                    return CommentModel.delCommentsByPostIdList(postIdList);
                 }
             })
     },
