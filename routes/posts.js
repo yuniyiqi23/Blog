@@ -205,7 +205,7 @@ router.get('/:postId/edit', checkLogin, function (req, res, next) {
             if (!result[0]) {
                 throw new Error('该文章不存在！');
             }
-            if (author.toString() !== result[0].author._id.toString()) {
+            if (authorId.toString() !== result[0].author._id.toString()) {
                 throw new Error('权限不足！');
             }
             res.render('edit.ejs', {
