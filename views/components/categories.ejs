@@ -9,6 +9,7 @@
             </div>
             <p></p>
             <div class="grouped fields">
+            <% if(categories){%>
                 <% if(categories.length > 0){
                     categories.forEach(function (obj) { %>
                     <div class="field">
@@ -25,7 +26,8 @@
                             <input id="categoryValue" name="category" hidden>
                             <input type="submit" class="ui button" value="删除" />
                         </form>
-                        <%}%>
+                <%}%>
+            <%}%>
             </div>
         </div>
     </div>

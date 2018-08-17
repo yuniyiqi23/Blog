@@ -14,25 +14,9 @@ router.post('/addCategory', checkLogin, function (req, res, next) {
 
     CategoryModel.addCategoryByAuthorId(authorId, category)
         .then(function (result) {
-            if (result) {
-                res.render('components/categories.ejs', {
-                    categories: result.categories,
-                });
-                return;
-            } else {
-                let value = {
-                    author: authorId,
-                    categories: [category],
-                }
-                return CategoryModel.create(value);
-            }
-        })
-        .then(function (result) {
-            if (result) {
-                res.render('components/categories.ejs', {
-                    categories: result.categories,
-                });
-            }
+            res.render('components/categories.ejs', {
+                categories: result.categories,
+            });
         })
         .catch(next);
 });
@@ -49,7 +33,8 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
             // 删除 posts
             await delPosts(postList);
             // 删除 category
-            await delCategory(authorId, categoryName);
+            let a = await delCategory(authorId, categoryName);
+            console.log(a);
             res.redirect('back');
         } catch (error) {
             console.log(error);

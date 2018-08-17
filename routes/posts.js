@@ -51,7 +51,7 @@ router.post('/create', checkLogin, function (req, res, next) {
     const categoryName = req.body.categoryName;
     let tags = null;
     // tags.map(ele => console.log(ele));
-    if(req.body.tags !== ""){
+    if (req.body.tags !== "") {
         tags = req.body.tags.split(',');
     }
 
@@ -102,16 +102,15 @@ async function createPost(post) {
 }
 
 function submitTag(tag) {
-    return TagModel.getTagByName(tag)
-        .then(function (value) {
-            if (!value) {
-                return TagModel.create({ name: tag });
-            }
-        })
+    let query = { name: tag },
+        update = { expire: { name: tag } },
+        options = { upsert: true, new: true, setDefaultsOnInsert: true };
+
+    return TagModel.findOneAndUpdate(query, update, options);
 }
 
 function createTags(tags) {
-    if(tags){
+    if (tags) {
         return Promise.all(tags.map((tag) => {
             return submitTag(tag)
         }))

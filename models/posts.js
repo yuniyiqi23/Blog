@@ -39,6 +39,7 @@ module.exports = {
             query = {
                 $or: [
                     { title: { $regex: keyword, $options: '$i' } }, //  $options: '$i' 忽略大小写
+                    { content: { $regex: keyword, $options: '$i' } },
                     { tags: { $regex: keyword, $options: '$i' } }
                 ],
             }
@@ -61,6 +62,7 @@ module.exports = {
             query = {
                 $or: [
                     { title: { $regex: keyword, $options: '$i' } }, //  $options: '$i' 忽略大小写
+                    { content: { $regex: keyword, $options: '$i' } },
                     { tags: { $regex: keyword, $options: '$i' } }
                 ],
             }

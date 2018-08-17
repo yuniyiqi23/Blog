@@ -31,7 +31,7 @@ module.exports = {
             .findOneAndUpdate(
                 { author: authorId },
                 { $addToSet: { categories: category } },
-                { new: true })
+                { upsert: true, new: true, setDefaultsOnInsert: true })
     },
 
     // 通过名称删除分类

@@ -14,6 +14,10 @@ module.exports = {
     // 通过模糊搜索获取 Tags
     getTagsBySearch: function (value) {
         return Tag.find({ name: { $regex: value, $options: 'i' } })
+    },
+
+    findOneAndUpdate: function(query, update, options){
+        return Tag.findOneAndUpdate(query, update, options);
     }
 
 }

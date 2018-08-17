@@ -1,4 +1,6 @@
-1.return 的理解（routes/categories）
+1.mongoose exce()返回promise 的作用是什么？
+2.没有return 为什么没有执行
+
 
 一、 学习计划
 1. HTTP权威指南（Node、Express其他参考书）
