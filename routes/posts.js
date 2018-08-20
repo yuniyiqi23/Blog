@@ -274,7 +274,7 @@ router.get('/:postId/remove', checkLogin, function (req, res, next) {
         .then(function (post) {
             return Promise.all([
                 delPostById(post, author),
-                CategoryModel.delPostByCategory(author, post.category, postId)
+                CategoryModel.delPostFromCategory(author, post.category, postId)
             ]);
         })
         .then(() => {

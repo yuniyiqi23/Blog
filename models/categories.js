@@ -31,7 +31,7 @@ module.exports = {
             .findOneAndUpdate(
                 { author: authorId },
                 { $addToSet: { categories: category } },
-                { upsert: true, new: true, setDefaultsOnInsert: true })
+                { new: true, up })
     },
 
     // 通过名称删除分类
@@ -52,7 +52,7 @@ module.exports = {
     },
 
     // 通过 category 删除 post
-    delPostByCategory: function (authorId, category, postId) {
+    delPostFromCategory: function (authorId, category, postId) {
         return Category
             .findOneAndUpdate(
                 { author: authorId, 'categories.category': category },
