@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
     let page = req.query.page || 1;
 
     Promise.all([
-        PostModel.getPostsCount(authorId),
+        PostModel.getPostsCount({ author: authorId }),
         PostModel.getPagingPosts({ author: authorId, page: page }),
         // 获取用户分类数据
         CategoryModel.getCategoryByAuthorId(authorId)
@@ -49,9 +49,11 @@ router.post('/create', checkLogin, function (req, res, next) {
     const title = req.body.title;
     const content = req.body.content;
     const categoryName = req.body.categoryName;
-
-    // 测试标签
-    // const tags = Array.of('Node5', 'Node6');
+    let tags = null;
+    // tags.map(ele => console.log(ele));
+    if (req.body.tags !== "") {
+        tags = req.body.tags.split(',');
+    }
 
     // 校验参数
     try {
@@ -89,32 +91,30 @@ router.post('/create', checkLogin, function (req, res, next) {
 async function createPost(post) {
     try {
         // 创建 post 并获取返回值
-        const postResult = await Promise.resolve(PostModel.create(post));
+        const postResult = await PostModel.create(post);
         // 将 post 添加进 category
         await Promise.resolve(CategoryModel
             .addPostByCategory(post.author, post.category, postResult._id));
         return Promise.resolve(postResult)
     } catch (error) {
-        console.log(error);
+        return Promise.reject(error);
     }
 }
 
 function submitTag(tag) {
-    return Promise.resolve()
-        .then(() => {
-            return TagModel.getTagByName(tag)
-                .then(function (value) {
-                    if (!value) {
-                        return TagModel.create({ name: tag });
-                    }
-                })
-        })
+    let query = { name: tag },
+        update = { expire: { name: tag } },
+        options = { upsert: true, new: true, setDefaultsOnInsert: true };
+
+    return TagModel.findOneAndUpdate(query, update, options);
 }
 
 function createTags(tags) {
-    return Promise.all(tags.map((tag) => {
-        return submitTag(tag)
-    }))
+    if (tags) {
+        return Promise.all(tags.map((tag) => {
+            return submitTag(tag)
+        }))
+    }
 }
 
 
@@ -135,6 +135,36 @@ router.get('/create', checkLogin, function (req, res, next) {
         })
         .catch(next);
 });
+
+// GET /posts/search 搜索相关文章
+router.get('/search', checkLogin, function (req, res, next) {
+    let keyword = req.query.keyword;
+    let page = req.query.page || 1;
+
+    Promise.all([
+        PostModel.getPostsCount({ keyword: keyword }),
+        PostModel.getPagingPosts({ page: page, keyword: keyword }),
+    ])
+        .then(function (result) {
+            if (result[1].length >= 0) {
+                if (req.query.page) {
+                    res.render('components/posts-content', {
+                        postsCount: result[0],
+                        posts: result[1],
+                        categories: null
+                    })
+                } else {
+                    res.render('posts', {
+                        postsCount: result[0],
+                        posts: result[1],
+                        categories: null
+                    })
+                }
+            }
+        })
+        .catch(next);
+
+})
 
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
@@ -166,20 +196,22 @@ router.get('/:postId', function (req, res, next) {
 // GET /posts/:postId/edit 更新文章页
 router.get('/:postId/edit', checkLogin, function (req, res, next) {
     const postId = req.params.postId;
-    const author = req.session.user._id;
+    const authorId = req.session.user._id;
 
-    PostModel.getRawPostById(postId)
-        .then(function (post) {
-            if (!post) {
+    Promise.all([
+        PostModel.getRawPostById(postId),
+        CategoryModel.getCategoryByAuthorId(authorId)])
+        .then(function (result) {
+            if (!result[0]) {
                 throw new Error('该文章不存在！');
             }
-            if (author.toString() !== post.author._id.toString()) {
+            if (authorId.toString() !== result[0].author._id.toString()) {
                 throw new Error('权限不足！');
             }
             res.render('edit.ejs', {
-                post: post,
+                post: result[0],
+                categories: result[1].categories
             });
-
         })
         .catch(next);
 })
@@ -204,24 +236,34 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
         return res.redirect('back')
     }
 
+    const value = {
+        title: title,
+        content: content,
+        updatedAt: moment().format('YYYY-MM-DD HH:mm')
+    }
+
     PostModel.getRawPostById(postId)
         .then(function (post) {
-            if (!post) {
-                throw new Error('文章不存在')
-            }
-            if (post.author._id.toString() !== author.toString()) {
-                throw new Error('没有权限')
-            }
-
-            PostModel.updatePostById(postId, { title: title, content: content, updatedAt: moment().format('YYYY-MM-DD HH:mm') })
-                .then(function () {
-                    req.flash('success', '编辑文章成功')
-                    // 编辑成功后跳转到上一页
-                    res.redirect('/posts/' + postId)
-                })
-                .catch(next)
-        });
+            return updatePostById(post, author, value)
+        })
+        .then(() => {
+            req.flash('success', '编辑文章成功')
+            // 编辑成功后跳转到上一页
+            res.redirect('/posts/' + postId)
+        })
+        .catch(next);
 })
+
+function updatePostById(post, author, value) {
+    if (!post) {
+        throw new Error('文章不存在')
+    }
+    if (post.author._id.toString() !== author.toString()) {
+        throw new Error('没有权限')
+    }
+
+    return PostModel.updatePostById(post._id, value);
+}
 
 // GET /posts/:postId/remove 删除一篇文章
 router.get('/:postId/remove', checkLogin, function (req, res, next) {
@@ -230,25 +272,27 @@ router.get('/:postId/remove', checkLogin, function (req, res, next) {
 
     PostModel.getRawPostById(postId)
         .then(function (post) {
-            if (!post) {
-                throw new Error('文章不存在')
-            }
-            if (post.author._id.toString() !== author.toString()) {
-                throw new Error('没有权限')
-            }
-
-            PostModel.delPostById(postId)
-                .then(function (value) {
-                    CategoryModel.delPostByCategory(author, post.category, postId)
-                        .then(function (value) {
-                            req.flash('success', '删除文章成功');
-                            // 删除成功后跳转到主页
-                            res.redirect('/posts');
-                        })
-                        .catch(next);
-                })
+            return Promise.all([
+                delPostById(post, author),
+                CategoryModel.delPostFromCategory(author, post.category, postId)
+            ]);
+        })
+        .then(() => {
+            req.flash('success', '删除文章成功');
+            // 删除成功后跳转到主页
+            res.redirect('/posts');
         })
         .catch(next)
 })
+
+function delPostById(post, author) {
+    if (!post) {
+        throw new Error('文章不存在')
+    }
+    if (post.author._id.toString() !== author.toString()) {
+        throw new Error('没有权限')
+    }
+    return PostModel.delPostById(post._id);
+}
 
 module.exports = router;
