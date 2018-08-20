@@ -236,24 +236,34 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
         return res.redirect('back')
     }
 
+    const value = {
+        title: title,
+        content: content,
+        updatedAt: moment().format('YYYY-MM-DD HH:mm')
+    }
+
     PostModel.getRawPostById(postId)
         .then(function (post) {
-            if (!post) {
-                throw new Error('文章不存在')
-            }
-            if (post.author._id.toString() !== author.toString()) {
-                throw new Error('没有权限')
-            }
-
-            PostModel.updatePostById(postId, { title: title, content: content, updatedAt: moment().format('YYYY-MM-DD HH:mm') })
-                .then(function () {
-                    req.flash('success', '编辑文章成功')
-                    // 编辑成功后跳转到上一页
-                    res.redirect('/posts/' + postId)
-                })
-                .catch(next)
-        });
+            return updatePostById(post, author, value)
+        })
+        .then(() => {
+            req.flash('success', '编辑文章成功')
+            // 编辑成功后跳转到上一页
+            res.redirect('/posts/' + postId)
+        })
+        .catch(next);
 })
+
+function updatePostById(post, author, value) {
+    if (!post) {
+        throw new Error('文章不存在')
+    }
+    if (post.author._id.toString() !== author.toString()) {
+        throw new Error('没有权限')
+    }
+
+    return PostModel.updatePostById(post._id, value);
+}
 
 // GET /posts/:postId/remove 删除一篇文章
 router.get('/:postId/remove', checkLogin, function (req, res, next) {
@@ -262,27 +272,27 @@ router.get('/:postId/remove', checkLogin, function (req, res, next) {
 
     PostModel.getRawPostById(postId)
         .then(function (post) {
-            if (!post) {
-                throw new Error('文章不存在')
-            }
-            if (post.author._id.toString() !== author.toString()) {
-                throw new Error('没有权限')
-            }
-
-            PostModel.delPostById(postId)
-                .then(function (value) {
-                    CategoryModel.delPostByCategory(author, post.category, postId)
-                        .then(function (value) {
-                            req.flash('success', '删除文章成功');
-                            // 删除成功后跳转到主页
-                            res.redirect('/posts');
-                        })
-                        .catch(next);
-                })
+            return Promise.all([
+                delPostById(post, author),
+                CategoryModel.delPostByCategory(author, post.category, postId)
+            ]);
+        })
+        .then(() => {
+            req.flash('success', '删除文章成功');
+            // 删除成功后跳转到主页
+            res.redirect('/posts');
         })
         .catch(next)
 })
 
-
+function delPostById(post, author) {
+    if (!post) {
+        throw new Error('文章不存在')
+    }
+    if (post.author._id.toString() !== author.toString()) {
+        throw new Error('没有权限')
+    }
+    return PostModel.delPostById(post._id);
+}
 
 module.exports = router;
