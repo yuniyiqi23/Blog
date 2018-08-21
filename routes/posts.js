@@ -222,6 +222,11 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
     const author = req.session.user._id;
     const title = req.body.title;
     const content = req.body.content;
+    let tags = null;
+    // tags.map(ele => console.log(ele));
+    if (req.body.tags !== "" && req.body.tags) {
+        tags = req.body.tags.split(',');
+    }
 
     //校验参数
     try {
@@ -239,7 +244,8 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
     const value = {
         title: title,
         content: content,
-        updatedAt: moment().format('YYYY-MM-DD HH:mm')
+        updatedAt: moment().format('YYYY-MM-DD HH:mm'),
+        tags: tags
     }
 
     PostModel.getRawPostById(postId)
@@ -283,6 +289,7 @@ router.get('/:postId/remove', checkLogin, function (req, res, next) {
             res.redirect('/posts');
         })
         .catch(next)
+
 })
 
 function delPostById(post, author) {

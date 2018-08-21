@@ -49,6 +49,7 @@ $(window).load(function () {
     $('#addTag').click(function () {
         let value = $("#search-text").val();
         let tagList = new Array();
+        tagList.forEach
         $.each($('.delete.icon'), function () {
             // console.log('tag = ' + $(this).attr("id"));
             tagList.push($(this).attr("id"));

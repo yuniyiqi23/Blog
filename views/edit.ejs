@@ -16,7 +16,7 @@
           <label>内容</label>
           <textarea name="content" rows="15"><%= post.content %></textarea>
         </div>
-        
+
         <div class="field">
           <label>标签</label>
           <div class="ui search">
@@ -29,12 +29,22 @@
           </div>
           </p>
           <div id="tagList" style="height: 23px;">
-            <div id="tag_label" class="ui left pointing red basic label" style="display: none;">
-              已添加相同的标签！
-            </div>
+            <% if(post.tags){
+              const tagList = post.tags;
+              tagList.forEach(ele => {
+                %>
+              <a class="ui label">
+                <%= ele%>
+                  <i id="<%= ele%>" class="delete icon"></i>
+              </a>
+              <%})%>
+                <%}%>
+                  <div id="tag_label" class="ui left pointing red basic label" style="display: none;">
+                    已添加相同的标签！
+                  </div>
           </div>
         </div>
-        <input type="submit" class="ui button" value="发布">
+        <input id="submit" type="submit" class="ui button" value="发布">
       </form>
     </div>
   </div>
