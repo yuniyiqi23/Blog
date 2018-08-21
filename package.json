@@ -1,7 +1,7 @@
 {
-  "name": "Eden",
+  "name": "Blog",
   "version": "0.0.0",
-  "description": "Welcome to the World",
+  "description": "Welcome to the Express",
   "private": true,
   "scripts": {
     "test": "mocha test",

@@ -1,6 +1,7 @@
 1.mongoose exce()返回promise 的作用是什么？
 2.没有return 为什么没有执行
 3.Express中next的理解 Promise用了catch（next）有什么效果？ 
+4.如何判断Mongoose返回的是Promise
 
 
 一、 学习计划

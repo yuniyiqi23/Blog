@@ -1,32 +1,44 @@
 <%- include('header') %>
 
-<div class="ui grid">
-  <div class="four wide column">
-    <a class="avatar"
-       href="/posts?author=<%= user._id %>"
-       data-title="<%= user.name %> | <%= ({m: '男', f: '女', x: '保密'})[user.gender] %>"
-       data-content="<%= user.bio %>">
-      <img class="avatar" src="/images/<%= user.avatar %>">
-    </a>
+  <div class="ui grid">
+    <div class="one wide column"></div>
+    <div id="div_category" class="three wide column">
+      <%- include('components/categories') %>
+    </div>
+
+    <div class="eight wide column">
+      <form class="ui form segment" method="post" action="/posts/<%= post._id %>/edit">
+        <div class="field required">
+          <label>标题</label>
+          <input type="text" name="title" value="<%= post.title %>">
+        </div>
+        <div class="field required">
+          <label>内容</label>
+          <textarea name="content" rows="15"><%= post.content %></textarea>
+        </div>
+        
+        <div class="field">
+          <label>标签</label>
+          <div class="ui search">
+            <div class="ui action left icon input">
+              <i class="search icon"></i>
+              <input id="search-text" class="prompt" type="text" placeholder="Search tags...">
+              <div id="addTag" class="ui teal button">添加</div>
+            </div>
+            <div class="results"></div>
+          </div>
+          </p>
+          <div id="tagList" style="height: 23px;">
+            <div id="tag_label" class="ui left pointing red basic label" style="display: none;">
+              已添加相同的标签！
+            </div>
+          </div>
+        </div>
+        <input type="submit" class="ui button" value="发布">
+      </form>
+    </div>
   </div>
 
-  <div class="eight wide column">
-    <form class="ui form segment" method="post" action="/posts/<%= post._id %>/edit">
-      <div class="field required">
-        <label>标题</label>
-        <input type="text" name="title" value="<%= post.title %>">
-      </div>
-      <div class="field required">
-        <label>内容</label>
-        <textarea name="content" rows="15"><%= post.content %></textarea>
-      </div>
-      <div class="field required">
-        <label>分类</label>
-        <input type="text" name="category" value="<%= post.category %>">
-      </div>
-      <input type="submit" class="ui button" value="发布">
-    </form>
-  </div>
-</div>
+  <script type="text/javascript" src="/js/create.js"></script>
 
-<%- include('footer') %>
+  <%- include('footer') %>

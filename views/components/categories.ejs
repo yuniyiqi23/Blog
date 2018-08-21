@@ -8,27 +8,29 @@
                 <div id="addCategory" class="ui teal button">添加</div>
             </div>
             <p></p>
-            <div class="grouped fields">
-            <% if(categories){%>
-                <% if(categories.length > 0){
+            <div class="grouped fields" style="height: 400px;">
+                <% if(categories){%>
+                    <% if(categories.length > 0){
                     categories.forEach(function (obj) { %>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="checkbox_Category" value="<%= obj.category %>">
-                            <label>
-                                <%= obj.category %>
-                            </label>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="checkbox_Category" value="<%= obj.category %>">
+                                <label>
+                                    <%= obj.category %>
+                                </label>
+                            </div>
                         </div>
-                    </div>
-                    <p></p>
-                    <%})%>
-                        <form class="ui reply form" method="post" action="/categories/delCategory">
-                            <input id="categoryValue" name="category" hidden>
-                            <input type="submit" class="ui button" value="删除" />
-                        </form>
-                <%}%>
-            <%}%>
+                        <p></p>
+                        <%})%>
+
+                            <%}%>
+                                <%}%>
             </div>
+            <p></p>
+            <form class="ui reply form" method="post" action="/categories/delCategory">
+                <input id="categoryValue" name="category" hidden>
+                <input type="submit" class="ui button" value="删除" />
+            </form>
         </div>
     </div>
 </div>

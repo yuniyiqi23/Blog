@@ -1,11 +1,12 @@
 <%- include('header') %>
+
   <div class="ui grid">
     <div class="one wide column"></div>
     <div id="div_category" class="three wide column">
       <%- include('components/categories') %>
     </div>
     <div class="eight wide column">
-      <form id="createPostform" class="ui form segment" method="post">
+      <form id="createPostform" class="ui form segment" method="post" style="height: 572px;">
         <div class="field required">
           <label>标题</label>
           <input type="text" name="title">
@@ -25,7 +26,7 @@
             <div class="results"></div>
           </div>
           </p>
-          <div id="tagList">
+          <div id="tagList" style="height: 23px;">
             <div id="tag_label" class="ui left pointing red basic label" style="display: none;">
               已添加相同的标签！
             </div>

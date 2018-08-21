@@ -36,7 +36,8 @@ router.post('/delCategory', checkLogin, function (req, res, next) {
             await delCategory(authorId, categoryName);
             res.redirect('back');
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            next(error);
         }
     }
 
