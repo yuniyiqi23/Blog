@@ -7,7 +7,7 @@
     </div>
 
     <div class="eight wide column">
-      <form class="ui form segment" method="post" action="/posts/<%= post._id %>/edit">
+      <form id="formPost" class="ui form segment" method="post" action="/posts/<%= post._id %>/edit">
         <div class="field required">
           <label>标题</label>
           <input type="text" name="title" value="<%= post.title %>">

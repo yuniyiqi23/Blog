@@ -13,7 +13,7 @@ $(window).load(function () {
         })
         console.log(tagList);
         if (categoryName) {
-            const form = $('#createPostform'); //得到form对象
+            const form = $('#formPost'); //得到form对象
             const tmpInput = $("<input type='text' name='categoryName' hidden/>");
             tmpInput.attr("value", categoryName);
             form.append(tmpInput);

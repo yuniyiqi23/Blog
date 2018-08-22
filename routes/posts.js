@@ -222,8 +222,8 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
     const author = req.session.user._id;
     const title = req.body.title;
     const content = req.body.content;
+    const categoryName = req.body.categoryName;
     let tags = null;
-    // tags.map(ele => console.log(ele));
     if (req.body.tags !== "" && req.body.tags) {
         tags = req.body.tags.split(',');
     }
@@ -245,6 +245,7 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
         title: title,
         content: content,
         updatedAt: moment().format('YYYY-MM-DD HH:mm'),
+        category: categoryName,
         tags: tags
     }
 
