@@ -40,3 +40,6 @@ https://github.com/nodejs/node/issues/19199
 重构代码：
 create or update
 删除分类 --> 一个语句更新多条博文状态（update idList）--> 一个语句删除多个Comments
+
+2018/8/22
+更新文章页（添加类型和标签）
