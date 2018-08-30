@@ -3,6 +3,8 @@
 3.Express中next的理解 Promise用了catch（next）有什么效果？ 
 4.如何判断Mongoose返回的是Promise
 
+如何判断：生产环境？开发环境？
+Master，Develop分支
 
 一、 学习计划
 1. HTTP权威指南（Node、Express其他参考书）
@@ -11,7 +13,7 @@
 
 二、 项目迭代计划
 1. 
-    回到顶端按钮
+    搜索的延伸
     安全机制（XSS防护等）
 2. 守护进程ChildProcess
 3. request请求不可靠(IP验证、cookie验证、session)
