@@ -7,7 +7,6 @@ var production=require('./production');
  * 默认返回开发环境的配置
  */
 function config(){
-
     switch(process.env.NODE_ENV){
         case 'development':
             return development;
