@@ -5,6 +5,8 @@
 
 如何判断：生产环境？开发环境？
 Master，Develop分支
+PM2
+nginx
 
 一、 学习计划
 1. HTTP权威指南（Node、Express其他参考书）
