@@ -20,14 +20,14 @@ const https = require('https');
 
 //引入配置文件
 var config = require('../config/config');
-console.log('当前运行环境为：'+ config.env);
+console.log('Environment :'+ config.env);
 /**
  * Get port from environment and store in Express.
  */
 
 const port = normalizePort(config.port || '3000');
 // 打印输出端口号
-console.log('当前监听端口号为： ' + port);
+console.log('Port ： ' + port);
 app.set('port', port);
 
 /**
