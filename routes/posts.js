@@ -137,7 +137,7 @@ router.get('/create', checkLogin, function (req, res, next) {
 });
 
 // GET /posts/search 搜索相关文章
-router.get('/search', checkLogin, function (req, res, next) {
+router.get('/search', function (req, res, next) {
     let keyword = req.query.keyword;
     let page = req.query.page || 1;
 
