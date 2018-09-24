@@ -154,7 +154,7 @@ router.get('/search', function (req, res, next) {
                         categories: null
                     })
                 } else {
-                    res.render('posts', {
+                    res.render('search', {
                         postsCount: result[0],
                         posts: result[1],
                         categories: null
