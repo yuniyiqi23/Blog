@@ -60,11 +60,13 @@ module.exports = {
         }
         if (keyword) {
             query = {
-                $or: [
-                    { title: { $regex: keyword, $options: '$i' } }, //  $options: '$i' 忽略大小写
-                    { content: { $regex: keyword, $options: '$i' } },
-                    { tags: { $regex: keyword, $options: '$i' } }
-                ],
+                //全文索引
+                $text: { $search: keyword }
+                // $or: [
+                //     { title: { $regex: keyword, $options: '$i' } }, //  $options: '$i' 忽略大小写
+                //     { content: { $regex: keyword, $options: '$i' } },
+                //     { tags: { $regex: keyword, $options: '$i' } }
+                // ],
             }
         }
         // 设置文章状态 Publish
