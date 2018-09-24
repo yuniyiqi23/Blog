@@ -137,4 +137,4 @@ module.exports = app;
 //node ./bin/www --inspect-brk ./bin/www
 
 //autoRun
-//nodemon ./bin/www 
+//nodemon --inspect-brk ./bin/www 
