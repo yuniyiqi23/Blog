@@ -10,6 +10,9 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 //解析客户端请求的body中的内容,内部使用JSON编码处理,url编码处理以及对于文件的上传处理
 const bodyParser = require('body-parser');
+//使用Helmet设置安全性相关的HTTP headers
+const helmet = require('helmet');
+const rateLimit = require("express-rate-limit");
 
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -21,13 +24,21 @@ const winston = require('winston');
 const expressWinston = require('express-winston');
 
 const app = express();
-
+app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
 // view engine setup
 //设置VIEWS文件夹，__dirname是node.js里面的全局变量。取得执行js所在的路径
 app.set('views', path.join(__dirname, 'views'));
 //设置模板引擎
 app.set('view engine', 'ejs');
 
+//Helmet helps you secure your Express apps by setting various HTTP headers.
+app.use(helmet());
+//  apply to all requests
+app.use(limiter);
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //加载日志中间件，定义日志和输出级别
@@ -55,6 +66,7 @@ app.use(session({
         touchAfter: 24 * 3600 //单位是秒
     })
 }));
+
 
 // flash 中间件，用来显示通知
 app.use(flash());
