@@ -31,4 +31,8 @@ const limiter = rateLimit({
 //  apply to all requests
 app.use(limiter);
 
+3.使用nsp和requireSafe管理第三方的依赖库的安全问题
+$ npm i nsp -g
+$ nsp check
+
 
