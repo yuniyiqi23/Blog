@@ -6,23 +6,22 @@
       <div id="div_category" class="three wide column">
         <%- include('components/categories',{hasDel:true}) %>
       </div>
-      <%}else{%>
-        <div class="three wide column"></div>
-        <%}%>
-          <!-- 博文列表 -->
-          <div class="thirteen wide column">
-            <div id="postContent" class="post-content">
-              <%- include('components/posts-content') %>
-            </div>
-          </div>
-
-          <!-- 实现分页页码 -->
-          <div class="ui equal width center aligned padded grid">
-            <div class="one column row"></div>
-            <div class="eight wide column">
-              <div id='page'></div>
-            </div>
-          </div>
+    <%}else{%>
+      <div class="three wide column"></div>
+    <%}%>
+    <!-- 博文列表 -->
+      <div class="thirteen wide column">
+        <div id="postContent" class="post-content">
+          <%- include('components/posts-content') %>
+        </div>
+      </div>
+  </div>
+  <!-- 实现分页页码 -->
+  <div class="ui equal width center aligned padded grid">
+    <div class="one column row"></div>
+    <div class="eight wide column">
+      <div id='page'></div>
+    </div>
   </div>
   <script type="text/javascript" src="/javascripts/pagination.js"></script>
 
