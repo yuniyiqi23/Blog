@@ -136,36 +136,6 @@ router.get('/create', checkLogin, function (req, res, next) {
         .catch(next);
 });
 
-// GET /posts/search 搜索相关文章
-router.get('/search', function (req, res, next) {
-    let keyword = req.query.keyword;
-    let page = req.query.page || 1;
-
-    Promise.all([
-        PostModel.getPostsCount({ keyword: keyword }),
-        PostModel.getPagingPosts({ page: page, keyword: keyword }),
-    ])
-        .then(function (result) {
-            if (result[1].length >= 0) {
-                if (req.query.page) {
-                    res.render('components/posts-content', {
-                        postsCount: result[0],
-                        posts: result[1],
-                        categories: null
-                    })
-                } else {
-                    res.render('search', {
-                        postsCount: result[0],
-                        posts: result[1],
-                        categories: null
-                    })
-                }
-            }
-        })
-        .catch(next);
-
-})
-
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
     const postId = req.params.postId;

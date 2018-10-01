@@ -7,7 +7,7 @@ $(window).load(function () {
         $.ajax({
             type: "GET",
             contentType: "application/json;charset=utf-8",
-            url: "http://" + window.location.host + "/posts/search?keyword=" + keyword,
+            url: "http://" + window.location.host + "/search?keyword=" + keyword,
             success: function (data) {
                 $("#posts").html(data);
             },

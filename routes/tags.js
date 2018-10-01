@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const TagModel = require('../models/tags');
 
-/* GET users listing. */
 router.get('/', function (req, res, next) {
     let tag = req.query.tag;
     if (tag) {

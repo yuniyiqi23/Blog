@@ -5,6 +5,9 @@
 4.Promise的理解<br>
 5.做项目过程中学到的经验<br>
 
+全文索引<br>
+db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{title:1,content:2}})<br>
+
 ## 网站部署<br>
 1.自动化部署说明<br>
 

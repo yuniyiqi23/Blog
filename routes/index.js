@@ -9,6 +9,7 @@ module.exports = function (app) {
     app.use('/comments', require('./comments'));
     app.use('/categories', require('./categories'));
     app.use('/tags', require('./tags'));
+    app.use('/search', require('./search'));
 
     // 404 page
     app.use(function (req, res) {
