@@ -26,14 +26,21 @@ const expressWinston = require('express-winston');
 const app = express();
 app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
 });
 // view engine setup
 //设置VIEWS文件夹，__dirname是node.js里面的全局变量。取得执行js所在的路径
 app.set('views', path.join(__dirname, 'views'));
 //设置模板引擎
 app.set('view engine', 'ejs');
+
+//Datadog(watch CPU, server RAM,  Node process RAM and so on)
+const dd_options = {
+    'response_code': true,
+    'tags': ['app:aliyun_blog']
+}
+const connect_datadog = require('connect-datadog')(dd_options);
 
 //Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet());
@@ -102,6 +109,8 @@ app.use(expressWinston.logger({
     ]
 }));
 
+// Add the datadog-middleware before your router
+app.use(connect_datadog);
 // Blog路由
 routes(app);
 
