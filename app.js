@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 //使用Helmet设置安全性相关的HTTP headers
 const helmet = require('helmet');
 const rateLimit = require("express-rate-limit");
+const moment = require('moment');
 
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -100,11 +101,15 @@ app.use(expressWinston.logger({
     transports: [
         new (winston.transports.Console)({
             json: true,
-            colorize: true
+            colorize: true,
+            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
         }),
         new winston.transports.File({
             // filename: 'logs/success.log'
             filename: path.join(__dirname, 'logs/success.log'),
+            maxsize: 20 * 1024,
+            maxFiles: 10,
+            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
         })
     ]
 }));
@@ -119,10 +124,14 @@ app.use(expressWinston.errorLogger({
     transports: [
         new winston.transports.Console({
             json: true,
-            colorize: true
+            colorize: true,
+            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
         }),
         new winston.transports.File({
             filename: path.join(__dirname, 'logs/error.log'),
+            maxsize: 20 * 1024,
+            maxFiles: 10,
+            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),            
         })
     ]
 }));
