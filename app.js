@@ -102,7 +102,6 @@ app.use(expressWinston.logger({
         new (winston.transports.Console)({
             json: true,
             colorize: true,
-            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
         }),
         new winston.transports.File({
             // filename: 'logs/success.log'
@@ -125,15 +124,14 @@ app.use(expressWinston.errorLogger({
         new winston.transports.Console({
             json: true,
             colorize: true,
-            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
         }),
         new winston.transports.File({
             filename: path.join(__dirname, 'logs/error.log'),
-            maxsize: 20 * 1024,
+            maxsize: 20 * 1024, 
             maxFiles: 10,
             timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),            
         })
-    ]
+    ],
 }));
 
 // catch 404 and forward to error handler
