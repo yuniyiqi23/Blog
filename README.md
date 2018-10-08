@@ -4,8 +4,7 @@
 3.数据库设计（category、tag）<br>
 4.Promise的理解<br>
 5.做项目过程中学到的经验<br>
-
-全文索引<br>
+6.全文索引<br>
 db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{title:1,content:2}})<br>
 
 ## 网站部署<br>
