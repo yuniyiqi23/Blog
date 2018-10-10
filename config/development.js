@@ -4,7 +4,7 @@
  */
 var config = {
     env: 'development', //环境名称
-    port: 80,         //服务端口号
+    port: 8080,         //服务端口号
     mysql_config: {
         //mysql数据库配置
     },
