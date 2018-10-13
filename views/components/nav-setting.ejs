@@ -1,29 +1,27 @@
-<div >
-<form action="/search" method="get">
-  <div class="ui action left icon input">
-    <i class="search icon"></i>
-    <input name="keyword" type="text" placeholder="搜索...">
-    <button type="submit" class="ui search button">搜索</div>
-  </div>
-</form> 
-</div>
 <div class="nav-setting">
-  <div class="ui buttons">
-    <div class="ui floating dropdown button">
-      <i class="icon bars"></i>
-      <div class="menu">
-        <% if (user) { %>
-          <a class="item" href="/posts?author=<%= user._id %>">个人主页</a>
-          <div class="divider"></div>
-          <a class="item" href="/posts/create">发表文章</a>
-          <a class="item" href="/signout">登出</a>
-          <% } else { %>
-            <a class="item" href="/signin">登录</a>
-            <a class="item" href="/signup">注册</a>
-            <% } %>
+  <form action="/search" method="get">
+    <div class="ui action left icon input">
+      <i class="search icon"></i>
+      <input name="keyword" type="text" placeholder="搜索...">
+      <button type="submit" class="ui search button">搜索</button>
+    </div>
+    <div class="ui buttons">
+      <div class="ui floating dropdown button">
+        <i class="icon bars"></i>
+        <div class="menu">
+          <% if (user) { %>
+            <a class="item" href="/posts?author=<%= user._id %>">个人主页</a>
+            <div class="divider"></div>
+            <a class="item" href="/posts/create">发表文章</a>
+            <a class="item" href="/signout">登出</a>
+            <% } else { %>
+              <a class="item" href="/signin">登录</a>
+              <a class="item" href="/signup">注册</a>
+              <% } %>
+        </div>
       </div>
     </div>
-  </div>
+  </form>
 </div>
 
 <script type="text/javascript" src="/js/search.js"></script>
