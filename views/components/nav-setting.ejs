@@ -2,7 +2,11 @@
   <form action="/search" method="get">
     <div class="ui action left icon input">
       <i class="search icon"></i>
-      <input name="keyword" type="text" placeholder="搜索...">
+      <%if(keywords != null){%>
+          <input name="keyword" type="text"  value="<%= keywords %>">
+          <%}else{%>
+          <input name="keyword" type="text" placeholder="搜索...">
+          <%}%>
       <button type="submit" class="ui search button">搜索</button>
     </div>
     <div class="ui buttons">

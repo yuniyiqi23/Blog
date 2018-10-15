@@ -91,6 +91,7 @@ app.locals.global = require('./utils/global');
 // 添加模板必需的三个变量
 app.use(function (req, res, next) {
     res.locals.user = req.session.user;
+    res.locals.keywords = null;
     res.locals.success = req.flash('success').toString();
     res.locals.error = req.flash('error').toString();
     next();

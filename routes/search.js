@@ -21,6 +21,7 @@ router.get('/', function (req, res, next) {
                     })
                 } else {
                     res.render('search', {
+                        keywords: keyword,
                         postsCount: result[0],
                         posts: result[1],
                         categories: null
