@@ -7,8 +7,6 @@
 二、 项目迭代计划
 1. Master，Develop分支
     用户注册后不自动的登录（通过邮箱方式验证，再登录）
-    确保用户输入的安全性（Express检测用户输入）
-    安全机制（XSS防护等）
 2. 守护进程ChildProcess
 3. request请求不可靠(IP验证、cookie验证、session)
 4. MongoDB驱动库
