@@ -63,7 +63,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
                     bio: userInfo.bio,
                     avatar: userInfo.avatar,
                     email: userInfo.email,
-                    date: moment(),
+                    date: moment().add({ days: 1 }),
                     islive: false
                 };
                 // console.log('user.password = ' + user.password);
