@@ -3,7 +3,7 @@ const User = require('../lib/mongoose').User;
 module.exports = {
     create: function (user) {
         // 注册一个用户
-        return new Promise(function(res){
+        return new Promise(function (res) {
             User.create(user, function (err, result) {
                 if (err) return handleError(err);
                 res(result);

@@ -5,6 +5,8 @@ const express = require('express');
 const router = express.Router();
 const formidable = require('formidable');
 const bcrypt = require('bcryptjs');
+const Joi = require('joi');
+const moment = require('moment');
 
 const checkNotLogin = require('../middlewares/check').checkNotLogin;
 const UserModel = require('../models/users');
@@ -18,56 +20,51 @@ router.get('/', checkNotLogin, function (req, res, next) {
 
 // POST /signup 用户注册
 router.post('/', checkNotLogin, function (req, res, next) {
-
     const form = new formidable.IncomingForm();
     form.uploadDir = path.join(__dirname, '../public/images');  //文件保存在系统临时目录
     form.maxFieldsSize = 1 * 1024 * 1024;  //上传文件大小限制为最大1M
     form.keepExtensions = true;        //使用文件的原扩展名
 
-    form.parse(req, function(err, fields, files) {
-        const name = fields.name;
-        const gender = fields.gender;
-        const bio = fields.bio;
-        const avatar = files.avatar.path.split(path.sep).pop();
-        let password = fields.password;
-        const repassword = fields.repassword;
+    form.parse(req, function (err, fields, files) {
+        const userInfo = {
+            username: fields.name,
+            gender: fields.gender,
+            bio: fields.bio,
+            email: fields.email,
+            avatar: files.avatar.path.split(path.sep).pop(),
+            password: fields.password,
+            repassword: fields.repassword,
+        };
+
+        const schema = Joi.object().keys({
+            username: Joi.string().alphanum().min(3).max(30).required(),
+            password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+            repassword: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+            email: Joi.string().email({ minDomainAtoms: 2 }),
+            bio: Joi.string().min(10).max(100),
+        }).with('username', 'password', 'email');
 
         // 校验参数
-        try {
-            if (!(name.length >= 1 && name.length <= 10)) {
-                throw new Error('名字请限制在 1-10 个字符')
-            }
-            if (['m', 'f', 'x'].indexOf(gender) === -1) {
-                throw new Error('性别只能是 m、f 或 x')
-            }
-            if (!(bio.length >= 1 && bio.length <= 30)) {
-                throw new Error('个人简介请限制在 1-30 个字符')
-            }
-            // if (!files.avatar.name) {
-            //     throw new Error('缺少头像')
-            // }
-            if (password.length < 6) {
-                throw new Error('密码至少 6 个字符')
-            }
-            if (password !== repassword) {
-                throw new Error('两次输入密码不一致')
-            }
-        } catch (e) {
+        const result = Joi.validate(userInfo, schema);
+        if (result.error !== null) {
             // 注册失败，异步删除上传的头像
-            fs.unlink(files.avatar.path)
-            req.flash('error', e.message)
-            return res.redirect('/signup')
+            fs.unlink(files.avatar.path);
+            req.flash('error', result.error);
+            return res.redirect('/signup');
         }
 
         getBcryptPassword(password)
             .then(function (value) {
                 // 待写入数据库的用户信息
                 let user = {
-                    name: name,
+                    name: userInfo.username,
                     password: value,
-                    gender: gender,
-                    bio: bio,
-                    avatar: avatar,
+                    gender: userInfo.gender,
+                    bio: userInfo.bio,
+                    avatar: userInfo.avatar,
+                    email: userInfo.email,
+                    date: moment(),
+                    islive: false
                 };
                 // console.log('user.password = ' + user.password);
 
@@ -105,7 +102,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
 
 function getBcryptPassword(password) {
     return new Promise(function (resolve) {
-        bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt, next) {
+        bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt, next) {
             if (err) {
                 throw next(err);
             }
