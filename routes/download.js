@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const FS = require('fs');
 
-var download_files = require('../models/download_files');
+const download_files = require('../models/download_files');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res) {
-    var filePath = '../' + req.body.filepath;
+    let filePath = '../' + req.body.filepath;
 
     if (filePath != null) {
         //判断文件和目录是否存在

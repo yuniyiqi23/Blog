@@ -7,11 +7,12 @@ const formidable = require('formidable');
 const bcrypt = require('bcryptjs');
 const Joi = require('joi');
 const moment = require('moment');
+const sendEmail = require('../utils/email');
 
 const checkNotLogin = require('../middlewares/check').checkNotLogin;
 const UserModel = require('../models/users');
 // 定义加密密码计算强度
-var SALT_WORK_FACTOR = 17;
+const SALT_WORK_FACTOR = 17;
 
 // GET /signup 注册页
 router.get('/', checkNotLogin, function (req, res, next) {
@@ -42,7 +43,9 @@ router.post('/', checkNotLogin, function (req, res, next) {
             repassword: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
             email: Joi.string().email({ minDomainAtoms: 2 }),
             bio: Joi.string().min(10).max(100),
-        }).with('username', 'password', 'email');
+            gender: Joi.string(),
+            avatar: Joi.string()
+        });
 
         // 校验参数
         const result = Joi.validate(userInfo, schema);
@@ -53,7 +56,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
             return res.redirect('/signup');
         }
 
-        getBcryptPassword(password)
+        getBcryptPassword(userInfo.password)
             .then(function (value) {
                 // 待写入数据库的用户信息
                 let user = {
@@ -64,22 +67,29 @@ router.post('/', checkNotLogin, function (req, res, next) {
                     avatar: userInfo.avatar,
                     email: userInfo.email,
                     date: moment().add({ days: 1 }),
+                    //产生随机数
+                    code: parseInt(Math.random() * 90000 + 10000).toString(),
+                    //用户状态（未激活）
                     islive: false
                 };
                 // console.log('user.password = ' + user.password);
 
                 // 用户信息写入数据库
-                UserModel.create(user)
+                UserModel.createUser(user)
                     .then(function (result) {
-                        // 此 user 是插入 mongodb 后的值，包含 _id
-                        user = result._doc;
-                        // 删除密码这种敏感信息，将用户信息存入 session
-                        delete user.password;
-                        req.session.user = user;
-                        // 写入 flash
-                        req.flash('success', '注册成功');
-                        // 跳转到首页
-                        res.redirect('/posts');
+                        // 创建一个邮件对象
+                        const mail = {
+                            // 发件人
+                            from: '378532514@qq.com',
+                            // 主题
+                            subject: '激活账号',
+                            // 收件人
+                            to: 'yuniyiqi23@gmail.com',
+                            // 邮件内容，HTML格式
+                            text: '点击激活：<a href="http://47.75.8.64/checkCode?name='+ user.name +'&code='+ user.code + '"></a>'
+                        };
+                        sendEmail(mail);
+                        res.send("请到您的邮箱（" + userInfo.email + "）中去验证信息！");
                     })
                     .catch(function (e) {
                         // 注册失败，异步删除上传的头像

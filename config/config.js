@@ -1,13 +1,13 @@
 'use strict';
 
-var development=require('./development');
-var production=require('./production');
+const development = require('./development');
+const production = require('./production');
 /**
  * 判断当前指示当前环境的常量返回对应配置
  * 默认返回开发环境的配置
  */
-function config(){
-    switch(process.env.NODE_ENV){
+function config() {
+    switch (process.env.NODE_ENV) {
         case 'development':
             return development;
             break;
@@ -18,4 +18,4 @@ function config(){
             return development;
     }
 };
-module.exports=config();
+module.exports = config();

@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 
-const UserModel = require('../models/users')
+const UserModel = require('../models/users');
 const checkNotLogin = require('../middlewares/check').checkNotLogin;
 
 router.get('/', checkNotLogin, function (req, res, next) {

@@ -64,7 +64,7 @@
   $(function () {
     //页面加载完毕后开始执行的事件
     $(".reply_a").click(function () {
-      var commentId = $(this).attr("value");
+      let commentId = $(this).attr("value");
       $(this).parent().parent().append("<form id='reply_form' class='ui reply form' method='post' action='/comments/addReply' style='margin-left: 0em;'><input name = 'commentId' value ='" + commentId + "' hidden /> <div class='reply_textarea'><textarea name='content' cols='70' rows='1'></textarea><input type='submit' class='ui icon button' value='回复' style='margin-top: .5em;'/></div></form>");
       $(this).remove();
     });

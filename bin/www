@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 //依赖加载
-var fs = require('fs');
+const fs = require('fs');
 //引入我们上面导出的app实例
 const app = require('../app');
 //引入debug模块，打印调试日志
@@ -14,12 +14,12 @@ const path = require('path');
 
 const https = require('https');
 // console.log('__dirname = ' + __dirname);
-// var privateKey  = fs.readFileSync(path.join(__dirname, '../ssl/key.pem'), 'utf8');
-// var certificate = fs.readFileSync(path.join(__dirname,'../ssl/cert.pem'), 'utf8');
-// var credentials = {key: privateKey, cert: certificate};
+// const privateKey  = fs.readFileSync(path.join(__dirname, '../ssl/key.pem'), 'utf8');
+// const certificate = fs.readFileSync(path.join(__dirname,'../ssl/cert.pem'), 'utf8');
+// const credentials = {key: privateKey, cert: certificate};
 
 //引入配置文件
-var config = require('../config/config');
+const config = require('../config/config');
 console.log('Environment :'+ config.env);
 /**
  * Get port from environment and store in Express.
@@ -50,7 +50,7 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  let port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -74,7 +74,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  let bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -98,8 +98,8 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  let addr = server.address();
+  let bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);

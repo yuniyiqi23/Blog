@@ -2,7 +2,7 @@
 /**
  * 开发环境配置文件
  */
-var config = {
+const config = {
     env: 'development', //环境名称
     port: 3000,         //服务端口号
     mysql_config: {
