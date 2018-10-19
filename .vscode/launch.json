@@ -6,9 +6,9 @@
     "configurations": [
         
         {
-            // "env": {
-            //     "NODE_ENV":"development",
-            // },
+            "env": {
+                "NODE_ENV":"development",
+            },
             "type": "node",
             "request": "launch",
             "name": "启动程序",

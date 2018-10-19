@@ -8,6 +8,7 @@ const bcrypt = require('bcryptjs');
 const Joi = require('joi');
 const moment = require('moment');
 const sendEmail = require('../utils/email');
+const config = require('../config/default')
 
 const checkNotLogin = require('../middlewares/check').checkNotLogin;
 const UserModel = require('../models/users');
@@ -16,7 +17,7 @@ const SALT_WORK_FACTOR = 17;
 
 // GET /signup 注册页
 router.get('/', checkNotLogin, function (req, res, next) {
-    res.render('signup.ejs')
+    res.render('signup.ejs');
 })
 
 // POST /signup 用户注册
@@ -86,10 +87,10 @@ router.post('/', checkNotLogin, function (req, res, next) {
                             // 收件人
                             to: 'yuniyiqi23@gmail.com',
                             // 邮件内容，HTML格式
-                            text: '点击激活：<a href="http://47.75.8.64/checkCode?name='+ user.name +'&code='+ user.code + '"></a>'
+                            text: '点击激活：<a href="http://' + config.deployEnv().ip +'/checkCode?name='+ user.name +'&code='+ user.code + '"></a>'
                         };
                         sendEmail(mail);
-                        res.send("请到您的邮箱（" + userInfo.email + "）中去验证信息！");
+                        res.send("注册成功！请到您的邮箱（" + userInfo.email + "）中去验证信息！");
                     })
                     .catch(function (e) {
                         // 注册失败，异步删除上传的头像

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha test",
     "run": "export NODE_ENV=production&&node ./bin/www",
-    "start": "node ./bin/www"
+    "start": "export NODE_ENV=development&&node ./bin/www"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

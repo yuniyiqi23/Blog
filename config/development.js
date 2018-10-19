@@ -14,6 +14,7 @@ const config = {
     redis_config: {
         //redis数据库配置
     },
+    ip: 'localhost:3000'
 
 };
 

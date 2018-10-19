@@ -4,9 +4,14 @@
 3. 删除分类需要用到事务
 
 二、 项目迭代计划
+
+激活用户邮件页面
+注册成功，需要激活页面
+用户登录失败（账号保留）
+激活链接安全性
+注册耗时
+
 1. Master，Develop分支
-    用户注册后不自动的登录（通过邮箱方式验证，再登录）
-2. 守护进程ChildProcess
 3. request请求不可靠(IP验证、cookie验证、session)
 4. MongoDB驱动库
 https://zhuanlan.zhihu.com/p/24308524

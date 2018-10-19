@@ -14,5 +14,6 @@ const config = {
     redis_config: {
         //redis数据库配置
     },
+    ip: '47.75.8.64'
 };
 module.exports=config;

@@ -11,6 +11,7 @@ const app = require('../app');
 const debug = require('debug')('nodeapp:server');
 const http = require('http');
 const path = require('path');
+const config = require('../config/default');
 
 const https = require('https');
 // console.log('__dirname = ' + __dirname);
@@ -19,13 +20,13 @@ const https = require('https');
 // const credentials = {key: privateKey, cert: certificate};
 
 //引入配置文件
-const config = require('../config/config');
-console.log('Environment :'+ config.env);
+// const config = require('../config/default').config();
+console.log('Environment :'+ config.deployEnv().env);
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(config.port || '3000');
+const port = normalizePort(config.deployEnv().port || '3000');
 // 打印输出端口号
 console.log('Port ： ' + port);
 app.set('port', port);
