@@ -17,7 +17,7 @@ module.exports = {
   mongodb: 'mongodb://localhost:27017/myblog',
 
   deployEnv: function () {
-    console.log('process.env.NODE_ENV : ' + process.env.NODE_ENV);
+    // console.log('process.env.NODE_ENV : ' + process.env.NODE_ENV);
     switch (process.env.NODE_ENV) {
       case 'development':
         return development;

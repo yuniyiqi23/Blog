@@ -19,6 +19,7 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "^2.5.8",
+    "email-templates": "^5.0.1",
     "express": "^4.15.5",
     "express-formidable": "^1.0.0",
     "express-rate-limit": "^3.2.0",
