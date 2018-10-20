@@ -12,6 +12,7 @@ const config = require('../config/default')
 
 const checkNotLogin = require('../middlewares/check').checkNotLogin;
 const UserModel = require('../models/users');
+const mail = require('../utils/nodeMailerWithTemp');
 // 定义加密密码计算强度
 const SALT_WORK_FACTOR = 17;
 
@@ -78,18 +79,9 @@ router.post('/', checkNotLogin, function (req, res, next) {
                 // 用户信息写入数据库
                 UserModel.createUser(user)
                     .then(function (result) {
-                        // 创建一个邮件对象
-                        const mail = {
-                            // 发件人
-                            from: '378532514@qq.com',
-                            // 主题
-                            subject: '激活账号',
-                            // 收件人
-                            to: 'yuniyiqi23@gmail.com',
-                            // 邮件内容，HTML格式
-                            text: '点击激活：<a href="http://' + config.deployEnv().ip +'/checkCode?name='+ user.name +'&code='+ user.code + '"></a>'
-                        };
-                        sendEmail(mail);
+                        //Sending email here
+                        let activeURL = "http://" + config.deployEnv().ip + "/checkCode?name=" + user.name + "&code=" + user.code;
+                        mail.sendActiveUser('yuniyiqi23@gmail.com', 'Adam', activeURL);
                         res.send("注册成功！请到您的邮箱（" + userInfo.email + "）中去验证信息！");
                     })
                     .catch(function (e) {

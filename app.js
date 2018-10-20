@@ -27,10 +27,9 @@ const expressWinston = require('express-winston');
 const app = express();
 app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 
-//Sending email here
-// var mail = require('./nodeMailerWithTemp');
-// mail.sendPasswordReset('yuniyiqi23@gmail.com', 'Ogirima','Adam','http://yourdomain.com/some-password-links');
-
+//Test Sending email here
+// const mail = require('./utils/nodeMailerWithTemp');
+// mail.sendActiveUser('yuniyiqi23@gmail.com', 'Adam', "http://localhost:3000/checkCode?name=adam&code=");
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes

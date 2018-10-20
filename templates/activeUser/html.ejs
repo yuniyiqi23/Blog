@@ -349,13 +349,10 @@
 
                                 <table class="one-column" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-spacing:0; border-left:1px solid #e8e7e5; border-right:1px solid #e8e7e5; border-bottom:1px solid #e8e7e5" bgcolor="#FFFFFF">
                                     <tr>
-                                        <td align="left" style="padding:0px 40px 40px 40px"><p style="color:#262626; font-size:32px; text-align:left; font-family: Verdana, Geneva, sans-serif">Hello <%= name %></p>
+                                        <td align="left" style="padding:0px 40px 40px 40px"><p style="color:#262626; font-size:32px; text-align:left; font-family: Verdana, Geneva, sans-serif">Hello <%= username %></p>
                                             <br style="color:#000000; font-size:16px; text-align:left; font-family: Verdana, Geneva, sans-serif; line-height:22px ">
                                             You requested for a password reset.</br>
                                             Please complete your password reset by clicking the below link</br>
-                                            <a href="<%= token %>">
-                                                <%= token %>
-                                            </a>                        <br />
                                             <br />
                                          </p></td>
 
@@ -367,7 +364,7 @@
                                             <table border="0" cellpadding="0" cellspacing="0" style="Margin:0 auto;">
                                                 <tr>
                                                     <td width="250" height="60" align="center" bgcolor="#2f9780" style="-moz-border-radius: 30px; -webkit-border-radius: 30px; border-radius: 30px;">
-                                                        <a href="<%= token %>" style="width:250; display:block; text-decoration:none; border:0; text-align:center; font-weight:bold;font-size:18px; font-family: Arial, sans-serif; color: #ffffff" class="button_link">Reset password
+                                                        <a href="<%= activeURL %>" style="width:250; display:block; text-decoration:none; border:0; text-align:center; font-weight:bold;font-size:18px; font-family: Arial, sans-serif; color: #ffffff" class="button_link">激活账号
                                                             <img src="https://gallery.mailchimp.com/fdcaf86ecc5056741eb5cbc18/images/73ac4376-78ab-4d32-a0b5-b8195202e51f.jpg" width="32" height="17" style="padding-top:5px" alt="" border="0"/>
                                                         </a>
                                                     </td>
