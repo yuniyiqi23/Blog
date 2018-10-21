@@ -14,7 +14,7 @@ const checkNotLogin = require('../middlewares/check').checkNotLogin;
 const UserModel = require('../models/users');
 const mail = require('../utils/nodeMailerWithTemp');
 // 定义加密密码计算强度
-const SALT_WORK_FACTOR = 17;
+const SALT_WORK_FACTOR = 11;
 
 // GET /signup 注册页
 router.get('/', checkNotLogin, function (req, res, next) {
@@ -60,6 +60,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
 
         getBcryptPassword(userInfo.password)
             .then(function (value) {
+                console.timeEnd("getBcryptPassword");
                 // 待写入数据库的用户信息
                 let user = {
                     name: userInfo.username,
@@ -79,14 +80,17 @@ router.post('/', checkNotLogin, function (req, res, next) {
                 // 用户信息写入数据库
                 UserModel.createUser(user)
                     .then(function (result) {
+                        // console.log('createUser result :\n' + result);
                         //Sending email here
-                        let activeURL = "http://" + config.deployEnv().ip + "/checkCode?name=" + user.name + "&code=" + user.code;
-                        mail.sendActiveUser('yuniyiqi23@gmail.com', 'Adam', activeURL);
-                        res.send("注册成功！请到您的邮箱（" + userInfo.email + "）中去验证信息！");
+                        let activeURL = "http://" + config.deployEnv().ip + "/checkCode?name=" + result.name + "&code=" + result.code;
+                        mail.sendActiveUser(result.email, result.name, activeURL);
+                        res.render('signupSuccess.ejs', { email: result.email});
                     })
                     .catch(function (e) {
                         // 注册失败，异步删除上传的头像
-                        fs.unlink(req.files.avatar.path);
+                        if(req.files){
+                            fs.unlink(req.files.avatar.path);
+                        }
                         // 用户名被占用则跳回注册页，而不是错误页
                         if (e.message.match('duplicate key')) {
                             req.flash('error', '用户名已被占用');
@@ -104,6 +108,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
 });
 
 function getBcryptPassword(password) {
+    console.time("getBcryptPassword");
     return new Promise(function (resolve) {
         bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt, next) {
             if (err) {
