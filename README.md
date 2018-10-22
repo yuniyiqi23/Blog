@@ -14,7 +14,7 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 3. 守护进程（PM2）<br>
 4. 设置NODE_ENV为Production<br>
 设置NODE_ENV为Production可以让应用有将近3倍速度提升<br>
-![]https://goldbergyoni.com/wp-content/uploads/2017/03/node_env-performance.png<br>
+![](https://goldbergyoni.com/wp-content/uploads/2017/03/node_env-performance.png)<br>
 
 ## 网站安全性<br>
 1. 安全性相关的HTTP头
