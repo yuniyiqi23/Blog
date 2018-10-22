@@ -1,18 +1,23 @@
 # Blog开发说明
-1.Express中next的理解<br>
-2.Mongoose ObjectId的理解<br>
-3.数据库设计（category、tag）<br>
-4.Promise的理解<br>
-5.做项目过程中学到的经验<br>
-6.全文索引<br>
+1. Express中next的理解<br>
+2. Mongoose ObjectId的理解<br>
+3. 数据库设计（category、tag）<br>
+4. Promise的理解<br>
+5. 做项目过程中学到的经验<br>
+- res.render和res.redirect的区别<br>
+6. 全文索引<br>
 db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{title:1,content:2}})<br>
 
 ## 网站部署<br>
-1.自动化部署说明<br>
-2.Nginx部署<br>
+1. 自动化部署说明<br>
+2. 反向代理（Nginx）<br>
+3. 守护进程（PM2）<br>
+4. 设置NODE_ENV为Production<br>
+设置NODE_ENV为Production可以让应用有将近3倍速度提升<br>
+![]https://goldbergyoni.com/wp-content/uploads/2017/03/node_env-performance.png<br>
 
 ## 网站安全性<br>
-1.安全性相关的HTTP头
+1. 安全性相关的HTTP头
 通过使用Helmet模块设置 HTTP 头，帮助您保护应用程序避免一些众所周知的 Web 漏洞。<br>
 - csp 用于设置 Content-Security-Policy 头，帮助抵御跨站点脚本编制攻击和其他跨站点注入攻击。
 - hidePoweredBy 用于移除 X-Powered-By 头。
@@ -30,8 +35,10 @@ const app = express();
 app.use(helmet());
 ```
 测试网站安全性：http://cyh.herokuapp.com/cyh<br>
+**附上效果图**<br>
+![](图片链接地址)<br>
 
-2.暴力破解保护（通过限制用户在一定时间内登录次数来实现）
+2. 暴力破解保护（通过限制用户在一定时间内登录次数来实现）
 通过使用中间件express-rate-limit来实现<br>
 ```node
 const rateLimit = require("express-rate-limit");
@@ -44,7 +51,7 @@ const limiter = rateLimit({
 app.use(limiter);
 ```
 
-3.使用nsp和requireSafe管理第三方的依赖库的安全问题
+3. 使用nsp和requireSafe管理第三方的依赖库的安全问题
 ```node
 $ npm i nsp -g
 $ nsp check

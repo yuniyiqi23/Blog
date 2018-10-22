@@ -4,11 +4,8 @@
 3. 删除分类需要用到事务
 
 二、 项目迭代计划
-
-用户登录失败（账号保留）
-
 1. Master，Develop分支
-3. request请求不可靠(IP验证、cookie验证、session)
+2.Radis
 4. MongoDB驱动库
 https://zhuanlan.zhihu.com/p/24308524
 5. Promise
