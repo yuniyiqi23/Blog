@@ -13,7 +13,7 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 2. 反向代理（Nginx）<br>
 3. 守护进程（PM2）<br>
 4. 设置NODE_ENV为Production<br>
-设置NODE_ENV为Production可以让应用有将近3倍速度提升<br>
+   可以让应用有将近3倍速度提升<br>
 ![](https://goldbergyoni.com/wp-content/uploads/2017/03/node_env-performance.png)<br>
 
 ## 网站安全性<br>
@@ -56,3 +56,6 @@ app.use(limiter);
 $ npm i nsp -g
 $ nsp check
 ```
+
+## 问题处理<br>
+1. APP内存溢出
