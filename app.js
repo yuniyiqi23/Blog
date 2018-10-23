@@ -23,6 +23,8 @@ const routes = require('./routes');
 const pkg = require('./package');
 const winston = require('winston');
 const expressWinston = require('express-winston');
+//Application Perpormance Monitorting
+require('newrelic');
 
 const app = express();
 app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
