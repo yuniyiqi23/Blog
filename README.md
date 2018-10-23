@@ -17,7 +17,7 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 ![](https://goldbergyoni.com/wp-content/uploads/2017/03/node_env-performance.png)<br>
 
 ## 网站安全性<br>
-1. 安全性相关的HTTP头
+1. HTTP头安全性设置
 通过使用Helmet模块设置 HTTP 头，帮助您保护应用程序避免一些众所周知的 Web 漏洞。<br>
 - csp 用于设置 Content-Security-Policy 头，帮助抵御跨站点脚本编制攻击和其他跨站点注入攻击。
 - hidePoweredBy 用于移除 X-Powered-By 头。

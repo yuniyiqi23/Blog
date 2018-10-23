@@ -1,7 +1,8 @@
 一、 学习计划
 1. HTTP权威指南（Node、Express其他参考书）
 2. ApacheBench压力测试（并发量）
-3. 删除分类需要用到事务
+3. node内存限制1.4G，单线程（多CPU同时工作）
+4. 删除分类需要用到事务
 
 二、 项目迭代计划
 1. Master，Develop分支
