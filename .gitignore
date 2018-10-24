@@ -1,6 +1,8 @@
 config/*
-#!config/default.*
 npm-debug.log
 node_modules
 # ignore all logs
 *.log
+public/*
+!public/js/*
+test/*

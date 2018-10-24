@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 //使用Helmet设置安全性相关的HTTP headers
 const helmet = require('helmet');
-const rateLimit = require("express-rate-limit");
+const rateLimit = require('express-rate-limit');
 const moment = require('moment');
 
 const session = require('express-session');
@@ -27,15 +27,15 @@ const expressWinston = require('express-winston');
 require('newrelic');
 
 const app = express();
-app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 
 //Test Sending email here
 // const mail = require('./utils/nodeMailerWithTemp');
 // mail.sendActiveUser('yuniyiqi23@gmail.com', 'Adam', "http://localhost:3000/checkCode?name=adam&code=");
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100 // limit each IP to 100 requests per windowMs
 });
 // view engine setup
 //设置VIEWS文件夹，__dirname是node.js里面的全局变量。取得执行js所在的路径
@@ -45,15 +45,15 @@ app.set('view engine', 'ejs');
 
 //Datadog(watch CPU, server RAM,  Node process RAM and so on)
 const dd_options = {
-    'response_code': true,
-    'tags': ['app:aliyun_blog']
-}
+	'response_code': true,
+	'tags': ['app:aliyun_blog']
+};
 const connect_datadog = require('connect-datadog')(dd_options);
 
 //Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet());
-app.use(helmet.permittedCrossDomainPolicies())
-app.use(helmet.noCache())
+app.use(helmet.permittedCrossDomainPolicies());
+app.use(helmet.noCache());
 //  apply to all requests
 app.use(limiter);
 // uncomment after placing your favicon in /public
@@ -70,18 +70,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // session 中间件
 app.use(session({
-    name: config.session.key, // 设置 cookie 中保存 session id 的字段名称
-    secret: config.session.secret, // 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
-    resave: false, // 强制更新 session
-    saveUninitialized: false, // 设置为 false，强制创建一个 session，即使用户未登录
-    cookie: {
-        maxAge: config.session.maxAge,// 过期时间，过期后 cookie 中的 session id 自动删除
-        secure: false,//当 secure 值为 true 时，cookie 在 HTTP 中是无效，在 HTTPS 中才有效
-    },
-    store: new MongoStore({// 将 session 存储到 mongodb
-        url: config.mongodb,// mongodb 地址
-        touchAfter: 24 * 3600 //单位是秒
-    })
+	name: config.session.key, // 设置 cookie 中保存 session id 的字段名称
+	secret: config.session.secret, // 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
+	resave: false, // 强制更新 session
+	saveUninitialized: false, // 设置为 false，强制创建一个 session，即使用户未登录
+	cookie: {
+		maxAge: config.session.maxAge,// 过期时间，过期后 cookie 中的 session id 自动删除
+		secure: false,//当 secure 值为 true 时，cookie 在 HTTP 中是无效，在 HTTPS 中才有效
+	},
+	store: new MongoStore({// 将 session 存储到 mongodb
+		url: config.mongodb,// mongodb 地址
+		touchAfter: 24 * 3600 //单位是秒
+	})
 }));
 
 
@@ -90,8 +90,8 @@ app.use(flash());
 
 // 设置模板全局常量
 app.locals.blog = {
-    title: pkg.name,
-    description: pkg.description
+	title: pkg.name,
+	description: pkg.description
 };
 
 //加载自定义全局方法  
@@ -99,28 +99,28 @@ app.locals.global = require('./utils/global');
 
 // 添加模板必需的三个变量
 app.use(function (req, res, next) {
-    res.locals.user = req.session.user;
-    res.locals.keywords = null;
-    res.locals.success = req.flash('success').toString();
-    res.locals.error = req.flash('error').toString();
-    next();
+	res.locals.user = req.session.user;
+	res.locals.keywords = null;
+	res.locals.success = req.flash('success').toString();
+	res.locals.error = req.flash('error').toString();
+	next();
 });
 
 // 正常请求的日志
 app.use(expressWinston.logger({
-    transports: [
-        new (winston.transports.Console)({
-            json: true,
-            colorize: true,
-        }),
-        new winston.transports.File({
-            // filename: 'logs/success.log'
-            filename: path.join(__dirname, 'logs/success.log'),
-            maxsize: 20 * 1024,
-            maxFiles: 10,
-            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
-        })
-    ]
+	transports: [
+		new (winston.transports.Console)({
+			json: true,
+			colorize: true,
+		}),
+		new winston.transports.File({
+			// filename: 'logs/success.log'
+			filename: path.join(__dirname, 'logs/success.log'),
+			maxsize: 20 * 1024,
+			maxFiles: 10,
+			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
+		})
+	]
 }));
 
 // Add the datadog-middleware before your router
@@ -130,40 +130,40 @@ routes(app);
 
 // 错误请求的日志
 app.use(expressWinston.errorLogger({
-    transports: [
-        new winston.transports.Console({
-            json: true,
-            colorize: true,
-        }),
-        new winston.transports.File({
-            filename: path.join(__dirname, 'logs/error.log'),
-            maxsize: 20 * 1024, 
-            maxFiles: 10,
-            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),            
-        })
-    ],
+	transports: [
+		new winston.transports.Console({
+			json: true,
+			colorize: true,
+		}),
+		new winston.transports.File({
+			filename: path.join(__dirname, 'logs/error.log'),
+			maxsize: 20 * 1024, 
+			maxFiles: 10,
+			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),            
+		})
+	],
 }));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    //     next(createError(404));
-    let err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+	//     next(createError(404));
+	let err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+	// set locals, only providing error in development
+	res.locals.message = err.message;
+	res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    if (res.headersSent) {
-        return next(err)
-    }
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+	if (res.headersSent) {
+		return next(err);
+	}
+	// render the error page
+	res.status(err.status || 500);
+	res.render('error');
 });
 
 module.exports = app;

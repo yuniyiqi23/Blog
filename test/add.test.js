@@ -13,7 +13,7 @@ const sum = require('./add');
 // });
 
 let user = {
-    password : '123456'
+	password : '123456'
 };
 
 sum.add(user);

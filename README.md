@@ -14,7 +14,9 @@ Nginx<br>
 2. 用menwatch等工具检查memory<br>
 3. 用ESLint检查代码质量<br>
 监测引用错误和未定义变量等<br>
-参考资料：http://eslint.cn/docs/rules/<br>
+参考资料：<br>
+https://www.jianshu.com/p/ad1e46faaea2<br>
+http://eslint.cn/docs/rules/<br>
 4. -trace-sync-io 标识同步代码<br>
 
 ## 网站部署<br>
@@ -63,7 +65,8 @@ app.use(limiter);
 3. 使用nsp和requireSafe管理第三方的依赖库的安全问题<br>
 ```node
 $ npm i nsp -g
-$ nsp check
+使用以下命令将 package.json 文件提交至 nodesecurity.io 以进行验证：
+$ nsp audit-package
 ```
 
 ## 问题处理<br>
