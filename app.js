@@ -110,17 +110,20 @@ app.use(function (req, res, next) {
 app.use(expressWinston.logger({
 	transports: [
 		new (winston.transports.Console)({
+			level: 'debug',
+			handleExceptions: true,
 			json: true,
 			colorize: true,
 		}),
 		new winston.transports.File({
 			// filename: 'logs/success.log'
 			filename: path.join(__dirname, 'logs/success.log'),
-			maxsize: 20 * 1024,
+			maxsize: 100 * 1024,
 			maxFiles: 10,
 			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
 		})
-	]
+	],
+	exitOnError: false, // do not exit on handled exceptions
 }));
 
 // Add the datadog-middleware before your router
@@ -132,16 +135,19 @@ routes(app);
 app.use(expressWinston.errorLogger({
 	transports: [
 		new winston.transports.Console({
+			level: 'debug',
+			handleExceptions: true,
 			json: true,
 			colorize: true,
 		}),
 		new winston.transports.File({
 			filename: path.join(__dirname, 'logs/error.log'),
-			maxsize: 20 * 1024, 
+			maxsize: 100 * 1024,
 			maxFiles: 10,
-			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),            
+			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
 		})
 	],
+	exitOnError: false, // do not exit on handled exceptions
 }));
 
 // catch 404 and forward to error handler

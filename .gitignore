@@ -1,5 +1,5 @@
 config/*
-npm-debug.log
+logs/*
 node_modules
 # ignore all logs
 *.log
