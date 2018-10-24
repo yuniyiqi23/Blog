@@ -7,7 +7,7 @@
     "test": "mocha test",
     "run": "export NODE_ENV=production&&node ./bin/www",
     "start": "node ./bin/www",
-    "lint": "eslint routes",
+    "lint": "eslint routes --fix",
     "lint:create": "eslint --init"
   },
   "dependencies": {
