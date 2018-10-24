@@ -1,5 +1,6 @@
 config/*
-!config/default.*
+#!config/default.*
 npm-debug.log
 node_modules
-coverage
+# ignore all logs
+*.log

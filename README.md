@@ -8,6 +8,15 @@
 6. 全文索引<br>
 db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{title:1,content:2}})<br>
 
+## 应用健壮性说明<br>
+1. 使用缓存技术<br>
+Nginx<br>
+2. 用menwatch等工具检查memory<br>
+3. 用ESLint检查代码质量<br>
+监测引用错误和未定义变量等<br>
+参考资料：http://eslint.cn/docs/rules/<br>
+4. -trace-sync-io 标识同步代码<br>
+
 ## 网站部署<br>
 1. 自动化部署说明<br>
 2. 反向代理（Nginx）<br>
@@ -51,11 +60,12 @@ const limiter = rateLimit({
 app.use(limiter);
 ```
 
-3. 使用nsp和requireSafe管理第三方的依赖库的安全问题
+3. 使用nsp和requireSafe管理第三方的依赖库的安全问题<br>
 ```node
 $ npm i nsp -g
 $ nsp check
 ```
 
 ## 问题处理<br>
-1. APP内存溢出
+1. 应用内存泄漏<br>
+Heapdump、Easy-monitor等工具<br>
