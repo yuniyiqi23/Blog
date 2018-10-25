@@ -24,7 +24,9 @@ http://eslint.cn/docs/rules/<br>
 2. 反向代理（Nginx）<br>
 3. 守护进程（PM2）<br>
 ```node
-	apps: [{
+//ecosystem.config.js配置文件
+module.exports = {
+    apps: [{
 		name: "Your APP Name",
 		// 最大内存限制
 		max_memory_restart: "500M",
@@ -44,7 +46,8 @@ http://eslint.cn/docs/rules/<br>
 			"PORT": 3001,
 			"NODE_ENV": "production"
 		}
-	}],
+	}]
+}
 ```
 参考资料：<br>
 http://pm2.keymetrics.io/<br>
