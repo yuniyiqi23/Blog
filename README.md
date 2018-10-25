@@ -71,8 +71,7 @@ const app = express();
 app.use(helmet());
 ```
 测试网站安全性：http://cyh.herokuapp.com/cyh<br>
-**附上效果图**<br>
-![](图片链接地址)<br>
+![](http://47.75.8.64/herokuapp.png)<br>
 
 2. 暴力破解保护（通过限制用户在一定时间内登录次数来实现）
 通过使用中间件express-rate-limit来实现<br>
