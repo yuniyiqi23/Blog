@@ -69,6 +69,7 @@ app.use(cookieParser());
 //静态文件目录设置,设置public文件夹为存放静态文件的目录
 app.use(express.static(path.join(__dirname, 'public')));
 // session 中间件
+let expiryDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 app.use(session({
 	name: config.session.key, // 设置 cookie 中保存 session id 的字段名称
 	secret: config.session.secret, // 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
@@ -77,6 +78,8 @@ app.use(session({
 	cookie: {
 		maxAge: config.session.maxAge,// 过期时间，过期后 cookie 中的 session id 自动删除
 		secure: false,//当 secure 值为 true 时，cookie 在 HTTP 中是无效，在 HTTPS 中才有效
+		httpOnly: true,
+		expires: expiryDate
 	},
 	store: new MongoStore({// 将 session 存储到 mongodb
 		url: config.mongodb,// mongodb 地址

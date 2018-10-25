@@ -23,6 +23,31 @@ http://eslint.cn/docs/rules/<br>
 1. 自动化部署说明<br>
 2. 反向代理（Nginx）<br>
 3. 守护进程（PM2）<br>
+```node
+	apps: [{
+		name: "Your APP Name",
+		// 最大内存限制
+		max_memory_restart: "500M",
+		script: "./bin/www",
+		// 最大限度地使用CPUs
+		instances: "max",
+		exec_mode: "cluster",
+		out_file: "~/.pm2/logs/blog_out.log",
+		error_file: "~/.pm2/logs/blog_error.log",
+		merge_logs: true,
+		log_date_format: "YYYY-MM-DD HH:mm Z",
+		env: {
+			"PORT": 3000,
+			"NODE_ENV": "development",
+		},
+		env_production: {
+			"PORT": 3001,
+			"NODE_ENV": "production"
+		}
+	}],
+```
+参考资料：<br>
+http://pm2.keymetrics.io/<br>
 4. 设置NODE_ENV为Production<br>
    可以让应用有将近3倍速度提升<br>
 ![](https://goldbergyoni.com/wp-content/uploads/2017/03/node_env-performance.png)<br>
