@@ -7,8 +7,8 @@ module.exports = {
 		// 最大限度地使用CPUs
 		instances: "max",
 		exec_mode: "cluster",
-		out_file: "~/.pm2/logs/blog_out.log",
-		error_file: "~/.pm2/logs/blog_error.log",
+		out_file: "blog_out.log",
+		error_file: "blog_error.log",
 		merge_logs: true,
 		log_date_format: "YYYY-MM-DD HH:mm:ss",
 		env: {

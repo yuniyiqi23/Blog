@@ -49,6 +49,8 @@ module.exports = {
 	}]
 }
 ```
+如果在多核CPU服务器上使用pm2 list可以看到多个应用实例<br>
+![](http://47.75.8.64/pm2_list.png)<br>
 参考资料：<br>
 http://pm2.keymetrics.io/<br>
 4. 设置NODE_ENV为Production<br>
