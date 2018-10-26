@@ -19,7 +19,7 @@ module.exports = {
 			"PORT": 3001,
 			"NODE_ENV": "production"
 		},
-		out_file: "~./logs/blog_out.log",
+		out_file: "./logs/blog_out.log",
 		error_file: "./logs/blog_error.log",
 		merge_logs: true,
 		log_date_format: "YYYY-MM-DD HH:mm:ss",
