@@ -6,9 +6,9 @@
 
 二、 项目迭代计划
 
-PM2自定义日志文件1
+*验证PM2每天定时重启
 错误日志发送到开发人员的邮箱
-使用nsp和requireSafe管理第三方的依赖库的安全问题
+内存泄漏处理方案
 异步输出日志（forgot console.log）
 
 1. Master，Develop分支
