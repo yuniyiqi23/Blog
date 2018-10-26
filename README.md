@@ -24,7 +24,9 @@ http://eslint.cn/docs/rules/<br>
 2. 反向代理（Nginx）<br>
 3. 守护进程（PM2）<br>
 ```node
-	apps: [{
+//ecosystem.config.js配置文件
+module.exports = {
+    apps: [{
 		name: "Your APP Name",
 		// 最大内存限制
 		max_memory_restart: "500M",
@@ -44,8 +46,11 @@ http://eslint.cn/docs/rules/<br>
 			"PORT": 3001,
 			"NODE_ENV": "production"
 		}
-	}],
+	}]
+}
 ```
+如果在多核CPU服务器上使用pm2 list可以看到多个应用实例<br>
+![](http://47.75.8.64/pm2_list.png)<br>
 参考资料：<br>
 http://pm2.keymetrics.io/<br>
 4. 设置NODE_ENV为Production<br>
@@ -86,12 +91,12 @@ const limiter = rateLimit({
 app.use(limiter);
 ```
 
-3. 使用nsp和requireSafe管理第三方的依赖库的安全问题<br>
+3. 使用nsp或是requireSafe检测第三方库的安全性<br>
 ```node
 $ npm i nsp -g
-使用以下命令将 package.json 文件提交至 nodesecurity.io 以进行验证：
-$ nsp audit-package
+$ nsp check --reporter summary
 ```
+![](http://47.75.8.64/nsp.png)<br>
 
 ## 问题处理<br>
 1. 应用内存泄漏<br>
