@@ -23,6 +23,10 @@ const routes = require('./routes');
 const pkg = require('./package');
 const winston = require('winston');
 const expressWinston = require('express-winston');
+//Assign TransactionId
+const cls = require('continuation-local-storage');
+const namespace = cls.createNamespace('com.blog');
+const uuid = require('node-uuid');
 //Application Perpormance Monitorting
 require('newrelic');
 
@@ -87,7 +91,6 @@ app.use(session({
 	})
 }));
 
-
 // flash 中间件，用来显示通知
 app.use(flash());
 
@@ -107,6 +110,26 @@ app.use(function (req, res, next) {
 	res.locals.success = req.flash('success').toString();
 	res.locals.error = req.flash('error').toString();
 	next();
+});
+
+// create a transaction id for each request
+app.use(function(req, res, next) {
+    const namespace = cls.getNamespace('com.blog');
+    const tid = uuid.v4();
+
+    // wrap the events from request and response
+    namespace.bindEmitter(req);
+    namespace.bindEmitter(res);
+
+    // run following middleware in the scope of
+    // the namespace we created
+    namespace.run(function() {
+
+        // set tid on the namespace, makes it
+        // available for all continuations
+        namespace.set('tid', tid);
+        next();
+    });
 });
 
 // 正常请求的日志

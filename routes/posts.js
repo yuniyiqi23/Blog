@@ -7,9 +7,11 @@ const CommentModel = require('../models/comments');
 const TagModel = require('../models/tags');
 const CategoryModel = require('../models/categories');
 const DataState = require('../middlewares/enum').DataState;
+const namespace = require('continuation-local-storage').getNamespace('com.blog');
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get('/', function (req, res, next) {
+	// console.log('Debug: ' + namespace.get('tid'));
     let authorId = req.query.author;
     let page = req.query.page || 1;
 
@@ -138,6 +140,7 @@ router.get('/create', checkLogin, function (req, res, next) {
 
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
+    console.log('Debug: ' + namespace.get('tid'));
     const postId = req.params.postId;
 
     Promise.all([
@@ -149,6 +152,7 @@ router.get('/:postId', function (req, res, next) {
         PostModel.incPv(postId),
     ])
         .then(function (result) {
+            console.log('Debug: ' + namespace.get('tid'));
             const post = result[0];
             const comments = result[1];
             if (!post) {
