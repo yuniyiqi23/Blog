@@ -95,8 +95,8 @@ app.use(limiter);
 ```node
 $ npm i nsp -g
 $ nsp check --reporter summary
-![](http://47.75.8.64/nsp.png)<br>
 ```
+![](http://47.75.8.64/nsp.png)<br>
 
 ## 问题处理<br>
 1. 应用内存泄漏<br>
