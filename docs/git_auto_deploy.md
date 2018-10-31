@@ -49,7 +49,7 @@ sudo chown -R git:git blog.git
 ```
  vim /srv/blog.git/hooks/post-receive
 ```
-赋予执行权限：chmod +x /srv/blog.git/hooks/post-recive
+赋予执行权限：chmod +x /srv/blog.git/hooks/post-recive<br>
 6.  添加用户 ssh 登录权限
 在客户端生成密匙文件：执行ssh-keygen<br>
 然后查看~./ssh目录，是否有id_rsa.pub文件，把公钥（id_rsa.pub）追加到服务器/home/git/.ssh/authorized_keys文件尾部（没有.ssh路径就创建，所有者要改为git）。如果是团队项目，可以采用 gitosis 进行管理，配置可参考官方文档，此处暂不作介绍<br>
@@ -76,10 +76,10 @@ git push origin master
 自动部署系统发布后发现问题，需要回滚到某一个commit，再重新发布<br>
 **原理**：先将本地分支退回到某个commit，删除远程分支，再重新push本地分支<br>
 ```
-1、新建backup分支 作为备份，以防万一
+//新建backup分支 作为备份，以防万一
 git branch backup 
-2、本地代码回滚到上一版本（或者指定版本）
+//本地代码回滚到上一版本（或者指定版本）
 git reset --hard HEAD~1
-3、加入-f参数，强制提交，远程端将强制跟新到reset版本
+//加入-f参数，强制提交，远程端将强制跟新到reset版本
 git push -f origin master 
 ```

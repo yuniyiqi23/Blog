@@ -57,7 +57,7 @@ http://eslint.cn/docs/rules/<br>
 
 ## 网站部署<br>
 1. 自动化部署说明<br>
-https://github.com/yuniyiqi23/Blog/blob/master/docs/git_auto_deploy.md
+<a href="https://github.com/yuniyiqi23/Blog/blob/master/docs/git_auto_deploy.md">Git自动化部署</a>
 2. 反向代理（Nginx）<br>
 3. 守护进程（PM2）<br>
 ```node
