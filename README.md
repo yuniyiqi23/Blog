@@ -51,13 +51,13 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 3. 用ESLint检查代码质量<br>
 监测引用错误和未定义变量等<br>
 参考资料：<br>
-<a href="https://www.jianshu.com/p/ad1e46faaea2">ESLint入门教程</a>
-<a href="http://eslint.cn/docs/rules/">ESLint官网</a>
+<a href="https://www.jianshu.com/p/ad1e46faaea2">ESLint入门教程</a><br>
+<a href="http://eslint.cn/docs/rules/">ESLint官网</a><br>
 4. -trace-sync-io 标识同步代码<br>
 
 ## 网站部署<br>
 1. 自动化部署说明<br>
-<a href="https://github.com/yuniyiqi23/Blog/blob/master/docs/git_auto_deploy.md">Git自动化部署</a>
+<a href="https://github.com/yuniyiqi23/Blog/blob/master/docs/git_auto_deploy.md">Git自动化部署</a><br>
 2. 反向代理（Nginx）<br>
 3. 守护进程（PM2）<br>
 ```node
@@ -115,7 +115,7 @@ const helmet = require('helmet');
 const app = express();
 app.use(helmet());
 ```
-网站地址：<a href="http://cyh.herokuapp.com/cyh">安全性测试网站</a>
+网站地址：<a href="http://cyh.herokuapp.com/cyh">安全性测试网站</a><br>
 效果图如下：<br>
 ![](http://47.75.8.64/herokuapp.png)<br>
 
