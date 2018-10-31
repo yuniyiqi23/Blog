@@ -46,13 +46,13 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 1. 使用缓存技术<br>
 使用缓存服务器，如Nginx来提升访问速度<br>
 参考资料：<br>
-http://www.expressjs.com.cn/advanced/best-practice-performance.html#use-a-load-balancer<br>
+<a href="http://www.expressjs.com.cn/advanced/best-practice-performance.html#use-a-load-balancer">Express最佳性能实践</a>
 2. 用menwatch等工具检查memory<br>
 3. 用ESLint检查代码质量<br>
 监测引用错误和未定义变量等<br>
 参考资料：<br>
-https://www.jianshu.com/p/ad1e46faaea2<br>
-http://eslint.cn/docs/rules/<br>
+<a href="https://www.jianshu.com/p/ad1e46faaea2">ESLint入门教程</a>
+<a href="http://eslint.cn/docs/rules/">ESLint官网</a>
 4. -trace-sync-io 标识同步代码<br>
 
 ## 网站部署<br>
@@ -90,7 +90,8 @@ module.exports = {
 如下图所示：<br>
 ![](http://47.75.8.64/pm2_list.png)<br>
 参考资料：<br>
-http://pm2.keymetrics.io/<br>
+<a href="http://pm2.keymetrics.io/">PM2官网</a>
+
 4. 设置NODE_ENV为Production<br>
    可以让应用有将近3倍速度提升<br>
    如下图所示：<br>
@@ -114,7 +115,7 @@ const helmet = require('helmet');
 const app = express();
 app.use(helmet());
 ```
-测试网站安全性：http://cyh.herokuapp.com/cyh<br>
+网站地址：<a href="http://cyh.herokuapp.com/cyh">安全性测试网站</a>
 效果图如下：<br>
 ![](http://47.75.8.64/herokuapp.png)<br>
 
