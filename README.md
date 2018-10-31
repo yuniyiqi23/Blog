@@ -29,29 +29,29 @@ router.post('/create', checkLogin, function (req, res, next) {
 ```
 2. MongoDB ObjectId的理解<br>
 - ObjectId是MongoDB数据库自动生成的id标识，里面带有时间戳（可以提取出来转化为相应的时间）
-- 在查询过程中对应数据库自动生成的ObjectId可以直接用string字符串查找，如果是自己创建的ObjectId则需要转化成ObjectId类型才能匹配查找
+- 在查询过程中对应数据库自动生成的ObjectId可以直接用string字符串查找，如果是自己创建的ObjectId则需要转化成ObjectId类型才能匹配查找<br>
 3. 数据库设计（category、tag）<br>
 - 博文的分类可以每一个用户特殊的分类列表也可以做成公用列表，两者相结合也可以（根据自身的需求来制定）
 - 使用的数据库是MongoDB，标签可以作为博文的一个字段
 4. Promise的理解<br>
-Promise是异步调用函数，回调方法会在所有同步代码执行完毕之后再执行
+Promise是异步调用函数，回调方法会在所有同步代码执行完毕之后再执行<br>
 5. 项目经验<br>
 - res.render和res.redirect的区别<br>
 6. 搜索功能<br>
 使用like关键字去匹配搜索效率比较低，可以使用全文搜索功能，提升搜索效率（用空间换时间）<br>
-- 全文搜索
+- 全文搜索<br>
 db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{title:1,content:2}})<br>
 
 ## 应用健壮性说明<br>
 1. 使用缓存技术<br>
 使用缓存服务器，如Nginx来提升访问速度<br>
-参考资料：<br>
+参考资料：
 <a href="http://www.expressjs.com.cn/advanced/best-practice-performance.html#use-a-load-balancer">Express最佳性能实践</a>
 2. 用menwatch等工具检查memory<br>
 3. 用ESLint检查代码质量<br>
 监测引用错误和未定义变量等<br>
-参考资料：<br>
-<a href="https://www.jianshu.com/p/ad1e46faaea2">ESLint入门教程</a><br>
+参考资料：
+<a href="https://www.jianshu.com/p/ad1e46faaea2">ESLint入门教程</a>、
 <a href="http://eslint.cn/docs/rules/">ESLint官网</a><br>
 4. -trace-sync-io 标识同步代码<br>
 
@@ -89,8 +89,7 @@ module.exports = {
 如果在多核CPU服务器上使用pm2 list可以看到多个应用实例<br>
 如下图所示：<br>
 ![](http://47.75.8.64/pm2_list.png)<br>
-参考资料：<br>
-<a href="http://pm2.keymetrics.io/">PM2官网</a>
+参考资料：<a href="http://pm2.keymetrics.io/">PM2官网</a>
 
 4. 设置NODE_ENV为Production<br>
    可以让应用有将近3倍速度提升<br>
