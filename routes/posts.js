@@ -14,6 +14,7 @@ router.get('/', function (req, res, next) {
 	// console.log('Debug: ' + namespace.get('tid'));
     let authorId = req.query.author;
     let page = req.query.page || 1;
+    // console.log('Debug: ' + namespace.get('tid'));
 
     Promise.all([
         PostModel.getPostsCount({ author: authorId }),
@@ -22,6 +23,7 @@ router.get('/', function (req, res, next) {
         CategoryModel.getCategoryByAuthorId(authorId)
     ])
         .then(function (result) {
+            // console.log('Debug: ' + namespace.get('tid') + 'ansy result');
             if (result[1].length >= 0) {
                 let categoryList = null;
                 if (result[2]) {
