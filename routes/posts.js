@@ -142,7 +142,7 @@ router.get('/create', checkLogin, function (req, res, next) {
 
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
-    console.log('Debug: ' + namespace.get('tid'));
+    // console.log('Debug: ' + namespace.get('tid'));
     const postId = req.params.postId;
 
     Promise.all([
@@ -154,7 +154,7 @@ router.get('/:postId', function (req, res, next) {
         PostModel.incPv(postId),
     ])
         .then(function (result) {
-            console.log('Debug: ' + namespace.get('tid'));
+            // console.log('Debug: ' + namespace.get('tid'));
             const post = result[0];
             const comments = result[1];
             if (!post) {
