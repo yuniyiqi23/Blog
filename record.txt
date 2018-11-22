@@ -4,11 +4,13 @@
 3. 删除分类需要用到事务
 
 二、 项目迭代计划
-
+callback、Promise、Generator
+完善Readme编写
+阿里云硬件支撑多少的并发量-->深入研究
+用户登录日志
 Nginx日志
 错误日志发送到开发人员的邮箱
 内存泄漏处理方案
-异步输出日志（forgot console.log）
 
 1. Master，Develop分支
 2.Radis
@@ -16,7 +18,7 @@ Nginx日志
 https://zhuanlan.zhihu.com/p/24308524
 5. Promise
 https://zhuanlan.zhihu.com/p/25178630
-6. 分析代码（压力测试）没有达到最终的成果
+
 
 问题记录：
 node --prof-process output empty

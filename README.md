@@ -1,4 +1,5 @@
 # Blog开发说明
+## 知识梳理<br>
 1. Express中next的理解<br>
 在Express中注册多个中间件，使用next调用后面的中间件。好比链表一样，往下调用。<br>
 在代码中也会有相同的效果，如下所示：<br>
@@ -33,14 +34,16 @@ router.post('/create', checkLogin, function (req, res, next) {
 3. 数据库设计（category、tag）<br>
 - 博文的分类可以每一个用户特殊的分类列表也可以做成公用列表，两者相结合也可以（根据自身的需求来制定）
 - 使用的数据库是MongoDB，标签可以作为博文的一个字段
-4. Promise的理解<br>
-Promise是异步调用函数，回调方法会在所有同步代码执行完毕之后再执行<br>
+4. callback、Promise的理解<br>
+- callback回调函数就是把函数的引用传递给另一个函数，在JS中可以把函数看成对象，这样容易理解<br>
+- Promise是异步调用函数，回调方法会在所有同步代码执行完毕之后再执行<br>
 5. 项目经验<br>
 - res.render和res.redirect的区别<br>
 6. 搜索功能<br>
 使用like关键字去匹配搜索效率比较低，可以使用全文搜索功能，提升搜索效率（用空间换时间）<br>
 - 全文搜索<br>
 db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{title:1,content:2}})<br>
+
 
 ## 应用健壮性说明<br>
 1. 使用缓存技术<br>
