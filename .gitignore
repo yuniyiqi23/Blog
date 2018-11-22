@@ -2,7 +2,6 @@ logs/*
 node_modules
 # ignore all logs
 *.log
-public/*
-!public/js/*
+public/images/*
 test/*
 .vscode/*
