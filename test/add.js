@@ -1,20 +1,14 @@
-var createNamespace = require('continuation-local-storage').createNamespace;
-var session = createNamespace('my session'); 
+function* foo(obj) {
+  let keys = Reflect.ownKeys(obj);
 
-router.get('/:id', (req, res, next) => {
-	session.set('transactionId', 'some unique GUID');
-	someService.getById(req.params.id);
-	logger.info('Starting now to get something by Id');
-})
-//Now any other service or components can have access to the contextual, per-request, data
-class someService {
-	getById(id) {
-		logger.info('Starting now to get something by Id');//other logic comes here
-	}
+  for(key of keys){
+	  yield [key, obj[key]];
+  }
 }
-//Logger can now append transaction-id to each entry, so that entries from the same request will have the same value
-class logger {
-	info(message) {
-		console.log(`message ${session.get('transactionId')}`);
-	}
+
+let adam = { first: 'ye', last: 'adam' };
+adam[Symbol.iterator] = foo
+
+for([key, value] of foo(adam)){
+	console.log(key + ' : ' + value)
 }

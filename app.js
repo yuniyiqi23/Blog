@@ -203,8 +203,5 @@ module.exports = app;
 //Debug
 //node --inspect-brk ./bin/www
 
-//Run
-//node ./bin/www --inspect-brk ./bin/www
-
 //autoRun
 //nodemon --inspect-brk ./bin/www 
