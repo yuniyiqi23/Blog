@@ -51,11 +51,11 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 1. 使用缓存技术（静态文件服务器）<br>
 使用缓存服务器，如Nginx来提升访问速度<br>
 以下是Apache和Nginx作为Http服务器的测试对比<br>
-![](http://47.75.8.64/docs/images/nginx_1.png)<br>
+![](http://47.75.8.64/docs/images/nginx_1.jpg)<br>
 Apache、Nginx 与 Node 的对比：请求负载的性能（每 100 位并发用户）<br>
-![](http://47.75.8.64/docs/images/nginx_2.png)<br>
+![](http://47.75.8.64/docs/images/nginx_2.jpg)<br>
 Apache、Nginx 与 Node 的对比：用户负载能力（每 1000 个请求）<br>
-![](http://47.75.8.64/docs/images/nginx_3.png)<br>
+![](http://47.75.8.64/docs/images/nginx_3.jpg)<br>
 Apache、Nginx 与 Node 的对比：完成 1000 位用户并发的 100000 个请求耗时<br>
 综合考虑：Nginx比Apache更适合做静态文件服务器
 参考资料：
