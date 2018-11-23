@@ -34,20 +34,30 @@ router.post('/create', checkLogin, function (req, res, next) {
 3. 数据库设计（category、tag）<br>
 - 博文的分类可以每一个用户特殊的分类列表也可以做成公用列表，两者相结合也可以（根据自身的需求来制定）
 - 使用的数据库是MongoDB，标签可以作为博文的一个字段
-4. callback、Promise的理解<br>
+4. callback、Event、Promise的理解<br>
 - callback回调函数就是把函数的引用传递给另一个函数，在JS中可以把函数看成对象，这样容易理解<br>
+- event相对于callback更灵活，属于发布和订阅的模式，可以有多个订阅，适合于公开的场景（如按钮的点击），callback更适合于私有的场景（如内部函数的调用）<br>
 - Promise是异步调用函数，回调方法会在所有同步代码执行完毕之后再执行<br>
 5. 项目经验<br>
 - res.render和res.redirect的区别<br>
+res.render可以传递参数；res.redirect不能传递参数<br>
 6. 搜索功能<br>
-使用like关键字去匹配搜索效率比较低，可以使用全文搜索功能，提升搜索效率（用空间换时间）<br>
+使用全文搜索提升效率（空间换时间）建立索引表快速查找目标；使用like关键字去匹配搜索效率较低<br>
 - 全文搜索<br>
 db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{title:1,content:2}})<br>
 
 
 ## 应用健壮性说明<br>
-1. 使用缓存技术<br>
+1. 使用缓存技术（静态文件服务器）<br>
 使用缓存服务器，如Nginx来提升访问速度<br>
+以下是Apache和Nginx作为Http服务器的测试对比<br>
+![](http://47.75.8.64/docs/images/nginx_1.png)<br>
+Apache、Nginx 与 Node 的对比：请求负载的性能（每 100 位并发用户）<br>
+![](http://47.75.8.64/docs/images/nginx_2.png)<br>
+Apache、Nginx 与 Node 的对比：用户负载能力（每 1000 个请求）<br>
+![](http://47.75.8.64/docs/images/nginx_3.png)<br>
+Apache、Nginx 与 Node 的对比：完成 1000 位用户并发的 100000 个请求耗时<br>
+综合考虑：Nginx比Apache更适合做静态文件服务器
 参考资料：
 <a href="http://www.expressjs.com.cn/advanced/best-practice-performance.html#use-a-load-balancer">Express最佳性能实践</a>
 2. 用menwatch等工具检查memory<br>
@@ -85,13 +95,13 @@ module.exports = {
 		env_production: {
 			"PORT": 3001,
 			"NODE_ENV": "production"
-		}
+		}	
 	}]
 }
 ```
 如果在多核CPU服务器上使用pm2 list可以看到多个应用实例<br>
 如下图所示：<br>
-![](http://47.75.8.64/pm2_list.png)<br>
+![](http://47.75.8.64/docs/images/pm2_list.png)<br>
 参考资料：<a href="http://pm2.keymetrics.io/">PM2官网</a>
 
 4. 设置NODE_ENV为Production<br>
@@ -119,7 +129,7 @@ app.use(helmet());
 ```
 网站地址：<a href="http://cyh.herokuapp.com/cyh">安全性测试网站</a><br>
 效果图如下：<br>
-![](http://47.75.8.64/herokuapp.png)<br>
+![](http://47.75.8.64/docs/images/herokuapp.png)<br>
 
 2. 暴力破解保护（通过限制用户在一定时间内登录次数来实现）
 通过使用中间件express-rate-limit来实现<br>
@@ -135,13 +145,15 @@ app.use(limiter);
 ```
 
 3. 使用nsp或是requireSafe检测第三方库的安全性<br>
+个人理解：发布中间件的时候会把代码提交给检测方测试，通过检测的版本记录到相应的数据库里，还会做一些签名。这样在验证中间件的时候只要提供相应的版本和签名就可以检测其安全性了。<br>
 ```node
 $ npm i nsp -g
 $ nsp check --reporter summary
 ```
 效果图如下：<br>
-![](http://47.75.8.64/nsp.png)<br>
+![](http://47.75.8.64/docs/images/nsp.png)<br>
 
 ## 问题处理<br>
 1. 应用内存泄漏<br>
 Heapdump、Easy-monitor等工具<br>
+Easy-monitor使用截图<br>
