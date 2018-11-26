@@ -51,11 +51,11 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 1. 使用缓存技术（静态文件服务器）<br>
 使用缓存服务器，如Nginx来提升访问速度<br>
 以下是Apache和Nginx作为Http服务器的测试对比<br>
-![](http://47.75.8.64/readme_images/images/nginx_1.jpg)<br>
+![](http://47.75.8.64/readme_images/nginx_1.jpg)<br>
 Apache、Nginx 与 Node 的对比：请求负载的性能（每 100 位并发用户）<br>
-![](http://47.75.8.64/readme_images/images/nginx_2.jpg)<br>
+![](http://47.75.8.64/readme_images/nginx_2.jpg)<br>
 Apache、Nginx 与 Node 的对比：用户负载能力（每 1000 个请求）<br>
-![](http://47.75.8.64/readme_images/images/nginx_3.jpg)<br>
+![](http://47.75.8.64/readme_images/nginx_3.jpg)<br>
 Apache、Nginx 与 Node 的对比：完成 1000 位用户并发的 100000 个请求耗时<br>
 综合考虑：Nginx比Apache更适合做静态文件服务器
 参考资料：
@@ -101,7 +101,7 @@ module.exports = {
 ```
 如果在多核CPU服务器上使用pm2 list可以看到多个应用实例<br>
 如下图所示：<br>
-![](http://47.75.8.64/readme_images/images/pm2_list.png)<br>
+![](http://47.75.8.64/readme_images/pm2_list.png)<br>
 参考资料：<a href="http://pm2.keymetrics.io/">PM2官网</a>
 
 4. 设置NODE_ENV为Production<br>
@@ -129,7 +129,7 @@ app.use(helmet());
 ```
 网站地址：<a href="http://cyh.herokuapp.com/cyh">安全性测试网站</a><br>
 效果图如下：<br>
-![](http://47.75.8.64/readme_images/images/herokuapp.png)<br>
+![](http://47.75.8.64/readme_images/herokuapp.png)<br>
 
 2. 暴力破解保护（通过限制用户在一定时间内登录次数来实现）
 通过使用中间件express-rate-limit来实现<br>
@@ -151,7 +151,7 @@ $ npm i nsp -g
 $ nsp check --reporter summary
 ```
 效果图如下：<br>
-![](http://47.75.8.64/readme_images/images/nsp.png)<br>
+![](http://47.75.8.64/readme_images/nsp.png)<br>
 
 ## 问题处理<br>
 1. 应用内存泄漏<br>
