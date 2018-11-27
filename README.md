@@ -83,14 +83,13 @@ module.exports = {
 }
 ```
 **Nodejs是单线程应用，可以部署cluster模式充分发挥多CPU的效能**
->如果在多核CPU服务器上使用pm2 list可以看到多个应用实例
+>如果在多核CPU服务器上使用pm2 list可以看到多个应用实例<br>
 如下图所示：<br>
 ![](http://47.75.8.64/readme_images/pm2_list.png)<br>
 参考资料：<a href="http://pm2.keymetrics.io/">PM2官网</a>
 
 #### 4. 设置NODE_ENV为Production<br>
-   可以让应用有将近3倍速度提升<br>
-   如下图所示：<br>
+   可以让应用有将近3倍速度提升，如下图所示：<br>
 ![](https://goldbergyoni.com/wp-content/uploads/2017/03/node_env-performance.png)<br>
 
 ## 网站安全性<br>
@@ -129,7 +128,7 @@ app.use(limiter);
 ```
 
 #### 3. 使用nsp或是requireSafe检测第三方库的安全性<br>
-个人理解：发布中间件的时候会把代码提交给检测方测试，通过检测的版本记录到相应的数据库里，还会做一些签名。这样在验证中间件的时候只要提供相应的版本和签名就可以检测其安全性了。<br>
+**个人理解**：发布中间件的时候会把代码提交给检测方测试，通过检测的版本记录到相应的数据库里，还会做一些签名。这样在验证中间件的时候只要提供相应的版本和签名就可以检测其安全性了。<br>
 ```node
 $ npm i nsp -g
 $ nsp check --reporter summary
