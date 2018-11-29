@@ -6,6 +6,7 @@ function Promise(fn) {
     callbacks = [];
 
   this.then = function (onFulfilled) {
+    console.log(1);
     return new Promise(function (resolve1) {
       handle({
         onFulfilled: onFulfilled || null,
@@ -26,11 +27,14 @@ function Promise(fn) {
     }
 
     var ret = callback.onFulfilled(value);
+    console.log(3);
     callback.resolve(ret);
+    console.log(4);
   }
 
 
   function resolve(newValue) {
+    console.log(0);
     if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
       var then = newValue.then;
       if (typeof then === 'function') {
@@ -42,6 +46,7 @@ function Promise(fn) {
     value = newValue;
     setTimeout(function () {
       callbacks.forEach(function (callback) {
+        console.log(2);
         handle(callback);
       });
     }, 0);
@@ -53,10 +58,10 @@ function Promise(fn) {
 // 例4
 getUserId()
   .then(getUserJobById)
-  .then(function (job) {
-    // 对job的处理
-    console.log(job);
-  });
+  // .then(function (job) {
+  //   // 对job的处理
+  //   console.log(job);
+  // });
 
 function getUserId() {
   return new Promise(function (resolve) {
@@ -65,13 +70,10 @@ function getUserId() {
 }
 
 function getUserJobById(id) {
-  return new Promise(function (resolve) {
+  return new Promise(function (resolve123) {
     //异步请求
     http.get({ host: "www.baidu.com" }, function (results) {
-      resolve(results);
+      resolve123(results);
     });
-    // http.get(baseUrl + id, function (job) {
-    //   resolve(job);
-    // });
   });
 }

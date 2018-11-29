@@ -34,5 +34,20 @@ function getUserId() {
 
 getUserId().then(function(res2) {
   //一些处理
-  console.log(res2);
+  // console.log(res2);
 });
+
+function a(fn){
+  function b(value){
+    console.log(value);
+  }
+
+  fn(b);
+
+}
+
+function c(para){
+  para(123);
+}
+
+a(c);
