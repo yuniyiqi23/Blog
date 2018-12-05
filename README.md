@@ -25,6 +25,13 @@
 db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{title:1,content:2}})<br>
 ```
 
+#### 7. setTimeout、setimmediate、process.nextTick的区别
+- setTimeout是在一定时间后执行，比如设置在10s后执行，到了10s只是排上了队。如果CPU还在执行其他任务的话，只能等待<br>
+- setimmediate是有空闲了立刻执行。在异步调用上，setimmediate调用会比setTimeout快<br>
+- process.nextTick会在代码执行异步回调之前执行，所以在setimmediate之前执行<br>
+参考资料：<a href="https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/">The Node.js Event Loop, Timers, and process.nextTick()</a>
+
+
 ## 应用健壮性说明<br>
 #### 1. 使用缓存技术（静态文件服务器）<br>
 使用缓存服务器，如Nginx来提升访问速度<br>
