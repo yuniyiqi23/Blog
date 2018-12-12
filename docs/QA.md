@@ -12,5 +12,6 @@
     不是（亲测）
     正在寻找异步输出到控制台的方法
 
-？4. 为什么在异步执行的时候setImmediate一定比setTimeout先执行
-https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/
+4. 为什么在异步执行的时候setImmediate一定比setTimeout先执行
+    异步执行在poll阶段，执行好了进入check阶段（setImmediate在此阶段执行）
+参考：https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/

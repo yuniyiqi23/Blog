@@ -55,6 +55,14 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 <a href="http://eslint.cn/docs/rules/">ESLint官网</a><br>
 
 #### 4. -trace-sync-io 标识同步代码<br>
+实践举例：<br>
+环境：nodejs 10.2.1；express 4.15.5<br>
+根据输出结果google得知res.render方法是同步方法，在Express5.0可能会调整底层逻辑。目前可以设置NODE_ENV=production或者使用缓存技术（如：Nginx）来提升应用的响应<br>
+
+#### 5. 测试应用性能，设置基准，避免版本之间的性能回归
+参考资料：
+<a href="https://pdfs.semanticscholar.org/301b/45bb8e795f83774c920b942c0dba7e290b53.pdf">Node.js Paradigms and Benchmarks</a>、
+<a href="https://github.com/nodejs/help/issues/1365">Node.js vs C on x86 vs ARM performance tests</a><br>
 
 ## 网站部署<br>
 #### 1. 自动化部署说明<br>
