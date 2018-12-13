@@ -35,3 +35,4 @@ Nginx日志
 
 #12/12
 -trace-sync-io标识同步代码（Nginx）
+Winston异步输出日志

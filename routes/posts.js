@@ -13,10 +13,6 @@ const namespace = require("continuation-local-storage").getNamespace(
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get("/", function(req, res, next) {
-  let map = new Map();
-  let key = new Array(50 * 1024 * 1024);
-  map.set(key, 1);
-
   // console.log('Debug: ' + namespace.get('tid'));
   let authorId = req.query.author;
   let page = req.query.page || 1;
