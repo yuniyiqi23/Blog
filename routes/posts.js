@@ -14,8 +14,8 @@ const winston = require("../lib/winston")
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get("/", function(req, res, next) {
-  winston.error('Test Winston log to console!!!');
-  
+  winston.info('Test Winston log to console!!!');
+
   // console.log('Debug: ' + namespace.get('tid'));
   let authorId = req.query.author;
   let page = req.query.page || 1;
