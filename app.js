@@ -5,7 +5,7 @@ const path = require('path');
 //加载图标
 const favicon = require('serve-favicon');
 //在控制台中，显示req请求的信息
-const logger = require('morgan');
+const morgan = require('morgan');
 //加载cookie模块，用于获取web浏览器发送的cookie中的内容
 const cookieParser = require('cookie-parser');
 //解析客户端请求的body中的内容,内部使用JSON编码处理,url编码处理以及对于文件的上传处理
@@ -21,7 +21,7 @@ const flash = require('connect-flash');
 const config = require('config-lite')(__dirname);
 const routes = require('./routes');
 const pkg = require('./package');
-const winston = require('winston');
+var winston = require('winston');
 const expressWinston = require('express-winston');
 //Assign TransactionId
 const cls = require('continuation-local-storage');
@@ -32,11 +32,7 @@ require('newrelic');
 
 const app = express();
 app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
-
-//Test Sending email here
-// const mail = require('./utils/nodeMailerWithTemp');
-// mail.sendActiveUser('yuniyiqi23@gmail.com', 'Adam', "http://localhost:3000/checkCode?name=adam&code=");
-
+//set linkTime and requests number
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
 	max: 100 // limit each IP to 100 requests per windowMs
@@ -63,7 +59,7 @@ app.use(limiter);
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //加载日志中间件，定义日志和输出级别
-app.use(logger('dev'));
+app.use(morgan('dev'));
 // 加载解析json的中间件,接受json请求
 app.use(bodyParser.json());
 // 加载解析urlencoded请求体的中间件
@@ -113,44 +109,44 @@ app.use(function (req, res, next) {
 });
 
 // create a transaction id for each request
-app.use(function(req, res, next) {
-    const namespace = cls.getNamespace('com.blog');
-    const tid = uuid.v4();
+app.use(function (req, res, next) {
+	const namespace = cls.getNamespace('com.blog');
+	const tid = uuid.v4();
 
-    // wrap the events from request and response
-    namespace.bindEmitter(req);
-    namespace.bindEmitter(res);
+	// wrap the events from request and response
+	namespace.bindEmitter(req);
+	namespace.bindEmitter(res);
 
-    // run following middleware in the scope of
-    // the namespace we created
-    namespace.run(function() {
+	// run following middleware in the scope of
+	// the namespace we created
+	namespace.run(function () {
 
-        // set tid on the namespace, makes it
-        // available for all continuations
-        namespace.set('tid', tid);
-        next();
-    });
+		// set tid on the namespace, makes it
+		// available for all continuations
+		namespace.set('tid', tid);
+		next();
+	});
 });
 
 // 正常请求的日志
-app.use(expressWinston.logger({
-	transports: [
-		new (winston.transports.Console)({
-			level: 'debug',
-			handleExceptions: true,
-			json: true,
-			colorize: true,
-		}),
-		new winston.transports.File({
-			// filename: 'logs/success.log'
-			filename: path.join(__dirname, 'logs/success.log'),
-			maxsize: 100 * 1024,
-			maxFiles: 10,
-			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
-		})
-	],
-	exitOnError: false, // do not exit on handled exceptions
-}));
+// app.use(expressWinston.logger({
+// 	transports: [
+// 		new (winston.transports.Console)({
+// 			level: 'debug',
+// 			handleExceptions: true,
+// 			json: true,
+// 			colorize: true,
+// 		}),
+// 		new winston.transports.File({
+// 			// filename: 'logs/success.log'
+// 			filename: path.join(__dirname, 'logs/success.log'),
+// 			maxsize: 5242880,//5MB
+// 			maxFiles: 10,
+// 			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
+// 		})
+// 	],
+// 	exitOnError: false, // do not exit on handled exceptions
+// }));
 
 // Add the datadog-middleware before your router
 app.use(connect_datadog);
@@ -158,23 +154,23 @@ app.use(connect_datadog);
 routes(app);
 
 // 错误请求的日志
-app.use(expressWinston.errorLogger({
-	transports: [
-		new winston.transports.Console({
-			level: 'debug',
-			handleExceptions: true,
-			json: true,
-			colorize: true,
-		}),
-		new winston.transports.File({
-			filename: path.join(__dirname, 'logs/error.log'),
-			maxsize: 100 * 1024,
-			maxFiles: 10,
-			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
-		})
-	],
-	exitOnError: false, // do not exit on handled exceptions
-}));
+// app.use(expressWinston.errorLogger({
+// 	transports: [
+// 		new winston.transports.Console({
+// 			level: 'debug',
+// 			handleExceptions: true,
+// 			json: true,
+// 			colorize: true,
+// 		}),
+// 		new winston.transports.File({
+// 			filename: path.join(__dirname, 'logs/error.log'),
+// 			maxsize: 5242880,//5MB
+// 			maxFiles: 10,
+// 			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
+// 		})
+// 	],
+// 	exitOnError: false, // do not exit on handled exceptions
+// }));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
