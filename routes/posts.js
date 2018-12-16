@@ -7,16 +7,15 @@ const CommentModel = require("../models/comments");
 const TagModel = require("../models/tags");
 const CategoryModel = require("../models/categories");
 const DataState = require("../middlewares/enum").DataState;
-const namespace = require("continuation-local-storage").getNamespace(
-  "com.blog"
-);
+// const namespace = require("continuation-local-storage").getNamespace(
+//   "com.blog"
+// );
+const winston = require('../lib/winston');
 
 // GET /posts 所有用户或者特定用户的文章页
 router.get("/", function(req, res, next) {
-  let map = new Map();
-  let key = new Array(50 * 1024 * 1024);
-  map.set(key, 1);
-
+  winston.info(req);
+  
   // console.log('Debug: ' + namespace.get('tid'));
   let authorId = req.query.author;
   let page = req.query.page || 1;

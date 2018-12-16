@@ -5,7 +5,7 @@ const path = require('path');
 //加载图标
 const favicon = require('serve-favicon');
 //在控制台中，显示req请求的信息
-const logger = require('morgan');
+const morgan = require('morgan');
 //加载cookie模块，用于获取web浏览器发送的cookie中的内容
 const cookieParser = require('cookie-parser');
 //解析客户端请求的body中的内容,内部使用JSON编码处理,url编码处理以及对于文件的上传处理
@@ -63,7 +63,7 @@ app.use(limiter);
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //加载日志中间件，定义日志和输出级别
-app.use(logger('dev'));
+app.use(morgan('dev'));
 // 加载解析json的中间件,接受json请求
 app.use(bodyParser.json());
 // 加载解析urlencoded请求体的中间件
@@ -135,12 +135,12 @@ app.use(function(req, res, next) {
 // 正常请求的日志
 app.use(expressWinston.logger({
 	transports: [
-		new (winston.transports.Console)({
-			level: 'debug',
-			handleExceptions: true,
-			json: true,
-			colorize: true,
-		}),
+		// new (winston.transports.Console)({
+		// 	level: 'debug',
+		// 	handleExceptions: true,
+		// 	json: true,
+		// 	colorize: true,
+		// }),
 		new winston.transports.File({
 			// filename: 'logs/success.log'
 			filename: path.join(__dirname, 'logs/success.log'),
@@ -160,12 +160,12 @@ routes(app);
 // 错误请求的日志
 app.use(expressWinston.errorLogger({
 	transports: [
-		new winston.transports.Console({
-			level: 'debug',
-			handleExceptions: true,
-			json: true,
-			colorize: true,
-		}),
+		// new winston.transports.Console({
+		// 	level: 'debug',
+		// 	handleExceptions: true,
+		// 	json: true,
+		// 	colorize: true,
+		// }),
 		new winston.transports.File({
 			filename: path.join(__dirname, 'logs/error.log'),
 			maxsize: 100 * 1024,
