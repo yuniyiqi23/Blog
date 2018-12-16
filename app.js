@@ -21,7 +21,7 @@ const flash = require('connect-flash');
 const config = require('config-lite')(__dirname);
 const routes = require('./routes');
 const pkg = require('./package');
-const winston = require('winston');
+var winston = require('winston');
 const expressWinston = require('express-winston');
 //Assign TransactionId
 const cls = require('continuation-local-storage');
@@ -32,11 +32,7 @@ require('newrelic');
 
 const app = express();
 app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
-
-//Test Sending email here
-// const mail = require('./utils/nodeMailerWithTemp');
-// mail.sendActiveUser('yuniyiqi23@gmail.com', 'Adam', "http://localhost:3000/checkCode?name=adam&code=");
-
+//set linkTime and requests number
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
 	max: 100 // limit each IP to 100 requests per windowMs
@@ -113,23 +109,23 @@ app.use(function (req, res, next) {
 });
 
 // create a transaction id for each request
-app.use(function(req, res, next) {
-    const namespace = cls.getNamespace('com.blog');
-    const tid = uuid.v4();
+app.use(function (req, res, next) {
+	const namespace = cls.getNamespace('com.blog');
+	const tid = uuid.v4();
 
-    // wrap the events from request and response
-    namespace.bindEmitter(req);
-    namespace.bindEmitter(res);
+	// wrap the events from request and response
+	namespace.bindEmitter(req);
+	namespace.bindEmitter(res);
 
-    // run following middleware in the scope of
-    // the namespace we created
-    namespace.run(function() {
+	// run following middleware in the scope of
+	// the namespace we created
+	namespace.run(function () {
 
-        // set tid on the namespace, makes it
-        // available for all continuations
-        namespace.set('tid', tid);
-        next();
-    });
+		// set tid on the namespace, makes it
+		// available for all continuations
+		namespace.set('tid', tid);
+		next();
+	});
 });
 
 // 正常请求的日志
@@ -144,7 +140,7 @@ app.use(expressWinston.logger({
 		new winston.transports.File({
 			// filename: 'logs/success.log'
 			filename: path.join(__dirname, 'logs/success.log'),
-			maxsize: 100 * 1024,
+			maxsize: 5242880,//5MB
 			maxFiles: 10,
 			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
 		})
@@ -168,7 +164,7 @@ app.use(expressWinston.errorLogger({
 		// }),
 		new winston.transports.File({
 			filename: path.join(__dirname, 'logs/error.log'),
-			maxsize: 100 * 1024,
+			maxsize: 5242880,//5MB
 			maxFiles: 10,
 			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
 		})

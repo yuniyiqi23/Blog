@@ -56,7 +56,7 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 
 #### 4. -trace-sync-io 标识同步代码<br>
 实践举例：<br>
-环境：nodejs 10.2.1；express 4.15.5<br>
+**环境：nodejs 10.2.1；express 4.15.5**<br>
 根据输出结果google得知res.render方法是同步方法，在Express5.0可能会调整底层逻辑。目前可以设置NODE_ENV=production或者使用缓存技术（如：Nginx）来提升应用的响应<br>
 
 #### 5. 测试应用性能，设置基准，避免版本之间的性能回归
@@ -66,7 +66,7 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 
 ## 网站部署<br>
 #### 1. 自动化部署说明<br>
-参考资料：<a href="https://github.com/yuniyiqi23/Blog/blob/master/docs/git_auto_deploy.md">Git自动化部署</a><br>
+参考资料：<a href="https://github.com/yuniyiqi23/Blog/blob/master/docs/git_auto_deploy.md">Git自动化部署(亲自部署总结的经验)</a><br>
 
 #### 2. 反向代理（Nginx）<br>
 
@@ -98,14 +98,18 @@ module.exports = {
 }
 ```
 **Nodejs是单线程应用，可以部署cluster模式充分发挥多CPU的效能**
->如果在多核CPU服务器上使用pm2 list可以看到多个应用实例<br>
+如果在多核CPU服务器上使用pm2 list可以看到多个应用实例<br>
 如下图所示：<br>
 ![](http://47.75.8.64/readme_images/pm2_list.png)<br>
 参考资料：<a href="http://pm2.keymetrics.io/">PM2官网</a>
 
 #### 4. 设置NODE_ENV为Production<br>
-   可以让应用有将近3倍速度提升，如下图所示：<br>
+可以让应用有将近3倍速度提升，如下图所示：<br>
 ![](https://goldbergyoni.com/wp-content/uploads/2017/03/node_env-performance.png)<br>
+
+#### 5. 日志使用的理解<br>
+console.log输出到控制台属于同步输出，在开发Nodejs应用程序时不建议使用。<br>
+可以使用Winston中间件输出日志<br>
 
 ## 网站安全性<br>
 #### 1. HTTP头安全性设置
