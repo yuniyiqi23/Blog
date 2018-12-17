@@ -3,5 +3,5 @@ node_modules
 # ignore all logs
 *.log
 # public/images/*
-# test/*
+test/*
 .vscode/*
