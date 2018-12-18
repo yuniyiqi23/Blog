@@ -201,3 +201,6 @@ module.exports = app;
 
 //autoRun
 //nodemon --inspect-brk ./bin/www 
+
+//esay profiling
+//NODE_ENV=production node --prof ./bin/www 

@@ -1,7 +1,7 @@
 
 module.exports = function (app) {
-
-	app.use('/', require('./posts'));
+	//use Get to URL
+	app.get('/', require('./posts'));
 	app.use('/signup', require('./signup'));
 	app.use('/signin', require('./signin'));
 	app.use('/signout', require('./signout'));
