@@ -162,4 +162,4 @@ $ nsp check --reporter summary
 ## 问题处理<br>
 #### 1. 应用内存泄漏<br>
 Heapdump、Easy-monitor等工具<br>
-Easy-monitor使用截图<br>
+![](http://47.75.8.64/readme_images/Easy-Monitor.png)<br>
