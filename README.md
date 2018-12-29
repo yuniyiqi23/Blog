@@ -61,7 +61,7 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 
 #### 5. 测试应用性能，设置基准，避免版本之间的性能回归<br>
 根据当前应用版本测试其性能，可参考如下《Easy profiling for Node.js Applications》分析具体代码，优化应用。
-记录发布版本性能测试记录（如：某某服务的每秒处理请求数）作为基准，为下次优化提供参考依据。
+记录发布版本性能测试记录（如：某某服务的每秒处理请求数）作为基准，为下次版本发布提供参考依据。<br>
 参考资料：
 <a href="https://nodejs.org/en/docs/guides/simple-profiling/">Easy profiling for Node.js Applications</a><br>
 <a href="https://pdfs.semanticscholar.org/301b/45bb8e795f83774c920b942c0dba7e290b53.pdf">Node.js Paradigms and Benchmarks</a>、
@@ -159,7 +159,16 @@ $ nsp check --reporter summary
 效果图如下：<br>
 ![](http://47.75.8.64/readme_images/nsp.png)<br>
 
+
+## 网站性能优化<br>
+1. 使用ApacheBench进行压力测试，分析测试结果<br>
+参考资料：<a href="https://blog.getpolymorph.com/7-tips-for-heavy-load-testing-with-apache-bench-b1127916b7b6">7 Tips for Heavy Load Testing with Apache Bench</a><br>
+
+2. 压力测试同时可以使用Easy-monitor等工具检测单个功能或是接口耗时的函数<br>
+![](http://47.75.8.64/readme_images/Easy-Monitor.png)<br>
+
+3. 对耗时函数进行优化，重新测试，直到符合预期<br>
+
 ## 问题处理<br>
 #### 1. 应用内存泄漏<br>
 Heapdump、Easy-monitor等工具<br>
-![](http://47.75.8.64/readme_images/Easy-Monitor.png)<br>
