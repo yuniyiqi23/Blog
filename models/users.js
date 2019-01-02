@@ -16,6 +16,12 @@ module.exports = {
 	activeUser: function (name, code, date) {
 		return User
 			.findOneAndUpdate({ name: name, code: code, date: {$gt: date}}, { isLive: true });
+	},
+
+	//更新登录时间
+	updateLoginTime: function(name, time){
+		return User
+			.findOneAndUpdate({ name: name, isLive: true}, { loginTime: time });
 	}
 
 };

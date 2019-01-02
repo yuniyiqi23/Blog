@@ -4,13 +4,13 @@
 3. 删除分类需要用到事务
 4. 代码分支Master、Develop
 5. Radis
+6. Readme编写(参考资料：https://www.diycode.cc/topics/498)
 
 二、 项目迭代计划
-Post并发，应用的并发测试
+??Post并发，应用的并发测试
 **阿里云硬件支撑多少的并发量-->深入研究**
 benchmark作为应用基准，有更新之后对比基准进行观察
-完善Readme编写(readme主要部分)https://www.diycode.cc/topics/498
-用户登录日志
+
 错误日志发送到开发人员的邮箱
 内存泄漏处理方案
 权限模块（管理员）
@@ -18,8 +18,12 @@ MongoDB高级应用
 文章+图片
 关注+文章提醒
 
+三、疑问
+1. 按照dedug和release进行编译程序（方便调试）
+2. simple-profiling生成文件分析
 
-三、解决的问题：
+四、解决的问题：
+##2018
 #long long ago
 call、bind、apply的区别
 callback、Promise、Generator
@@ -31,4 +35,9 @@ Winston异步输出日志
 
 #12/17
 ApacheBench压力测试（并发量）
-分析Nodejs代码https://nodejs.org/en/docs/guides/simple-profiling/
+分析Nodejs代码
+https://nodejs.org/en/docs/guides/simple-profiling/
+
+##2019
+#1/2
+增加用户登录时间记录
