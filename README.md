@@ -62,9 +62,9 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 #### 5. 测试应用性能，设置基准，避免版本之间的性能回归<br>
 根据当前应用版本测试其性能，可参考如下《Easy profiling for Node.js Applications》分析具体代码，优化应用。
 记录发布版本性能测试记录（如：某某服务的每秒处理请求数）作为基准，为下次版本发布提供参考依据。<br>
-参考资料：
+参考资料：<br>
 <a href="https://nodejs.org/en/docs/guides/simple-profiling/">Easy profiling for Node.js Applications</a><br>
-<a href="https://pdfs.semanticscholar.org/301b/45bb8e795f83774c920b942c0dba7e290b53.pdf">Node.js Paradigms and Benchmarks</a>、
+<a href="https://pdfs.semanticscholar.org/301b/45bb8e795f83774c920b942c0dba7e290b53.pdf">Node.js Paradigms and Benchmarks</a><br>
 <a href="https://github.com/nodejs/help/issues/1365">Node.js vs C on x86 vs ARM performance tests</a><br>
 
 
