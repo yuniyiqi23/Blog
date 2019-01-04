@@ -20,7 +20,8 @@ MongoDB高级应用
 
 三、疑问
 1. 按照dedug和release进行编译程序（方便调试）
-2. simple-profiling生成文件分析
+2. simple-profiling生成文件分析（processed.txt）
+3. 日志文件以Json方式查看
 
 四、解决的问题：
 ##2018
