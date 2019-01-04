@@ -9,9 +9,9 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:id', (req, res, next) => {
-	const namespace = cls.getNamespace('com.blog');
-	console.log('Debug: ' + namespace.get('tid'));
-	res.send('Test transactionId');
+	// const namespace = cls.getNamespace('com.blog');
+	// console.log('Debug: ' + namespace.get('tid'));
+	res.send('id');
 })
 
 module.exports = router;

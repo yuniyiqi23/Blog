@@ -46,6 +46,7 @@
     "request": "^2.85.0",
     "serve-favicon": "~2.4.5",
     "sha1": "^1.1.1",
+    "should": "^13.2.3",
     "silly-datetime": "^0.1.2",
     "winston": "^2.4.1"
   },
