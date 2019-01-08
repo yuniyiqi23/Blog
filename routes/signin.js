@@ -24,6 +24,7 @@ router.post("/", checkNotLogin, function(req, res, next) {
     }
   } catch (e) {
     // req.flash('error', e.message);
+    // return res.send('请填写用户名！');
     return res.render("signin", { username: name, error: e.message });
   }
 

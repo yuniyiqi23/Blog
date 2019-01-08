@@ -1,18 +1,12 @@
 一、 学习计划
 1. HTTP权威指南（Node、Express其他参考书）
 2. 测试网站并发量
-3. 删除分类需要用到事务
-4. 代码分支Master、Develop
-5. Radis
-6. Readme编写(参考资料：https://www.diycode.cc/topics/498)
+3. Radis
+4. Readme编写(参考资料：https://www.diycode.cc/topics/498)
 
 二、 项目迭代计划
-??Post并发，应用的并发测试
-**阿里云硬件支撑多少的并发量-->深入研究**
-benchmark作为应用基准，有更新之后对比基准进行观察
-
+测试覆盖率
 错误日志发送到开发人员的邮箱
-内存泄漏处理方案
 权限模块（管理员）
 MongoDB高级应用
 文章+图片
@@ -22,6 +16,7 @@ MongoDB高级应用
 1. 按照dedug和release进行编译程序（方便调试）
 2. simple-profiling生成文件分析（processed.txt）
 3. 日志文件以Json方式查看
+4. ab post(用户登录)
 
 四、解决的问题：
 ##2018
