@@ -4,7 +4,8 @@
   "description": "Welcome to the Express",
   "private": true,
   "scripts": {
-    "test": "mocha test",
+    "test": "mocha",
+    "test-with-coverage": "nyc --reporter=html --reporter=text mocha",
     "run": "export NODE_ENV=production&&node ./bin/www",
     "start": "node ./bin/www",
     "lint": "eslint --ignore-path .gitignore . --fix",
@@ -53,6 +54,7 @@
   "devDependencies": {
     "eslint": "^5.7.0",
     "mocha": "^5.1.1",
+    "nyc": "^13.1.0",
     "supertest": "^3.0.0"
   }
 }
