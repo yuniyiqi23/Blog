@@ -24,15 +24,15 @@ const should = require("should");
 //   });
 // });
 
-describe("test sign in", function() {
-  const loginname = "adam" + Math.random(1);
-  const password = "111";
+describe("test signin", function() {
+  const name = "adam05";
+  const password = "111111";
 
-  it.only("should not sign in successful when loginname is empty", function(done) {
+  it("signin fail when name is empty", function(done) {
     request
       .post("/signin")
       .send({
-        loginname: "",
+        name: "",
         password: password
       })
       .end(function(err, res) {
@@ -41,44 +41,55 @@ describe("test sign in", function() {
         done();
       });
   });
-  it("should not sign in successful when loginname is not exist", function(done) {
+  it("signin fail when password is empty", function(done) {
+    request
+    .post("/signin")
+    .send({
+      name: name,
+      password: ""
+    })
+    .end(function(err, res){
+      should.not.exist(err);
+      res.text.should.containEql("请填写密码！");
+      done();
+    });
+  });
+  it("signin fail when name is not exist", function(done) {
     request
       .post("/signin")
       .send({
-        // 之前的测试用例已经注册了用户名为loginname的用户，现在改变一下loginname的值，确保该用户不存在
-        loginname: loginname + "1",
+        name: name + "!@#",
         password: password
       })
       .end(function(err, res) {
         should.not.exist(err);
-        res.text.should.containEql("用户不存在");
+        res.text.should.containEql("用户不存在！");
         done();
       });
   });
-  it("should not sign in successful when password is wrong", function(done) {
+  it("signin fail when password is wrong", function(done) {
     request
       .post("/signin")
       .send({
-        loginname: loginname,
-        // 在用户名存在的前提下改变密码的值
-        password: password + "1"
+        name: name,
+        password: password + "!@#"
       })
       .end(function(err, res) {
         should.not.exist(err);
-        res.text.should.containEql("用户密码错误");
+        res.text.should.containEql("密码错误！");
         done();
       });
   });
-  it("should sign in successful", function(done) {
+  it("signin successful", function(done) {
     request
       .post("/signin")
       .send({
-        loginname: loginname,
+        name: name,
         password: password
       })
+      .expect(302)
       .end(function(err, res) {
         should.not.exist(err);
-        res.text.should.containEql("登录成功");
         done();
       });
   });

@@ -61,7 +61,7 @@ function validatesPassword(res, user, password) {
       } else {
         res.render("signin", {
           username: user.name,
-          error: "用户名或是密码错误！"
+          error: "密码错误！"
         });
       }
     })
