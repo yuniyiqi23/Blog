@@ -35,7 +35,7 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 - 中间库Mocha、supertest、should<br>
 参考：<a href="https://github.com/yuniyiqi23/Blog/tree/master/test">测试用例</a><br>
 测试覆盖结果：<br>
-![](http://47.75.8.64/readme_images/signinTest.jpg)<br>
+![](http://47.75.8.64/readme_images/signinTest.png)<br>
 
 ## 应用健壮性说明<br>
 #### 1. 使用缓存技术（静态文件服务器）<br>
