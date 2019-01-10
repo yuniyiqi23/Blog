@@ -16,7 +16,7 @@
 - event相对于callback更灵活，属于发布和订阅的模式，可以有多个订阅，适合于公开的场景（如按钮的点击），callback更适合于私有的场景（如内部函数的调用）<br>
 - Promise是异步调用函数，回调方法会在所有同步代码执行完毕之后再执行<br>
 
-#### 5. 项目经验<br>
+#### 5. 小知识<br>
 - res.render和res.redirect的区别：res.render可以传递参数；res.redirect不能传递参数<br>
 
 #### 6. 搜索功能<br>
@@ -31,6 +31,11 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 - process.nextTick会在代码执行异步回调之前执行，所以在setimmediate之前执行<br>
 参考资料：<a href="https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/">The Node.js Event Loop, Timers, and process.nextTick()</a>
 
+#### 8. 测试（秉着自己为自己负责的原则）
+- 中间库Mocha、supertest、should<br>
+参考：<a href="https://github.com/yuniyiqi23/Blog/tree/master/test">测试用例</a><br>
+测试覆盖结果：<br>
+![](http://47.75.8.64/readme_images/signinTest.jpg)<br>
 
 ## 应用健壮性说明<br>
 #### 1. 使用缓存技术（静态文件服务器）<br>
