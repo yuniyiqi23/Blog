@@ -73,7 +73,8 @@ router.post('/', checkNotLogin, function (req, res, next) {
 					//产生随机数
 					code: parseInt(Math.random() * 90000 + 10000).toString(),
 					//用户状态（未激活）
-					islive: false
+					islive: false,
+					loginTime: moment()
 				};
 				// console.log('user.password = ' + user.password);
 

@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 'use strict';
-const easyMonitor = require('easy-monitor');
-easyMonitor('Blog');
+// const easyMonitor = require('easy-monitor');
+// easyMonitor('Blog');
 //依赖加载
 const fs = require('fs');
 //引入我们上面导出的app实例
