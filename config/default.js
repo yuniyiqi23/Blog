@@ -11,7 +11,7 @@ module.exports = {
   session: {
     secret: 'adamblogsecret',
     key: 'adamblogkey',
-    maxAge: 604800000//7 days
+    maxAge: 1000 * 60 * 30 //30min
   },
 
   mongodb: 'mongodb://localhost:27017/myblog',

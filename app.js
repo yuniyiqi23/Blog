@@ -54,7 +54,7 @@ const connect_datadog = require('connect-datadog')(dd_options);
 app.use(helmet());
 app.use(helmet.permittedCrossDomainPolicies());
 app.use(helmet.noCache());
-//  apply to all requests
+// apply to all requests
 app.use(limiter);
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -69,21 +69,21 @@ app.use(cookieParser());
 //静态文件目录设置,设置public文件夹为存放静态文件的目录
 app.use(express.static(path.join(__dirname, 'public')));
 // session 中间件
-let expiryDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+// let expiryDate = new Date(Date.now() + 60 * 1 * 1000); // 1小时，单位是毫秒
 app.use(session({
 	name: config.session.key, // 设置 cookie 中保存 session id 的字段名称
 	secret: config.session.secret, // 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
-	resave: false, // 强制更新 session
+	rolling : true,
 	saveUninitialized: false, // 设置为 false，强制创建一个 session，即使用户未登录
 	cookie: {
 		maxAge: config.session.maxAge,// 过期时间，过期后 cookie 中的 session id 自动删除
 		secure: false,//当 secure 值为 true 时，cookie 在 HTTP 中是无效，在 HTTPS 中才有效
 		httpOnly: true,
-		expires: expiryDate
+		// expires: expiryDate
 	},
 	store: new MongoStore({// 将 session 存储到 mongodb
 		url: config.mongodb,// mongodb 地址
-		touchAfter: 24 * 3600 //单位是秒
+		touchAfter: 24 * 3600 //24小时，单位是秒
 	})
 }));
 
@@ -99,7 +99,7 @@ app.locals.blog = {
 //加载自定义全局方法  
 app.locals.global = require('./utils/global');
 
-// 添加模板必需的三个变量
+// 添加模板必需的变量
 app.use(function (req, res, next) {
 	res.locals.user = req.session.user;
 	res.locals.keywords = null;
