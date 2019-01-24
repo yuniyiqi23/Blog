@@ -80,7 +80,7 @@ db.getCollection('posts').ensureIndex({title:"text",content:"text"},{weights:{ti
 #### 2. 反向代理（Nginx）<br>
 
 #### 3. 守护进程（PM2）<br>
-```node
+```js
 //ecosystem.config.js配置文件
 module.exports = {
     apps: [{
@@ -132,7 +132,7 @@ console.log输出到控制台属于同步输出，在开发Nodejs应用程序时
 - noSniff 用于设置 X-Content-Type-Options，以防止攻击者以 MIME 方式嗅探浏览器发出的响应中声明的 content-type。
 - frameguard 用于设置 X-Frame-Options 头，提供 clickjacking 保护。
 - xssFilter 用于设置 X-XSS-Protection，在最新的 Web 浏览器中启用跨站点脚本编制 (XSS) 过滤器。
-```node
+```js
 const express = require('express');  
 const helmet = require('helmet');
 const app = express();
@@ -144,7 +144,7 @@ app.use(helmet());
 
 #### 2. 暴力破解保护（通过限制用户在一定时间内登录次数来实现）
 通过使用中间件express-rate-limit来实现<br>
-```node
+```js
 const rateLimit = require("express-rate-limit");
 app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 const limiter = rateLimit({
@@ -157,7 +157,7 @@ app.use(limiter);
 
 #### 3. 使用nsp或是requireSafe检测第三方库的安全性<br>
 **个人理解**：发布中间件的时候会把代码提交给检测方测试，通过检测的版本记录到相应的数据库里，还会做一些签名。这样在验证中间件的时候只要提供相应的版本和签名就可以检测其安全性了。<br>
-```node
+```terminal
 $ npm i nsp -g
 $ nsp check --reporter summary
 ```
