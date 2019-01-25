@@ -80,7 +80,7 @@ app.use(session({
 		maxAge: config.session.maxAge,// 过期时间，过期后 cookie 中的 session id 自动删除
 		secure: false,//当 secure 值为 true 时，cookie 在 HTTP 中是无效，在 HTTPS 中才有效
 		httpOnly: true,
-		expires: expiryDate,//兼容IE
+		expires: expiryDate,//兼容IE(IE早期版本不支持maxAge)
 	},
 	store: new MongoStore({// 将 session 存储到 mongodb
 		url: config.mongodb,// mongodb 地址
