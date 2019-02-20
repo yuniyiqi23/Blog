@@ -19,7 +19,7 @@ class SubReadable extends Readable {
 
 // 模拟资源池
 const dataSource = {
-  data: new Array(100000).fill('1'),
+  data: new Array(1000).fill('1'),
   // 每次读取时推送一定量数据
   makeData() {
     if (!dataSource.data.length) return null;
@@ -31,7 +31,7 @@ const dataSource = {
 let num = 1;
 const subReadable = new SubReadable(dataSource);
 subReadable.on('readable', () => {
-    let chunk = subReadable.read()
+    let chunk = subReadable.read(1000)
     if(chunk) 
     console.log(`读取 ${chunk.length} bytes数据`);
     console.log('缓存剩余数据大小: ', subReadable._readableState.length + ' byte')

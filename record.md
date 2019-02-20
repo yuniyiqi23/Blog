@@ -19,6 +19,7 @@ MongoDB高级应用
 3. 日志文件以Json方式查看
 4. ab post(用户登录)
 5. Too many requests, please try again later
+6. 程序打包发布webpack，gulp
 
 四、解决的问题：
 ##2018
