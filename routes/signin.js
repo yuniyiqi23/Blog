@@ -6,6 +6,10 @@ const moment = require("moment");
 const UserModel = require("../models/users");
 const checkNotLogin = require("../middlewares/check").checkNotLogin;
 
+router.put("/", function(req, res){
+  res.status("200").send("You're success in Put");
+});
+
 router.get("/", checkNotLogin, function(req, res) {
   res.render("signin", { username: null });
 });

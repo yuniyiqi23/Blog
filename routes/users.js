@@ -13,6 +13,6 @@ router.get('/:id', (req, res, next) => {
 	console.log('Debug: ' + namespace.get('tid'));
 	// throw new Error("请填写密码！");
 	res.send('id');
-})
+});
 
 module.exports = router;
