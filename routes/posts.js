@@ -6,7 +6,7 @@ const PostModel = require("../models/posts");
 const CommentModel = require("../models/comments");
 const TagModel = require("../models/tags");
 const CategoryModel = require("../models/categories");
-const DataState = require("../middlewares/enum").DataState;
+const DataStateEnum = require("../middlewares/enum").DataStateEnum;
 // const namespace = require("continuation-local-storage").getNamespace(
 //   "com.blog"
 // );
@@ -80,7 +80,7 @@ router.post("/create", checkLogin, function(req, res, next) {
     title: title,
     content: content,
     category: categoryName,
-    state: DataState.effective,
+    state: DataStateEnum.effective,
     tags: tags
   };
 
