@@ -22,7 +22,7 @@ module.exports = {
 		if (author) {
 			query.author = author;
 		}
-		query.state = DataState.Publish;
+		query.state = DataState.effective;
 		return Post
 			.find(query)
 			.populate({ path: 'author', model: 'User' })
@@ -44,7 +44,7 @@ module.exports = {
 				],
 			};
 		}
-		query.state = DataState.Publish;
+		query.state = DataState.effective;
 		return Post
 			.find(query)
 			.populate({ path: 'author', model: 'User' })
@@ -70,7 +70,7 @@ module.exports = {
 			};
 		}
 		// 设置文章状态 Publish
-		query.state = DataState.Publish;
+		query.state = DataState.effective;
 		// 分页 
 		let skipNum = (page - 1) * pageSize;
 
@@ -92,7 +92,7 @@ module.exports = {
 	// 通过文章 id 获取一篇原生文章（编辑文章）
 	getRawPostById: function (postId) {
 		return Post
-			.findOne({ _id: postId, state: DataState.Publish })
+			.findOne({ _id: postId, state: DataState.effective })
 			.populate({ path: 'author', model: 'User' })
 			.exec();
 	},
@@ -107,7 +107,7 @@ module.exports = {
 	// 通过文章 id 删除一篇文章
 	delPostById: function (postId) {
 		return Post
-			.updateOne({ _id: postId }, { state: DataState.Delete })
+			.updateOne({ _id: postId }, { state: DataState.cancellation })
 			.then(function (res) {
 				// 文章删除后，再删除该文章下的所有留言
 				if (res.ok && res.n > 0 && res.nModified == 1) {
@@ -123,7 +123,7 @@ module.exports = {
 		});
 		// console.log(query);
 		return Post
-			.updateMany({ $or: query }, { state: DataState.Delete })
+			.updateMany({ $or: query }, { state: DataState.cancellation })
 			.then(function (res) {
 				// 文章删除后，再删除该文章下的所有留言
 				if (res.ok && res.n > 0 && res.nModified == 1) {

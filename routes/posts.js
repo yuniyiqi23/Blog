@@ -80,7 +80,7 @@ router.post("/create", checkLogin, function(req, res, next) {
     title: title,
     content: content,
     category: categoryName,
-    state: DataState.Publish,
+    state: DataState.effective,
     tags: tags
   };
 

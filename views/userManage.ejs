@@ -1,0 +1,11 @@
+<%- include('header') %>
+
+    <% if(users.length > 0){%>
+        <div class="ui list">
+            <%for(let user of users){%>
+                <div class="item"><%= user.name %></div>
+            <%}%>
+        </div>
+    <%}%>
+
+  <%- include('footer') %>
