@@ -7,10 +7,21 @@ module.exports = {
 		return User.create(user);
 	},
 
+	// 更新一个用户
+	editUser: function(user){
+		return User.save(user);
+	},
+
 	// 通过用户名获取用户信息
 	getUserByName: function (name) {
 		return User
 			.findOne({ name: name, dataStatus: DataStateEnum.effective });
+	},
+
+	// 通过 id 获取用户信息
+	getUserById: function (id) {
+		return User
+			.findOne({ _id: id, dataStatus: DataStateEnum.effective });
 	},
 
 	//管理员获取全部用户

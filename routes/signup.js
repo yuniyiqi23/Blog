@@ -74,7 +74,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
 					code: parseInt(Math.random() * 90000 + 10000).toString(),
 					//用户状态（未激活）
 					islive: false,
-					loginTime: moment()
+					loginTime: moment().format('YYYY-MM-DD HH:mm')
 				};
 				// console.log('user.password = ' + user.password);
 

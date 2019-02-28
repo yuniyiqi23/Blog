@@ -141,6 +141,7 @@ app.use(expressWinston.logger({
 		// }),
 		new winston.transports.File({
 			// filename: 'logs/success.log'
+			json: true,
 			filename: path.join(__dirname, 'logs/success.log'),
 			maxsize: 5242880,//5MB
 			maxFiles: 10,
@@ -165,6 +166,7 @@ app.use(expressWinston.errorLogger({
 		// 	colorize: true,
 		// }),
 		new winston.transports.File({
+			json: true,
 			filename: path.join(__dirname, 'logs/error.log'),
 			maxsize: 5242880,//5MB
 			maxFiles: 10,

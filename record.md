@@ -6,12 +6,13 @@
 
 
 二、 项目迭代计划
-测试覆盖率
-错误日志发送到开发人员的邮箱
 权限模块（管理员）
-MongoDB高级应用
 文章+图片
 关注+文章提醒
+错误日志发送到开发人员的邮箱
+MongoDB高级应用
+
+
 
 三、疑问
 1. 按照dedug和release进行编译程序（方便调试）
@@ -20,6 +21,7 @@ MongoDB高级应用
 4. ab post(用户登录)
 5. Too many requests, please try again later
 6. 程序打包发布webpack，gulp
+
 
 四、解决的问题：
 ##2018
@@ -42,3 +44,6 @@ https://nodejs.org/en/docs/guides/simple-profiling/
 ##2019
 #1/2
 增加用户登录时间记录
+
+#2/28
+开发用户管理模块
