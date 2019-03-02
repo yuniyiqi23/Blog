@@ -3,6 +3,7 @@ const router = express.Router();
 const cls = require('continuation-local-storage');
 const UserModel = require("../models/users");
 const checkLogin = require("../middlewares/check").checkLogin;
+const Joi = require('joi');
 
 /* GET users listing. */
 router.get('/', function (req, res) {
@@ -25,25 +26,48 @@ router.get('/management', checkLogin, function (req, res, next) {
 // GET /users/information?userId=XXX 用户详情页
 router.get('/information', checkLogin, function (req, res, next) {
 	let userId = req.query.userId;
-	// return res.render("userInformation", { error: 'e.message' });
 
 	UserModel.getUserById(userId)
 		.then(function (result) {
-			res.render("userInformation.ejs", {
-				user: result
-			});
+			if (result) {
+				return res.render("userInformation.ejs", {
+					user: result
+				});
+			}
+			// 优化查询不到的用户提示信息
+			return res.render("userInformation", { user: null, error: '查询的用户不存在！' });
 		})
 		.catch(next);
 });
 
-// POST /users/edit?userId=XXX 
-router.post('/', checkLogin, function(req, res, next){
-	let userId = req.query.userId;
+// POST /users/update?userId=XXX 
+router.post('/update', checkLogin, function (req, res, next) {
+	const userId = req.body.userId;
+	const userInfo = {
+		gender: req.body.gender,
+		bio: req.body.bio,
+		email: req.body.email,
+	};
+	const schema = Joi.object().keys({
+		email: Joi.string().email({ minDomainAtoms: 2 }),
+		bio: Joi.string().min(10).max(100),
+		gender: Joi.string(),
+	});
 
-	return res.render("signin", { username: name, error: e.message });
-	if(userId){
-		
+	// 校验参数
+	const result = Joi.validate(userInfo, schema);
+	if (result.error !== null) {
+		// 更新失败
+		req.flash('error', result.error.message);
+		return res.redirect('back');
 	}
+
+	UserModel.updateUser(userId, userInfo)
+		.then(function (result) {
+			return res.render("userInformation.ejs", { user: result, success: '更新成功！'});
+		})
+		.catch(next);
+
 })
 
 router.get('/:id', (req, res, next) => {

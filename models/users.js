@@ -8,8 +8,8 @@ module.exports = {
 	},
 
 	// 更新一个用户
-	editUser: function(user){
-		return User.save(user);
+	updateUser: function(userId, data){
+		return User.findOneAndUpdate({ _id: userId }, { $set: data }, { new: true })
 	},
 
 	// 通过用户名获取用户信息
