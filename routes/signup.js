@@ -53,8 +53,12 @@ router.post('/', checkNotLogin, function (req, res, next) {
 		const result = Joi.validate(userInfo, schema);
 		if (result.error !== null) {
 			// 注册失败，异步删除上传的头像
-			fs.unlink(files.avatar.path);
-			req.flash('error', result.error);
+			// fs.unlink(files.avatar.path);
+			fs.unlink(files.avatar.path, function (err) {
+				if (err) throw err;
+				console.log('文件:' + files.avatar.path + '删除成功！');
+			})
+			req.flash('error', result.error.message);
 			return res.redirect('/signup');
 		}
 
@@ -85,11 +89,11 @@ router.post('/', checkNotLogin, function (req, res, next) {
 						//Sending email here
 						let activeURL = 'http://' + config.deployEnv().ip + '/checkCode?name=' + result.name + '&code=' + result.code;
 						mail.sendActiveUser(result.email, result.name, activeURL);
-						res.render('signupSuccess.ejs', { email: result.email});
+						res.render('signupSuccess.ejs', { email: result.email });
 					})
 					.catch(function (e) {
 						// 注册失败，异步删除上传的头像
-						if(req.files){
+						if (req.files) {
 							fs.unlink(req.files.avatar.path);
 						}
 						// 用户名被占用则跳回注册页，而不是错误页
