@@ -2,7 +2,7 @@ logs/*
 node_modules
 # ignore all logs
 *.log
-# public/images/*
+public/images/*
 #.vscode/*
 .idea
 .*

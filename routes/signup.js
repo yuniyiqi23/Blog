@@ -94,7 +94,11 @@ router.post('/', checkNotLogin, function (req, res, next) {
 					.catch(function (e) {
 						// 注册失败，异步删除上传的头像
 						if (req.files) {
-							fs.unlink(req.files.avatar.path);
+							// fs.unlink(req.files.avatar.path);
+							fs.unlink(req.files.avatar.path, function (err) {
+								if (err) throw err;
+								console.log('文件:' + files.avatar.path + '删除成功！');
+							})
 						}
 						// 用户名被占用则跳回注册页，而不是错误页
 						if (e.message.match('duplicate key')) {

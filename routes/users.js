@@ -5,6 +5,7 @@ const UserModel = require("../models/users");
 const checkLogin = require("../middlewares/check").checkLogin;
 const Joi = require('joi');
 const DataStateEnum = require('../middlewares/enum').DataStateEnum;
+const mail = require('../utils/nodeMailerWithTemp');
 
 /* GET users listing. */
 router.get('/', function (req, res) {
@@ -87,8 +88,9 @@ async function deleteUser(userId) {
 	}
 }
 
+// GET /users/recover?userId=XXX 恢复用户
 router.get('/recover', checkLogin, function (req, res, next) {
-	let userId = req.query.userId;
+	const userId = req.query.userId;
 
 	recoverUser(userId)
 		.then(function (result) {
@@ -120,6 +122,24 @@ async function recoverUser(userId) {
 	}
 }
 
+// GET /users/resetPassword?userId=XXX 重置用户密码
+router.get('/resetPassword', function (req, res, next) {
+	const userId = req.query.userId;
+
+	UserModel.getUserById(userId)
+		.then(function (result) {
+			if (!result.email) {
+				req.flash('fail', '邮箱不存在！');
+			}
+			mail.resetPassword(result.email, resetPasswordURL);
+			req.flash('success', '邮件已发送！请到XXXX中查收邮件，重置密码！');
+			res.redirect('back');
+		})
+		.catch(next)
+
+});
+
+
 // POST /users/update?userId=XXX 
 router.post('/update', checkLogin, function (req, res, next) {
 	const userId = req.body.userId;
@@ -148,7 +168,7 @@ router.post('/update', checkLogin, function (req, res, next) {
 		})
 		.catch(next);
 
-})
+});
 
 router.get('/:id', (req, res, next) => {
 	const namespace = cls.getNamespace('com.blog');
