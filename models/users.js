@@ -8,8 +8,13 @@ module.exports = {
 	},
 
 	// 更新一个用户
-	updateUser: function(userId, data){
+	updateUser: function (userId, data) {
 		return User.findOneAndUpdate({ _id: userId }, { $set: data }, { new: true })
+	},
+
+	// 删除一个用户
+	deleteUser: function (userId) {
+		return User.findOneAndUpdate({ _id: userId }, { $set: { dataStatus: DataStateEnum.cancellation } }, { new: true })
 	},
 
 	// 通过用户名获取用户信息
@@ -25,20 +30,20 @@ module.exports = {
 	},
 
 	//管理员获取全部用户
-	getAllusers: function(){
-		return User.find({});
+	getAllusers: function () {
+		return User.find({ dataStatus: DataStateEnum.effective });
 	},
 
 	// 激活用户
 	activeUser: function (name, code, date) {
 		return User
-			.findOneAndUpdate({ name: name, code: code, date: {$gt: date}}, { dataStatus: DataStateEnum.effective });
+			.findOneAndUpdate({ name: name, code: code, date: { $gt: date } }, { dataStatus: DataStateEnum.effective });
 	},
 
 	//更新登录时间
-	updateLoginTime: function(name, time){
+	updateLoginTime: function (name, time) {
 		return User
-			.findOneAndUpdate({ name: name, dataStatus: DataStateEnum.effective}, { loginTime: time });
+			.findOneAndUpdate({ name: name, dataStatus: DataStateEnum.effective }, { loginTime: time });
 	}
 
 };

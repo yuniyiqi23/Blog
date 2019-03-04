@@ -3,37 +3,39 @@
 <table class="ui compact celled definition table">
     <thead class="full-width">
         <tr>
-            <th></th>
             <th>姓名</th>
             <th>性别</th>
             <th>邮箱</th>
             <th>最近登录时间</th>
             <th>操作</th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <% if(users.length > 0){%>
     <tbody>
         <%for(let user of users){%>
         <tr>
-            <td class="collapsing">
+            <!-- <td class="collapsing">
                 <div class="ui fitted slider checkbox">
                     <input type="checkbox"> <label></label>
                 </div>
-            </td>
+            </td> -->
             <td><%= user.name %></td>
             <td><%= ({m: '男', f: '女', x: '保密'})[user.gender] %></td>
             <td><%= user.email %></td>
             <td><%= user.loginTime %></td>
             <td><a class="item" href="/users/information?userId=<%= user._id %>">详细信息</a></td>
+            <td><a class="item" href="/users/delete?userId=<%= user._id %>">删除</a></td>
+            <td><a class="item" href="/users/resetPassword?userId=<%= user._id %>">重置密码</a></td>
         </tr>
         <%}%>
     </tbody>
     <%}%>
     </tbody>
     <tfoot class="full-width">
-        <tr>
-            <th></th>
-            <th colspan="5">
+        <!-- <tr>
+            <th colspan="7">
                 <div class="ui right floated small primary labeled icon button">
                     <i class="user icon"></i> Add User
                 </div>
@@ -44,7 +46,7 @@
                     Approve All
                 </div>
             </th>
-        </tr>
+        </tr> -->
     </tfoot>
 </table>
 

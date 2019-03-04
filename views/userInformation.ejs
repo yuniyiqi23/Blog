@@ -5,19 +5,16 @@
   <div class="four wide column"></div>
   <div class="eight wide column">
     <form class="ui form segment" action="/users/update" method="post">
-      <div class="field" hidden>
-        <input type="text" name="userId" value="<%= user._id %>">
-      </div>
+      <input type="text" name="userId" value="<%= user._id %>" hidden>
       <div class="field">
-          <a class="ui massive image label">
-              <img src="/images/<%= user.avatar %>">
-              <%= user.name %>
-            </a>
+        <a class="ui massive image label">
+          <img src="/images/<%= user.avatar %>">
+          <%= user.name %>
+        </a>
         <!-- <label>用户名</label> -->
       </div>
       <div class="field">
-        <label>性别</label>
-        <!-- <%= ({m: '男', f: '女', x: '保密'})[user.gender] %> -->
+        <label>性别:<%= ({m: '男', f: '女', x: '保密'})[user.gender] %></label>
         <select class="ui compact selection dropdown" name="gender">
           <option value="m">男</option>
           <option value="f">女</option>

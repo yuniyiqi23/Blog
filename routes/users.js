@@ -4,6 +4,7 @@ const cls = require('continuation-local-storage');
 const UserModel = require("../models/users");
 const checkLogin = require("../middlewares/check").checkLogin;
 const Joi = require('joi');
+// const DataStateEnum = require('../middlewares/enum').DataStateEnum;
 
 /* GET users listing. */
 router.get('/', function (req, res) {
@@ -16,7 +17,7 @@ router.get('/', function (req, res) {
 router.get('/management', checkLogin, function (req, res, next) {
 	UserModel.getAllusers()
 		.then(function (result) {
-			res.render("userManagement.ejs", {
+			return res.render("userManagement.ejs", {
 				users: result
 			});
 		})
@@ -39,6 +40,41 @@ router.get('/information', checkLogin, function (req, res, next) {
 		})
 		.catch(next);
 });
+
+// GET /users/delete?userId=XXX 删除用户
+router.get('/delete', checkLogin, function (req, res, next) {
+	let userId = req.query.userId;
+
+	deleteUser(userId)
+		.then(function (result) {
+			if(result.delResult){
+				if(result.delResult.dataStatus === '2'){
+					return res.render("userManagement.ejs", {
+						success: '删除成功!',
+						users: result.users
+					});
+				}else{
+					return res.render("userManagement.ejs", {
+						success: '删除失败!',
+						users: result.users
+					});
+				}
+			}
+			
+		})
+		.catch(next)
+
+});
+
+async function deleteUser(userId) {
+	try {
+		const delResult = await UserModel.deleteUser(userId);
+		const users = await UserModel.getAllusers();
+		return { delResult, users };
+	} catch (e) {
+		console.error(err);
+	}
+}
 
 // POST /users/update?userId=XXX 
 router.post('/update', checkLogin, function (req, res, next) {
@@ -64,7 +100,7 @@ router.post('/update', checkLogin, function (req, res, next) {
 
 	UserModel.updateUser(userId, userInfo)
 		.then(function (result) {
-			return res.render("userInformation.ejs", { user: result, success: '更新成功！'});
+			res.render("userInformation.ejs", { user: result, success: '更新成功！' });
 		})
 		.catch(next);
 
