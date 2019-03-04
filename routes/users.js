@@ -4,7 +4,7 @@ const cls = require('continuation-local-storage');
 const UserModel = require("../models/users");
 const checkLogin = require("../middlewares/check").checkLogin;
 const Joi = require('joi');
-// const DataStateEnum = require('../middlewares/enum').DataStateEnum;
+const DataStateEnum = require('../middlewares/enum').DataStateEnum;
 
 /* GET users listing. */
 router.get('/', function (req, res) {
@@ -15,7 +15,7 @@ router.get('/', function (req, res) {
 // GET /users/management 用户管理
 // 获取用户列表（重制密码，删除用户）
 router.get('/management', checkLogin, function (req, res, next) {
-	UserModel.getAllusers()
+	UserModel.getAllUsers()
 		.then(function (result) {
 			return res.render("userManagement.ejs", {
 				users: result
@@ -23,6 +23,18 @@ router.get('/management', checkLogin, function (req, res, next) {
 		})
 		.catch(next);
 });
+
+
+// GET /users/deleteUserList
+router.get('/deleteUserList', function (req, res, next) {
+	UserModel.getDeleteUsers()
+		.then(function (result) {
+			return res.render("userDeletedList.ejs", {
+				users: result
+			});
+		})
+		.catch(next);
+})
 
 // GET /users/information?userId=XXX 用户详情页
 router.get('/information', checkLogin, function (req, res, next) {
@@ -47,30 +59,62 @@ router.get('/delete', checkLogin, function (req, res, next) {
 
 	deleteUser(userId)
 		.then(function (result) {
-			if(result.delResult){
-				if(result.delResult.dataStatus === '2'){
+			if (result.delResult) {
+				if (result.delResult.dataStatus == DataStateEnum.cancellation) {
 					return res.render("userManagement.ejs", {
 						success: '删除成功!',
 						users: result.users
 					});
-				}else{
+				} else {
 					return res.render("userManagement.ejs", {
 						success: '删除失败!',
 						users: result.users
 					});
 				}
 			}
-			
+
 		})
 		.catch(next)
-
 });
 
 async function deleteUser(userId) {
 	try {
 		const delResult = await UserModel.deleteUser(userId);
-		const users = await UserModel.getAllusers();
+		const users = await UserModel.getAllUsers();
 		return { delResult, users };
+	} catch (e) {
+		console.error(err);
+	}
+}
+
+router.get('/recover', checkLogin, function (req, res, next) {
+	let userId = req.query.userId;
+
+	recoverUser(userId)
+		.then(function (result) {
+			if (result.recResult) {
+				if (result.recResult.dataStatus == DataStateEnum.effective) {
+					return res.render("userDeletedList.ejs", {
+						success: '恢复成功!',
+						users: result.users
+					});
+				} else {
+					return res.render("userDeletedList.ejs", {
+						success: '恢复失败!',
+						users: result.users
+					});
+				}
+			}
+
+		})
+		.catch(next)
+});
+
+async function recoverUser(userId) {
+	try {
+		const recResult = await UserModel.recoveUser(userId);
+		const users = await UserModel.getDeleteUsers();
+		return { recResult, users };
 	} catch (e) {
 		console.error(err);
 	}
@@ -110,7 +154,7 @@ router.get('/:id', (req, res, next) => {
 	const namespace = cls.getNamespace('com.blog');
 	console.log('Debug: ' + namespace.get('tid'));
 	// throw new Error("请填写密码！");
-	res.send('id');
+	res.send('访问的URL未被捕捉到！');
 });
 
 module.exports = router;

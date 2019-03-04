@@ -8,8 +8,6 @@
             <th>邮箱</th>
             <th>最近登录时间</th>
             <th>操作</th>
-            <th></th>
-            <th></th>
         </tr>
     </thead>
     <% if(users.length > 0){%>
@@ -25,9 +23,7 @@
             <td><%= ({m: '男', f: '女', x: '保密'})[user.gender] %></td>
             <td><%= user.email %></td>
             <td><%= user.loginTime %></td>
-            <td><a class="item" href="/users/information?userId=<%= user._id %>">详细信息</a></td>
-            <td><a class="item" href="/users/delete?userId=<%= user._id %>">删除</a></td>
-            <td><a class="item" href="/users/resetPassword?userId=<%= user._id %>">重置密码</a></td>
+            <td><a class="item" href="/users/recover?userId=<%= user._id %>">恢复</a></td>
         </tr>
         <%}%>
     </tbody>
@@ -38,7 +34,7 @@
             <th colspan="7">
                 <div class="ui right floated small primary labeled icon button">
                     <i class="user icon"></i> 
-                    <a class="item" href="/users/deleteUserList" style="color: rgb(245, 240, 240)">删除用户列表</a>
+                    <a class="item" href="/users/management" style="color: rgb(245, 240, 240)">用户列表</a>
                 </div>
                 <!-- <div class="ui small  button">
                     Approve

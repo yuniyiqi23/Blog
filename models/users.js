@@ -17,6 +17,11 @@ module.exports = {
 		return User.findOneAndUpdate({ _id: userId }, { $set: { dataStatus: DataStateEnum.cancellation } }, { new: true })
 	},
 
+	// 恢复一个用户
+	recoveUser: function (userId) {
+		return User.findOneAndUpdate({ _id: userId }, { $set: { dataStatus: DataStateEnum.effective } }, { new: true })
+	},
+
 	// 通过用户名获取用户信息
 	getUserByName: function (name) {
 		return User
@@ -29,9 +34,14 @@ module.exports = {
 			.findOne({ _id: id, dataStatus: DataStateEnum.effective });
 	},
 
-	//管理员获取全部用户
-	getAllusers: function () {
+	// 获取全部用户
+	getAllUsers: function () {
 		return User.find({ dataStatus: DataStateEnum.effective });
+	},
+
+	// 获取删除用户列表
+	getDeleteUsers: function () {
+		return User.find({ dataStatus: DataStateEnum.cancellation });
 	},
 
 	// 激活用户
