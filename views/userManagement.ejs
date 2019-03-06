@@ -27,7 +27,7 @@
             <td><%= user.loginTime %></td>
             <td><a class="item" href="/users/information?userId=<%= user._id %>">详细信息</a></td>
             <td><a class="item" href="/users/delete?userId=<%= user._id %>">删除</a></td>
-            <td><a class="item" href="/users/resetPassword?userId=<%= user._id %>">重置密码</a></td>
+            <td><a class="item" href="/users/sendEmailToResetPassword?userId=<%= user._id %>">重置密码</a></td>
         </tr>
         <%}%>
     </tbody>

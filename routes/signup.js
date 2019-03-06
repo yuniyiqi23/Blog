@@ -21,6 +21,34 @@ router.get('/', checkNotLogin, function (req, res) {
 	res.render('signup.ejs');
 });
 
+// POST /signup/resetPassword 重置用户密码
+router.post('/resetPassword', function (req, res, next) {
+	const userId = req.body.userId;
+	const password = req.body.password;
+
+	async function resetUserPwd(userId) {
+		try {
+			const user = await UserModel.getUserById(userId);
+			if (user) {
+				if (user.date > moment()) {
+					const pwd = await getBcryptPassword(password);
+					const result = await UserModel.updateUser(userId, { password: pwd });
+					if(!result.errors){
+						return res.render("signin", { username: null, success: '密码重置成功！欢迎登录！' });
+					}
+				} else {
+					throw new Error('重置密码时间已过期！');
+				}
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+	resetUserPwd(userId);
+});
+
+
+
 // POST /signup 用户注册
 router.post('/', checkNotLogin, function (req, res, next) {
 	const form = new formidable.IncomingForm();
@@ -135,5 +163,7 @@ function getBcryptPassword(password) {
 		});
 	});
 }
+
+
 
 module.exports = router;

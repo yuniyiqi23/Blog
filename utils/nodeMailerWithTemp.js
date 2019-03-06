@@ -13,14 +13,20 @@ const transporter = nodeMailer.createTransport(sender + ':' + password + '@smtp.
 
 // create template based sender function
 // assumes text.{ext} and html.{ext} in template/directory
-const sendResetPasswordLink = transporter.templateSender(
+// 激活用户链接
+const sendActiveUserLink = transporter.templateSender(
 	new EmailTemplate(path.join(__dirname, '../', './templates/activeUser')), {
+		from: '378532514@qq.com',
+	});
+// 重置密码链接
+const sendResetPasswordLink = transporter.templateSender(
+	new EmailTemplate(path.join(__dirname, '../', './templates/resetPassword')), {
 		from: '378532514@qq.com',
 	});
 
 exports.sendActiveUser = function (email, username, activeURL) {
 	// transporter.template
-	sendResetPasswordLink({
+	sendActiveUserLink({
 		to: email,
 		subject: '激活账号'
 	}, {
@@ -35,12 +41,13 @@ exports.sendActiveUser = function (email, username, activeURL) {
 		});
 };
 
-exports.resetPassword = function (email, resetPasswordURL) {
+exports.resetPassword = function (user, resetPasswordURL) {
 	sendResetPasswordLink({
-		to: email,
+		to: user.email,
 		subject: '重置密码'
 	}, {
-			activeURL: resetPasswordURL
+			username: user.name,
+			resetPasswordURL: resetPasswordURL
 		}, function (err, info) {
 			if (err) {
 				console.log('Email sent fail!\n' + err);

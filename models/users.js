@@ -9,7 +9,7 @@ module.exports = {
 
 	// 更新一个用户
 	updateUser: function (userId, data) {
-		return User.findOneAndUpdate({ _id: userId }, { $set: data }, { new: true })
+		return User.findOneAndUpdate({ _id: userId }, { $set: data }, { upsert: true, new: true })
 	},
 
 	// 删除一个用户

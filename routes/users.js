@@ -6,6 +6,7 @@ const checkLogin = require("../middlewares/check").checkLogin;
 const Joi = require('joi');
 const DataStateEnum = require('../middlewares/enum').DataStateEnum;
 const mail = require('../utils/nodeMailerWithTemp');
+const moment = require('moment');
 
 /* GET users listing. */
 router.get('/', function (req, res) {
@@ -122,23 +123,35 @@ async function recoverUser(userId) {
 	}
 }
 
-// GET /users/resetPassword?userId=XXX 重置用户密码
-router.get('/resetPassword', function (req, res, next) {
+// GET /users/sendEmailToResetPassword?userId=XXX 发邮件重置用户密码
+router.get('/sendEmailToResetPassword', function (req, res, next) {
 	const userId = req.query.userId;
+	const resetPasswordURL = 'http://' + req.headers.host + '/users/resetPassword?userId=' + userId;
+	const limitTime = {
+		date: moment().add({ days: 1 })
+	};
 
-	UserModel.getUserById(userId)
+	UserModel.updateUser(userId, limitTime)
 		.then(function (result) {
 			if (!result.email) {
 				req.flash('fail', '邮箱不存在！');
 			}
-			mail.resetPassword(result.email, resetPasswordURL);
-			req.flash('success', '邮件已发送！请到XXXX中查收邮件，重置密码！');
+			mail.resetPassword(result, resetPasswordURL);
+			req.flash('success', '邮件已发送！请到' + result.email +  '中查收邮件，重置密码！');
 			res.redirect('back');
 		})
 		.catch(next)
 
 });
 
+// GET /users/resetPassword?userId=XXX 重置用户密码
+router.get('/resetPassword', function (req, res, next) {
+	const value = {
+		userId: req.query.userId,
+		resetPasswordURL: 'http://' + req.headers.host + '/signup/resetPassword'
+	}
+	res.render("userResetPassword.ejs", { value: value });
+});
 
 // POST /users/update?userId=XXX 
 router.post('/update', checkLogin, function (req, res, next) {
