@@ -26,12 +26,16 @@ router.post('/resetPassword', function (req, res, next) {
 	const userId = req.body.userId;
 	const password = req.body.password;
 
-	async function resetUserPwd(userId) {
+	(async function resetUserPwd(userId) {
 		try {
+			// 获取用户信息
 			const user = await UserModel.getUserById(userId);
 			if (user) {
+				// 判断是否超过重置时间限制
 				if (user.date > moment()) {
+					// 密码加密
 					const pwd = await getBcryptPassword(password);
+					// 重置用户密码
 					const result = await UserModel.updateUser(userId, { password: pwd });
 					if(!result.errors){
 						return res.render("signin", { username: null, success: '密码重置成功！欢迎登录！' });
@@ -43,8 +47,7 @@ router.post('/resetPassword', function (req, res, next) {
 		} catch (error) {
 			console.log(error)
 		}
-	}
-	resetUserPwd(userId);
+	})(userId)
 });
 
 
