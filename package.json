@@ -49,6 +49,7 @@
     "sha1": "^1.1.1",
     "should": "^13.2.3",
     "silly-datetime": "^0.1.2",
+    "video-stream": "^1.2.1",
     "winston": "^2.4.1"
   },
   "devDependencies": {

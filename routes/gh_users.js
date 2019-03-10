@@ -7,8 +7,13 @@ const Joi = require('joi');
 const DataStateEnum = require('../middlewares/enum').DataStateEnum;
 const mail = require('../utils/nodeMailerWithTemp');
 const moment = require('moment');
+const path = require('path');
 
-/* GET users listing. */
+/**
+ * @author yep
+ * @description get user info
+ * @date 2019-3-9
+ */
 router.get('/', function (req, res, next) {
 	UserModel.getAllUsers()
 		.then(function (result) {
@@ -17,6 +22,11 @@ router.get('/', function (req, res, next) {
             }
 		})
 		.catch(next);
+});
+
+router.get('/audio', function (req, res, next){
+    console.log(path.resolve(__dirname));
+    videoStream({ dir: path.resolve(__dirname) });
 });
 
 // GET /users/management 用户管理
