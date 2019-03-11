@@ -10,8 +10,8 @@ const moment = require('moment');
 const path = require('path');
 
 /**
- * @author yep
  * @description get user info
+ * @author yep
  * @date 2019-3-9
  */
 router.get('/', function (req, res, next) {
