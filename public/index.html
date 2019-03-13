@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>index.html</title>
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://unpkg.com/qiniu-js@2.5.1/dist/qiniu.min.js"></script>
+</head>
+
+<body>
+    // 压缩文件大小，参考资料：https://developer.qiniu.com/kodo/sdk/1283/javascript
+    <h1>测试七牛云上传图片</h1>
+    <form action="upload" method="post" enctype="multipart/form-data">
+        <input class="file-input" type="file" id="select" />
+    </form>
+    <div id="result">
+
+    </div>
+    <button onclick="clickButton()">请求图片</button>
+    <div id="pics"></div>
+    <script type="text/javascript">
+        var result;
+        var fileName;
+        var domain = 'http://poaadnrl9.bkt.clouddn.com/';
+
+        var complete = function (res) {
+            $('#result').html('<img src=' + result.domain + '/' + fileName + ' />');
+        }
+
+        var subObject = {
+            // next: 接收上传进度信息
+            // res 参数是一个带有 total 字段的 object，包含loaded、total、percent三个属性，提供上传进度信息。
+            next(res) {
+                // ...
+                console.log(res);
+            },
+            // error: 上传错误后触发，当不是 xhr 请求错误时，会把当前错误产生原因直接抛出，诸如 JSON 解析异常等；
+            // 当产生 xhr 请求错误时，参数 err 为一个包含 code、message、isRequestError 三个属性的 object
+            error(err) {
+                // ...
+                console.log(err);
+            },
+            // complete: 接收上传完成后的后端返回信息
+            // res 参数为一个 object， 为上传成功后后端返回的信息，具体返回结构取决于后端sdk的配置
+            complete(res) {
+                console.log(res);
+            }
+        };
+
+        $.ajax({
+            type: "get",
+            url: "/api/uptoken",
+            async: true,
+            success: function (res) {
+                result = res;
+            }
+        });
+
+        $('#select').on('change', function () {
+            // 文件资源名为 null 或者 undefined，则文件资源名会以 hash 值作为资源名
+            // 避免文件重名导致无法上传成功
+            var file = this.files[0];
+            fileName = 'image/test/' + (new Date()).valueOf() + '_' + file.name;
+            var token = result.uptoken;
+            var domain = result.domain;
+            var config = {
+                useCdnDomain: true,
+                disableStatisticsReport: false,
+                retryCount: 6,
+                region: qiniu.region.z0
+            };
+            var putExtra = {
+                fname: "",
+                params: {},
+                mimeType: null
+            };
+            var observable = qiniu.upload(file, fileName, token, putExtra, config);
+            // 上传开始
+            var subscription = observable.subscribe(subObject);
+            // 上传取消
+            // subscription.unsubscribe() 
+        });
+        var marker = '';
+        function clickButton() {
+            $.ajax({
+                type: "get",
+                url: "/api/getImg",
+                async: true,
+                data: {
+                    marker: marker
+                },
+                success: function (res) {
+                    var items = res.items;
+                    marker = res.marker;
+                    var html = '';
+                    items.forEach(function (val, index) {
+                        html += '<img src=' + domain + val.key + ' />'
+                    });
+                    $('#pics').html(html);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

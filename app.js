@@ -30,7 +30,65 @@ const uuid = require('node-uuid');
 //Application Perpormance Monitorting
 require('newrelic');
 
+var fs = require('fs');
+var qiniu = require('qiniu');
 const app = express();
+
+var config1 = JSON.parse(fs.readFileSync(path.resolve(__dirname, "config.json")));
+var mac = new qiniu.auth.digest.Mac(config1.AccessKey, config1.SecretKey);
+
+var putExtra = new qiniu.form_up.PutExtra();
+var options = {
+    scope: config1.Bucket,
+    deleteAfterDays: 1,
+    returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
+};
+
+var putPolicy = new qiniu.rs.PutPolicy(options);
+var bucketManager = new qiniu.rs.BucketManager(mac, config1);
+
+
+app.get('/api/getImg', function(req, res) {
+    var options = {
+        limit: 5,
+        prefix: 'image/test/',
+        marker: req.query.marker
+    };
+    bucketManager.listPrefix(config1.Bucket, options, function(err, respBody, respInfo) {
+        if(err) {
+            console.log(err);
+            throw err;
+        }
+
+        if(respInfo.statusCode == 200) {
+            var nextMarker = respBody.marker || '';
+            var items = respBody.items;
+            res.json({
+                items: items,
+                marker: nextMarker
+            });
+        } else {
+            console.log(respInfo.statusCode);
+            console.log(respBody);
+        }
+    });
+});
+
+app.get('/api/uptoken', function(req, res) {
+    var token = putPolicy.uploadToken(mac);
+    res.header("Cache-Control", "max-age=0, private, must-revalidate");
+    res.header("Pragma", "no-cache");
+    res.header("Expires", 0);
+    if(token) {
+        res.json({
+            uptoken: token,
+            domain: config1.Domain
+        });
+    }
+});
+
+
+
 app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 //set linkTime and requests number
 const limiter = rateLimit({
