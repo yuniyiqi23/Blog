@@ -14,6 +14,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const moment = require('moment');
+const cors = require('cors')
 
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -47,62 +48,6 @@ var options = {
 var putPolicy = new qiniu.rs.PutPolicy(options);
 var bucketManager = new qiniu.rs.BucketManager(mac, config1);
 
-app.all('*', function (req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Accept");
-	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-	// res.header("X-Powered-By", ' 3.2.1')
-	//这段仅仅为了方便返回json而已
-	// res.header("Content-Type", "application/json;charset=utf-8");
-	if (req.method == 'OPTIONS') {
-		//让options请求快速返回
-		res.sendStatus(200);
-	} else {
-		next();
-	}
-});
-
-app.get('/api/getImg', function (req, res) {
-	var options = {
-		limit: 5,
-		prefix: 'image/test/',
-		marker: req.query.marker
-	};
-	bucketManager.listPrefix(config1.Bucket, options, function (err, respBody, respInfo) {
-		if (err) {
-			console.log(err);
-			throw err;
-		}
-
-		if (respInfo.statusCode == 200) {
-			var nextMarker = respBody.marker || '';
-			var items = respBody.items;
-			res.json({
-				items: items,
-				marker: nextMarker
-			});
-		} else {
-			console.log(respInfo.statusCode);
-			console.log(respBody);
-		}
-	});
-});
-
-app.get('/api/uptoken', function (req, res) {
-	var token = putPolicy.uploadToken(mac);
-	res.header("Cache-Control", "max-age=0, private, must-revalidate");
-	res.header("Pragma", "no-cache");
-	res.header("Expires", 0);
-	if (token) {
-		res.json({
-			uptoken: token,
-			domain: config1.Domain
-		});
-	}
-});
-
-
-
 
 app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 //set linkTime and requests number
@@ -123,7 +68,9 @@ const dd_options = {
 };
 const connect_datadog = require('connect-datadog')(dd_options);
 
-//Helmet helps you secure your Express apps by setting various HTTP headers.
+// Enable All CORS Requests
+app.use(cors())
+// Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet());
 app.use(helmet.permittedCrossDomainPolicies());
 app.use(helmet.noCache());
@@ -131,7 +78,7 @@ app.use(helmet.noCache());
 app.use(limiter);
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-//加载日志中间件，定义日志和输出级别
+// 加载日志中间件，定义日志和输出级别
 app.use(morgan('dev'));
 // 加载解析json的中间件,接受json请求
 app.use(bodyParser.json());
@@ -223,6 +170,47 @@ app.use(expressWinston.logger({
 	],
 	exitOnError: false, // do not exit on handled exceptions
 }));
+
+
+app.get('/api/getImg', function (req, res) {
+	var options = {
+		limit: 5,
+		prefix: 'image/test/',
+		marker: req.query.marker
+	};
+	bucketManager.listPrefix(config1.Bucket, options, function (err, respBody, respInfo) {
+		if (err) {
+			console.log(err);
+			throw err;
+		}
+
+		if (respInfo.statusCode == 200) {
+			var nextMarker = respBody.marker || '';
+			var items = respBody.items;
+			res.json({
+				items: items,
+				marker: nextMarker
+			});
+		} else {
+			console.log(respInfo.statusCode);
+			console.log(respBody);
+		}
+	});
+});
+
+app.get('/api/uptoken', function (req, res) {
+	var token = putPolicy.uploadToken(mac);
+	res.header("Cache-Control", "max-age=0, private, must-revalidate");
+	res.header("Pragma", "no-cache");
+	res.header("Expires", 0);
+	if (token) {
+		res.json({
+			uptoken: token,
+			domain: config1.Domain
+		});
+	}
+});
+
 
 // Add the datadog-middleware before your router
 app.use(connect_datadog);
