@@ -50,7 +50,7 @@
 
         $.ajax({
             type: "get",
-            url: "/api/uptoken",
+            url: "http://47.75.8.64/api/uptoken",
             async: true,
             success: function (res) {
                 result = res;
@@ -85,7 +85,7 @@
         function clickButton() {
             $.ajax({
                 type: "get",
-                url: "/api/getImg",
+                url: "http://47.75.8.64/api/getImg",
                 async: true,
                 data: {
                     marker: marker
