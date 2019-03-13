@@ -39,68 +39,69 @@ var mac = new qiniu.auth.digest.Mac(config1.AccessKey, config1.SecretKey);
 
 var putExtra = new qiniu.form_up.PutExtra();
 var options = {
-    scope: config1.Bucket,
-    deleteAfterDays: 1,
-    returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
+	scope: config1.Bucket,
+	deleteAfterDays: 1,
+	returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
 };
 
 var putPolicy = new qiniu.rs.PutPolicy(options);
 var bucketManager = new qiniu.rs.BucketManager(mac, config1);
 
-
-app.get('/api/getImg', function(req, res) {
-    var options = {
-        limit: 5,
-        prefix: 'image/test/',
-        marker: req.query.marker
-    };
-    bucketManager.listPrefix(config1.Bucket, options, function(err, respBody, respInfo) {
-        if(err) {
-            console.log(err);
-            throw err;
-        }
-
-        if(respInfo.statusCode == 200) {
-            var nextMarker = respBody.marker || '';
-            var items = respBody.items;
-            res.json({
-                items: items,
-                marker: nextMarker
-            });
-        } else {
-            console.log(respInfo.statusCode);
-            console.log(respBody);
-        }
-    });
+app.all('*', function (req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Accept");
+	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+	// res.header("X-Powered-By", ' 3.2.1')
+	//这段仅仅为了方便返回json而已
+	// res.header("Content-Type", "application/json;charset=utf-8");
+	if (req.method == 'OPTIONS') {
+		//让options请求快速返回
+		res.sendStatus(200);
+	} else {
+		next();
+	}
 });
 
-app.get('/api/uptoken', function(req, res) {
-    var token = putPolicy.uploadToken(mac);
-    res.header("Cache-Control", "max-age=0, private, must-revalidate");
-    res.header("Pragma", "no-cache");
-    res.header("Expires", 0);
-    if(token) {
-        res.json({
-            uptoken: token,
-            domain: config1.Domain
-        });
-    }
+app.get('/api/getImg', function (req, res) {
+	var options = {
+		limit: 5,
+		prefix: 'image/test/',
+		marker: req.query.marker
+	};
+	bucketManager.listPrefix(config1.Bucket, options, function (err, respBody, respInfo) {
+		if (err) {
+			console.log(err);
+			throw err;
+		}
+
+		if (respInfo.statusCode == 200) {
+			var nextMarker = respBody.marker || '';
+			var items = respBody.items;
+			res.json({
+				items: items,
+				marker: nextMarker
+			});
+		} else {
+			console.log(respInfo.statusCode);
+			console.log(respBody);
+		}
+	});
 });
 
-app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-    res.header("X-Powered-By", ' 3.2.1')
-        //这段仅仅为了方便返回json而已
-    // res.header("Content-Type", "application/json;charset=utf-8");
-    if(req.method == 'OPTIONS') {
-        //让options请求快速返回
-        res.sendStatus(200); 
-    } else { 
-        next(); 
-    }
+app.get('/api/uptoken', function (req, res) {
+	var token = putPolicy.uploadToken(mac);
+	res.header("Cache-Control", "max-age=0, private, must-revalidate");
+	res.header("Pragma", "no-cache");
+	res.header("Expires", 0);
+	if (token) {
+		res.json({
+			uptoken: token,
+			domain: config1.Domain
+		});
+	}
 });
+
+
 
 
 app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
@@ -145,7 +146,7 @@ const expiryDate = new Date(Date.now() + 60 * 30 * 1000); // 30min，单位是�
 app.use(session({
 	name: config.session.key, // 设置 cookie 中保存 session id 的字段名称
 	secret: config.session.secret, // 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
-	rolling : true,// 顺延session过期时间
+	rolling: true,// 顺延session过期时间
 	// resave: false,
 	saveUninitialized: false, // 设置为 false，强制创建一个 session，即使用户未登录
 	cookie: {

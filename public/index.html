@@ -49,6 +49,7 @@
         };
 
         $.ajax({
+            dataType:'jsonp',
             type: "get",
             url: "http://47.75.8.64/api/uptoken",
             async: true,
@@ -84,6 +85,7 @@
         var marker = '';
         function clickButton() {
             $.ajax({
+                dataType:'jsonp',
                 type: "get",
                 url: "http://47.75.8.64/api/getImg",
                 async: true,
