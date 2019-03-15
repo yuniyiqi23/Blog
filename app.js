@@ -14,7 +14,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const moment = require('moment');
-const cors = require('cors')
+const cors = require('cors');
 
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -68,8 +68,7 @@ const dd_options = {
 };
 const connect_datadog = require('connect-datadog')(dd_options);
 
-// Enable All CORS Requests
-app.use(cors())
+app.use(cors());// Enable All CORS Requests
 // Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet());
 app.use(helmet.permittedCrossDomainPolicies());
@@ -165,7 +164,7 @@ app.use(expressWinston.logger({
 			filename: path.join(__dirname, 'logs/success.log'),
 			maxsize: 5242880,//5MB
 			maxFiles: 10,
-			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
+			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss:ss'),
 		})
 	],
 	exitOnError: false, // do not exit on handled exceptions
@@ -231,7 +230,7 @@ app.use(expressWinston.errorLogger({
 			filename: path.join(__dirname, 'logs/error.log'),
 			maxsize: 5242880,//5MB
 			maxFiles: 10,
-			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
+			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss:ss'),
 		})
 	],
 	exitOnError: false, // do not exit on handled exceptions

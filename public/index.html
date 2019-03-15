@@ -44,17 +44,15 @@
             // complete: 接收上传完成后的后端返回信息
             // res 参数为一个 object， 为上传成功后后端返回的信息，具体返回结构取决于后端sdk的配置
             complete(res) {
+                // 取出图片存储地址上传给服务端
                 console.log(res);
             }
         };
 
         $.ajax({
             type: "GET",
-            dataType: 'jsonp',
-            type: "get",
             url: "http://47.75.8.64/api/uptoken",
-            jsonp: "jsonpCallback",
-            // jsonpCallback: "success_jsonpCallback",
+            async: true,
             success: function (jsonpCallback) {
                 result = jsonpCallback;
             }
@@ -87,7 +85,6 @@
         var marker = '';
         function clickButton() {
             $.ajax({
-                dataType: 'jsonp',
                 type: "get",
                 url: "http://47.75.8.64/api/getImg",
                 async: true,
