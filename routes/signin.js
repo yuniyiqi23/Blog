@@ -6,15 +6,15 @@ const moment = require("moment");
 const UserModel = require("../models/users");
 const checkNotLogin = require("../middlewares/check").checkNotLogin;
 
-router.put("/", function(req, res){
+router.put("/", function (req, res) {
   res.status("200").send("You're success in Put");
 });
 
-router.get("/", checkNotLogin, function(req, res) {
+router.get("/", checkNotLogin, function (req, res) {
   res.render("signin", { username: null });
 });
 
-router.post("/", checkNotLogin, function(req, res, next) {
+router.post("/", checkNotLogin, function (req, res, next) {
   const name = req.body.name;
   const password = req.body.password;
 
@@ -33,14 +33,14 @@ router.post("/", checkNotLogin, function(req, res, next) {
   }
 
   UserModel.getUserByName(name)
-    .then(function(user) {
+    .then(function (user) {
       if (!user) {
         // req.flash('error', '用户不存在！');
         return res.render("signin", { username: name, error: "用户不存在！" });
       }
       return validatesPassword(res, user, password);
     })
-    .then(function(user) {
+    .then(function (user) {
       if (user) {
         req.flash("success", "登录成功！");
         // 删除 password;
@@ -56,19 +56,20 @@ router.post("/", checkNotLogin, function(req, res, next) {
 
 function validatesPassword(res, user, password) {
   return Promise.resolve(
-    bcrypt.compare(password, user.password).then(function(result) {
-      if (result === true) {
-        return UserModel.updateLoginTime(
-          user.name,
-          moment().format("YYYY-MM-DD HH:mm")
-        );
-      } else {
-        res.render("signin", {
-          username: user.name,
-          error: "密码错误！"
-        });
-      }
-    })
+    bcrypt.compare(password, user.password)
+      .then(function (result) {
+        if (result === true) {
+          return UserModel.updateLoginTime(
+            user.name,
+            moment().format("YYYY-MM-DD HH:mm")
+          );
+        } else {
+          res.render("signin", {
+            username: user.name,
+            error: "密码错误！"
+          });
+        }
+      })
   );
 }
 

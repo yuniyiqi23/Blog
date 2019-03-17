@@ -164,7 +164,7 @@ app.use(expressWinston.logger({
 			filename: path.join(__dirname, 'logs/success.log'),
 			maxsize: 5242880,//5MB
 			maxFiles: 10,
-			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss:ss'),
+			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
 		})
 	],
 	exitOnError: false, // do not exit on handled exceptions
@@ -230,7 +230,7 @@ app.use(expressWinston.errorLogger({
 			filename: path.join(__dirname, 'logs/error.log'),
 			maxsize: 5242880,//5MB
 			maxFiles: 10,
-			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss:ss'),
+			timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss'),
 		})
 	],
 	exitOnError: false, // do not exit on handled exceptions
