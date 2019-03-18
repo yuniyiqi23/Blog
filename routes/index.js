@@ -13,11 +13,6 @@ module.exports = function (app) {
 	app.use('/checkCode', require('./checkCode'));
 	app.use('/users', require('./users'));
 
-	//光合应用
-	app.use('/gh_users', require('./gh_users'));
-	app.use('/gh_presideWord', require('./gh_presideWord'));
-	app.use('/gh_audio', require('./gh_audio'));
-
 	// 404 page
 	app.use(function (req, res) {
 		if (!res.headersSent) {

@@ -22,7 +22,7 @@ const flash = require('connect-flash');
 const config = require('config-lite')(__dirname);
 const routes = require('./routes');
 const pkg = require('./package');
-var winston = require('winston');
+const winston = require('winston');
 const expressWinston = require('express-winston');
 //Assign TransactionId
 const cls = require('continuation-local-storage');
@@ -31,22 +31,22 @@ const uuid = require('node-uuid');
 //Application Perpormance Monitorting
 require('newrelic');
 
-var fs = require('fs');
-var qiniu = require('qiniu');
+const fs = require('fs');
+const qiniu = require('qiniu');
 const app = express();
 
-var config1 = JSON.parse(fs.readFileSync(path.resolve(__dirname, "config.json")));
-var mac = new qiniu.auth.digest.Mac(config1.AccessKey, config1.SecretKey);
+const config1 = JSON.parse(fs.readFileSync(path.resolve(__dirname, "config.json")));
+const mac = new qiniu.auth.digest.Mac(config1.AccessKey, config1.SecretKey);
 
-var putExtra = new qiniu.form_up.PutExtra();
-var options = {
+const putExtra = new qiniu.form_up.PutExtra();
+const options = {
 	scope: config1.Bucket,
 	deleteAfterDays: 1,
 	returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
 };
 
-var putPolicy = new qiniu.rs.PutPolicy(options);
-var bucketManager = new qiniu.rs.BucketManager(mac, config1);
+const putPolicy = new qiniu.rs.PutPolicy(options);
+const bucketManager = new qiniu.rs.BucketManager(mac, config1);
 
 
 app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
@@ -172,7 +172,7 @@ app.use(expressWinston.logger({
 
 
 app.get('/api/getImg', function (req, res) {
-	var options = {
+	const options = {
 		limit: 5,
 		prefix: 'image/test/',
 		marker: req.query.marker
@@ -184,8 +184,8 @@ app.get('/api/getImg', function (req, res) {
 		}
 
 		if (respInfo.statusCode == 200) {
-			var nextMarker = respBody.marker || '';
-			var items = respBody.items;
+			let nextMarker = respBody.marker || '';
+			let items = respBody.items;
 			res.json({
 				items: items,
 				marker: nextMarker
@@ -198,7 +198,7 @@ app.get('/api/getImg', function (req, res) {
 });
 
 app.get('/api/uptoken', function (req, res) {
-	var token = putPolicy.uploadToken(mac);
+	let token = putPolicy.uploadToken(mac);
 	res.header("Cache-Control", "max-age=0, private, must-revalidate");
 	res.header("Pragma", "no-cache");
 	res.header("Expires", 0);
