@@ -14,7 +14,7 @@ const path = require('path');
 // const winston = require('../lib/winston');
 
 // GET /posts 所有用户或者特定用户的文章页
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   // console.log('Debug: ' + namespace.get('tid'));
   let authorId = req.query.author;
   let page = req.query.page || 1;
@@ -26,7 +26,7 @@ router.get("/", function(req, res, next) {
     // 获取用户分类数据
     CategoryModel.getCategoryByAuthorId(authorId)
   ])
-    .then(function(result) {
+    .then(function (result) {
       // console.log('Debug: ' + namespace.get('tid') + 'ansy result');
       if (result[1].length >= 0) {
         let categoryList = null;
@@ -52,7 +52,7 @@ router.get("/", function(req, res, next) {
 });
 
 // POST /posts/create 发表一篇文章
-router.post("/create", checkLogin, function(req, res, next) {
+router.post("/create", checkLogin, function (req, res, next) {
   const author = req.session.user._id;
   const title = req.body.title;
   const content = req.body.content;
@@ -86,7 +86,7 @@ router.post("/create", checkLogin, function(req, res, next) {
   };
 
   Promise.all([createPost(post), createTags(post.tags)])
-    .then(function(result) {
+    .then(function (result) {
       req.flash("success", "发表成功");
       // 发表成功后跳转到该文章页
       res.redirect("/posts/" + result[0]._id);
@@ -131,10 +131,10 @@ function createTags(tags) {
 }
 
 // GET /posts/create 发表文章
-router.get("/create", checkLogin, function(req, res, next) {
+router.get("/create", checkLogin, function (req, res, next) {
   let authorId = req.session.user._id;
   CategoryModel.getCategoryByAuthorId(authorId)
-    .then(function(result) {
+    .then(function (result) {
       if (result) {
         res.render("create.ejs", {
           categories: result.categories
@@ -149,7 +149,7 @@ router.get("/create", checkLogin, function(req, res, next) {
 });
 
 // GET /posts/:postId 单独一篇的文章页
-router.get("/:postId", function(req, res, next) {
+router.get("/:postId", function (req, res, next) {
   // console.log('Debug: ' + namespace.get('tid'));
   const postId = req.params.postId;
 
@@ -161,7 +161,7 @@ router.get("/:postId", function(req, res, next) {
     // pv 加 1
     PostModel.incPv(postId)
   ])
-    .then(function(result) {
+    .then(function (result) {
       // console.log('Debug: ' + namespace.get('tid'));
       const post = result[0];
       const comments = result[1];
@@ -178,7 +178,7 @@ router.get("/:postId", function(req, res, next) {
 });
 
 // GET /posts/:postId/edit 更新文章页
-router.get("/:postId/edit", checkLogin, function(req, res, next) {
+router.get("/:postId/edit", checkLogin, function (req, res, next) {
   const postId = req.params.postId;
   const authorId = req.session.user._id;
 
@@ -186,7 +186,7 @@ router.get("/:postId/edit", checkLogin, function(req, res, next) {
     PostModel.getRawPostById(postId),
     CategoryModel.getCategoryByAuthorId(authorId)
   ])
-    .then(function(result) {
+    .then(function (result) {
       if (!result[0]) {
         throw new Error("该文章不存在！");
       }
@@ -202,7 +202,7 @@ router.get("/:postId/edit", checkLogin, function(req, res, next) {
 });
 
 // POST /posts/:postId/edit 更新一篇文章
-router.post("/:postId/edit", checkLogin, function(req, res, next) {
+router.post("/:postId/edit", checkLogin, function (req, res, next) {
   const postId = req.params.postId;
   const author = req.session.user._id;
   const title = req.body.title;
@@ -235,7 +235,7 @@ router.post("/:postId/edit", checkLogin, function(req, res, next) {
   };
 
   PostModel.getRawPostById(postId)
-    .then(function(post) {
+    .then(function (post) {
       return updatePostById(post, author, value);
     })
     .then(() => {
@@ -258,12 +258,12 @@ function updatePostById(post, author, value) {
 }
 
 // GET /posts/:postId/remove 删除一篇文章
-router.get("/:postId/remove", checkLogin, function(req, res, next) {
+router.get("/:postId/remove", checkLogin, function (req, res, next) {
   const postId = req.params.postId;
   const author = req.session.user._id;
 
   PostModel.getRawPostById(postId)
-    .then(function(post) {
+    .then(function (post) {
       return Promise.all([
         delPostById(post, author),
         CategoryModel.delPostFromCategory(author, post.category, postId)

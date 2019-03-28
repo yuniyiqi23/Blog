@@ -16,12 +16,15 @@ MongoDB高级应用
 
 三、疑问
 1. 按照dedug和release进行编译程序（方便调试）
+回归测试（反复测试、自动化测试）
+注册用户（防止测试数据污染数据库）、测试数据库
+release：npm包 update
 2. simple-profiling生成文件分析（processed.txt）
 3. 日志文件以Json方式查看
 4. ab post(用户登录)
 5. Too many requests, please try again later
-6. 程序打包发布webpack，gulp
-
+6. 程序打包发布webpack，gulp（首先学习，预处理css，js）
+主要打包html、css等
 
 四、解决的问题：
 ##2018
