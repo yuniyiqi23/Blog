@@ -31,23 +31,7 @@ const uuid = require('node-uuid');
 //Application Perpormance Monitorting
 require('newrelic');
 
-const fs = require('fs');
-const qiniu = require('qiniu');
 const app = express();
-
-const config1 = JSON.parse(fs.readFileSync(path.resolve(__dirname, "config.json")));
-const mac = new qiniu.auth.digest.Mac(config1.AccessKey, config1.SecretKey);
-
-const putExtra = new qiniu.form_up.PutExtra();
-const options = {
-	scope: config1.Bucket,
-	deleteAfterDays: 1,
-	returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
-};
-
-const putPolicy = new qiniu.rs.PutPolicy(options);
-const bucketManager = new qiniu.rs.BucketManager(mac, config1);
-
 
 app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 //set linkTime and requests number
@@ -169,46 +153,6 @@ app.use(expressWinston.logger({
 	],
 	exitOnError: false, // do not exit on handled exceptions
 }));
-
-
-app.get('/api/getImg', function (req, res) {
-	const options = {
-		limit: 5,
-		prefix: 'image/test/',
-		marker: req.query.marker
-	};
-	bucketManager.listPrefix(config1.Bucket, options, function (err, respBody, respInfo) {
-		if (err) {
-			console.log(err);
-			throw err;
-		}
-
-		if (respInfo.statusCode == 200) {
-			let nextMarker = respBody.marker || '';
-			let items = respBody.items;
-			res.json({
-				items: items,
-				marker: nextMarker
-			});
-		} else {
-			console.log(respInfo.statusCode);
-			console.log(respBody);
-		}
-	});
-});
-
-app.get('/api/uptoken', function (req, res) {
-	let token = putPolicy.uploadToken(mac);
-	res.header("Cache-Control", "max-age=0, private, must-revalidate");
-	res.header("Pragma", "no-cache");
-	res.header("Expires", 0);
-	if (token) {
-		res.json({
-			uptoken: token,
-			domain: config1.Domain
-		});
-	}
-});
 
 
 // Add the datadog-middleware before your router
