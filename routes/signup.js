@@ -106,7 +106,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
 					email: userInfo.email,
 					date: moment().add({ days: 1 }),
 					//产生随机数
-					code: parseInt(Math.random() * 90000 + 10000).toString(),
+					code: parseInt(Math.random() * 9000 + 1000).toString(),
 					//用户状态（未激活）
 					islive: false,
 					loginTime: moment().format('YYYY-MM-DD HH:mm')
