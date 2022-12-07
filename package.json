@@ -27,7 +27,7 @@
     "easy-monitor": "^2.2.6-rc.0",
     "ejs": "^2.5.8",
     "email-templates-v2": "^2.0.3",
-    "express": "^4.15.5",
+    "express": "^4.17.3",
     "express-formidable": "^1.0.0",
     "express-rate-limit": "^3.2.0",
     "express-session": "^1.15.6",
